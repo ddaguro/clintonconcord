@@ -82,7 +82,7 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
         let cell = tableView.dequeueReusableCellWithIdentifier("CertsDetailCell") as! CertsDetailCell
         
         let info = certitem[indexPath.row]
-        
+        /*
         self.certitemdetail = [CertItemDetail]()
         self.api = API()
         
@@ -94,7 +94,7 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
         
         //let detail = certitemdetail[0]
         
-        
+        */
         cell.certifyButton.tag = indexPath.row
         cell.certifyButton.setBackgroundImage(UIImage(named:"btn-certify"), forState: .Normal)
         cell.certifyButton.addTarget(self, action: "dismiss:", forControlEvents: .TouchUpInside)

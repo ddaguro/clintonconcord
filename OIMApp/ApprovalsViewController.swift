@@ -45,7 +45,6 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         
         itemHeading.addObject("Approvals")
         
-        
         self.tasks = [Tasks]()
         self.api = API()
         
@@ -53,7 +52,6 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
         let url = Persistent.endpoint + "/webapp/rest/approvals/pendingapprovals/" + requestorUserId + "?cursor=1&limit=10"
         api.loadPendingApprovals(url, completion : didLoadData)
-        
         
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = UIColor.redColor()
@@ -79,31 +77,25 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         for data in loadedData {
             self.tasks.append(data)
         }
+        
+        if isFirstTime  {
+            self.view.showLoading()
+        }
         self.tableView.reloadData()
         self.view.hideLoading()
+        self.refreshControl?.endRefreshing()
     }
     
     override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-            
-            if isFirstTime {
-                
-                self.tableView.reloadData()
-                if self.tasks.count != 0 {
-                    view.showLoading()
-                }
-                
-                isFirstTime = false
-            }
-    }
-/*
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
+        super.viewDidAppear(true)
         
-        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.Default
-        
+        if isFirstTime {
+            view.showLoading()
+            isFirstTime = false
+        }
+
     }
-*/
+
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if self.tasks == nil
         {

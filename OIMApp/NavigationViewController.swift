@@ -73,7 +73,7 @@ class NavigationViewController : UIViewController, UITableViewDelegate, UITableV
         let item4 = NavigationModel(title: "MY APPROVALS", icon: "icon-filter", segue: "presentApprovals")
         let item5 = NavigationModel(title: "MY REQUESTS", icon: "icon-info", segue: "presentRequests")
         let item6 = NavigationModel(title: "MAKE A REQUEST", icon: "icon-info", segue: "presetMakeARequest")
-        let item7 = NavigationModel(title: "SWAGGER", icon: "icon-info", segue: "presetSwagger")
+        let item7 = NavigationModel(title: "API DOCS", icon: "icon-info", segue: "presetSwagger")
         
         items = [item1, item2, item3, item4, item5, item6, item7]
     }

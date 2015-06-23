@@ -17,9 +17,11 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
     @IBOutlet var labelTitle: UINavigationItem!
     
     @IBOutlet var navigationBar: UINavigationBar!
+    
     @IBAction func goBack(sender: UIBarButtonItem) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
+    
     var isFirstTime = true
     var refreshControl:UIRefreshControl!
     var nagivationStyleToPresent : String?
@@ -34,7 +36,7 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         //navigationBar.clipsToBounds = true
         tableView.tableFooterView = UIView(frame: CGRectZero)
         
@@ -129,6 +131,8 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
             cell.dateImage?.image = UIImage(named: "clock")
             cell.dateLabel?.text = dataObject.assignedOn
         }
+        
+        cell.selectionStyle = UITableViewCellSelectionStyle.None
         
         return cell;
         

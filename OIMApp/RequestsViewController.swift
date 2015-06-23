@@ -28,7 +28,7 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        toolbar.clipsToBounds = true
+        //toolbar.clipsToBounds = true
         labelTitle.text = "My Requests"
         tableView.delegate = self
         tableView.dataSource = self
@@ -75,7 +75,7 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         if isFirstTime {
             
             self.tableView.reloadData()
-            view.showLoading()
+            //view.showLoading()
             
             isFirstTime = false
         }
@@ -97,7 +97,7 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         } else if dataObject.reqStatus == "Obtaining Operation Approval" {
             cell.typeImageView.image = UIImage(named: "approval")
         } else {
-            cell.typeImageView.image = UIImage(named: "timeline-chat")
+            cell.typeImageView.image = UIImage(named: "check-1-icon")
         }
         
         
