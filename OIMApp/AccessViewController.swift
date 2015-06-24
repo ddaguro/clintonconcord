@@ -17,7 +17,7 @@ class AccessViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     @IBOutlet var labelTitle: UILabel!
     var nagivationStyleToPresent : String?
-        let transitionOperator = TransitionOperator()
+    let transitionOperator = TransitionOperator()
        
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,6 +47,9 @@ class AccessViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let info = viewLinks[indexPath.row]
         cell.titleLabel.text = info.title
         cell.subtitleLabel.text = info.description
+        
+        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        
         return cell;
     }
     
@@ -65,6 +68,7 @@ class AccessViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
         }
     }
+    
     
     @IBAction func presentNavigation(sender: AnyObject) {
         if self.nagivationStyleToPresent != nil {

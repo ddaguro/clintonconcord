@@ -24,6 +24,8 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
     var certs : [Certs]!
     var api : API!
     
+    var itemHeading: NSMutableArray! = NSMutableArray()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -37,6 +39,9 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
         
         menuItem.image = UIImage(named: "menu")
         toolbar.tintColor = UIColor.blackColor()
+        
+        
+        itemHeading.addObject("Certifications")
         
         self.certs = [Certs]()
         self.api = API()
@@ -59,24 +64,25 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func didLoadData(loadedData: [Certs]){
+        self.certs = [Certs]()
         
         for data in loadedData {
             self.certs.append(data)
         }
+        
+        if isFirstTime  {
+            self.view.showLoading()
+        }
         self.tableView.reloadData()
         self.view.hideLoading()
+        self.refreshControl?.endRefreshing()
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
         if isFirstTime {
-            
-            self.tableView.reloadData()
-            if self.certs.count != 0 {
-                view.showLoading()
-            }
-            
+            view.showLoading()
             isFirstTime = false
         }
     }
@@ -86,10 +92,6 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
         let url = Persistent.endpoint + "/webapp/rest/idaas/oig/v1/certifications/users/" + requestorUserId + "/MyPendingCertifications"
         api.loadPendingCerts(url, completion : didLoadData)
-        view.showLoading()
-        self.certs.removeAll()
-        self.tableView.reloadData()
-        self.refreshControl.endRefreshing()
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -153,8 +155,21 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
         }
     }
     
-    func dismiss(){
-        dismissViewControllerAnimated(true, completion: nil)
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return itemHeading.count
+    }
+    
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        
+        var view: UIView! = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 40))
+        view.backgroundColor = UIColor(red: 236.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, alpha: 1)
+        var lblHeading : UILabel! = UILabel(frame: CGRectMake(20, 0, 200, 20))
+        lblHeading.font = UIFont.systemFontOfSize(12)
+        lblHeading.textColor = UIColor.darkGrayColor()
+        lblHeading.text = itemHeading.objectAtIndex(section) as! NSString as String
+        view.addSubview(lblHeading)
+        return view
     }
     
     @IBAction func presentNavigation(sender: AnyObject) {
