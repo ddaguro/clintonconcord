@@ -21,6 +21,8 @@
 		013AB3CC1AFA7E2200160A34 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013AB3CB1AFA7E2200160A34 /* API.swift */; };
 		013AB3CE1AFA84F300160A34 /* Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013AB3CD1AFA84F300160A34 /* Identity.swift */; };
 		013AB3D11AFA854400160A34 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013AB3D01AFA854400160A34 /* Utils.swift */; };
+		0141C7ED1B3B23B9000B674B /* refresh.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0141C7EB1B3B23B9000B674B /* refresh.wav */; };
+		0141C7EE1B3B23B9000B674B /* upvote.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0141C7EC1B3B23B9000B674B /* upvote.wav */; };
 		01506FB01B0D0BDB00F9D605 /* AccessDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01506FAF1B0D0BDB00F9D605 /* AccessDetailViewController.swift */; };
 		01506FB21B0D10EE00F9D605 /* AccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01506FB11B0D10EE00F9D605 /* AccessViewController.swift */; };
 		01506FB41B0D11B400F9D605 /* MetaCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01506FB31B0D11B400F9D605 /* MetaCell.swift */; };
@@ -111,6 +113,8 @@
 		013AB3CB1AFA7E2200160A34 /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		013AB3CD1AFA84F300160A34 /* Identity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Identity.swift; sourceTree = "<group>"; };
 		013AB3D01AFA854400160A34 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		0141C7EB1B3B23B9000B674B /* refresh.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = refresh.wav; sourceTree = "<group>"; };
+		0141C7EC1B3B23B9000B674B /* upvote.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = upvote.wav; sourceTree = "<group>"; };
 		01506FAF1B0D0BDB00F9D605 /* AccessDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessDetailViewController.swift; sourceTree = "<group>"; };
 		01506FB11B0D10EE00F9D605 /* AccessViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessViewController.swift; sourceTree = "<group>"; };
 		01506FB31B0D11B400F9D605 /* MetaCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetaCell.swift; sourceTree = "<group>"; };
@@ -263,6 +267,7 @@
 				015C13FD1B0BC4F50099B9E7 /* Controls */,
 				018060021B1F879200F4C68D /* Images.xcassets */,
 				013AB3B31AFA7CA400160A34 /* LaunchScreen.xib */,
+				0141C7EA1B3B23B9000B674B /* Sounds */,
 				01F70E191B01280600EA7C7F /* Storyboards */,
 				013AB3A61AFA7CA400160A34 /* Supporting Files */,
 				0138FC651AFAAABB00837EAB /* Theme */,
@@ -322,6 +327,15 @@
 				013AB3D01AFA854400160A34 /* Utils.swift */,
 			);
 			name = Utils;
+			sourceTree = "<group>";
+		};
+		0141C7EA1B3B23B9000B674B /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				0141C7EB1B3B23B9000B674B /* refresh.wav */,
+				0141C7EC1B3B23B9000B674B /* upvote.wav */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 		015C13F81B0BC3500099B9E7 /* MyDashboard */ = {
@@ -552,6 +566,8 @@
 				018060031B1F879200F4C68D /* Images.xcassets in Resources */,
 				013AB3B51AFA7CA400160A34 /* LaunchScreen.xib in Resources */,
 				01B7B4FC1B0299FC0090E62E /* Main.storyboard in Resources */,
+				0141C7ED1B3B23B9000B674B /* refresh.wav in Resources */,
+				0141C7EE1B3B23B9000B674B /* upvote.wav in Resources */,
 				018060351B20D6B600F4C68D /* LoadingView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

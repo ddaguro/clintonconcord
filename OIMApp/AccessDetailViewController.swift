@@ -37,14 +37,12 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        //navigationBar.clipsToBounds = true
         tableView.tableFooterView = UIView(frame: CGRectZero)
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.estimatedRowHeight = 150.0;
-        tableView.rowHeight = UITableViewAutomaticDimension;
         tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
+        tableView.separatorColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
         
         self.applications = [Applications]()
         self.entitlements = [Entitlements]()
@@ -67,27 +65,36 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
             api.loadRoles(url, completion : didLoadRoles)
         }
         
-        
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = UIColor.redColor()
         refreshControl.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
         tableView.addSubview(refreshControl)
 
-        
     }
     
     func refresh(){
-        self.tableView.reloadData()
-        self.refreshControl.endRefreshing()
+        var requestorUserId : String!
+        requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
+        let url = Persistent.endpoint + "/webapp/rest/useraccounts/all/" + requestorUserId + "/" + requestorUserId
+        
+        if catalog == "Applications"{
+            labelTitle2.text = "Applications"
+            api.loadApplications(url, completion : didLoadApplications)
+        } else if catalog == "Entitlements" {
+            labelTitle2.text = "Entitlements"
+            api.loadEntitlements(url, completion: didLoadEntitlements)
+        } else if catalog == "Roles" {
+            labelTitle2.text = "Roles"
+            api.loadRoles(url, completion : didLoadRoles)
+        }
+        
+        SoundPlayer.play("upvote.wav")
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         if isFirstTime {
-            
-            self.tableView.reloadData()
             view.showLoading()
-            
             isFirstTime = false
         }
     }
@@ -145,33 +152,48 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
     
     
     func didLoadApplications(loadedApplications: [Applications]){
+        self.applications = [Applications]()
         
         for app in loadedApplications {
             self.applications.append(app)
         }
-        tableView.reloadData()
         
+        if isFirstTime  {
+            self.view.showLoading()
+        }
+        self.tableView.reloadData()
         self.view.hideLoading()
+        self.refreshControl?.endRefreshing()
     }
     
     func didLoadRoles(loadedRoles: [Roles]){
+        self.roles = [Roles]()
         
         for role in loadedRoles {
             self.roles.append(role)
         }
-        tableView.reloadData()
         
+        if isFirstTime  {
+            self.view.showLoading()
+        }
+        self.tableView.reloadData()
         self.view.hideLoading()
+        self.refreshControl?.endRefreshing()
     }
     
     func didLoadEntitlements(loadedEntitlements: [Entitlements]){
+        self.entitlements = [Entitlements]()
         
         for ent in loadedEntitlements {
             self.entitlements.append(ent)
         }
-        tableView.reloadData()
         
+        if isFirstTime  {
+            self.view.showLoading()
+        }
+        self.tableView.reloadData()
         self.view.hideLoading()
+        self.refreshControl?.endRefreshing()
     }
     
 

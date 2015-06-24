@@ -88,10 +88,13 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func refresh(){
+        
         var requestorUserId : String!
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
         let url = Persistent.endpoint + "/webapp/rest/idaas/oig/v1/certifications/users/" + requestorUserId + "/MyPendingCertifications"
         api.loadPendingCerts(url, completion : didLoadData)
+        
+        SoundPlayer.play("upvote.wav")
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

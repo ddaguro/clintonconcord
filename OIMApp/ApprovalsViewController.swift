@@ -61,18 +61,19 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func refresh(){
-        
         var requestorUserId : String!
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
         let url = Persistent.endpoint + "/webapp/rest/approvals/pendingapprovals/" + requestorUserId + "?cursor=1&limit=10"
         api.loadPendingApprovals(url, completion : didLoadData)
-        view.showLoading()
-        self.tasks.removeAll()
-        self.tableView.reloadData()
-        self.refreshControl.endRefreshing()
+        
+        //view.showLoading()
+        
+        SoundPlayer.play("upvote.wav")
     }
     
     func didLoadData(loadedData: [Tasks]){
+        
+        self.tasks = [Tasks]()
         
         for data in loadedData {
             self.tasks.append(data)

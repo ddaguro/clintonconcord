@@ -16,6 +16,8 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet var labelTitle: UILabel!
     var nagivationStyleToPresent : String?
     
+    var itemHeading: NSMutableArray! = NSMutableArray()
+    
     var refreshControl:UIRefreshControl!
     
     var isFirstTime = true
@@ -28,17 +30,18 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //toolbar.clipsToBounds = true
+        toolbar.clipsToBounds = true
         labelTitle.text = "My Requests"
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.estimatedRowHeight = 150.0;
-        tableView.rowHeight = UITableViewAutomaticDimension;
-        tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+        tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
+        tableView.separatorColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
         
         menuItem.image = UIImage(named: "menu")
         toolbar.tintColor = UIColor.blackColor()
         
+        
+        itemHeading.addObject("Requests")
         
         self.reqs = [Requests]()
         self.api = API()
@@ -56,27 +59,34 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func refresh(){
-        self.tableView.reloadData()
-        self.refreshControl.endRefreshing()
+        var requestorUserId : String!
+        requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
+        let url = Persistent.endpoint + "/webapp/rest/requests/" + requestorUserId + "/requestsRaisedByMe?cursor=1&limit=10"
+        api.loadRequests(url, completion : didLoadData)
+        
+        SoundPlayer.play("upvote.wav")
     }
     
     func didLoadData(loadedData: [Requests]){
+        self.reqs = [Requests]()
         
         for data in loadedData {
             self.reqs.append(data)
         }
-        tableView.reloadData()
+        
+        if isFirstTime  {
+            self.view.showLoading()
+        }
+        self.tableView.reloadData()
         self.view.hideLoading()
+        self.refreshControl?.endRefreshing()
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
         if isFirstTime {
-            
-            self.tableView.reloadData()
-            //view.showLoading()
-            
+            view.showLoading()
             isFirstTime = false
         }
     }
@@ -100,40 +110,38 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
             cell.typeImageView.image = UIImage(named: "check-1-icon")
         }
         
-        
-        //cell.profileImageView.image = UIImage(named: "profile-pic-1")
         cell.nameLabel.text = dataObject.reqId + " " + dataObject.reqType
         cell.postLabel?.text = dataObject.reqStatus
         cell.dateLabel.text = dataObject.reqCreatedOn
         
+        cell.selectionStyle = UITableViewCellSelectionStyle.None
         return cell
         
     }
     
-    /*
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
-        if let indexPath = self.tableView.indexPathForSelectedRow() {
-            let reqObject = reqs[indexPath.row]
-            
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let controller = storyboard.instantiateViewControllerWithIdentifier("RequestsDetailViewController") as! RequestsDetailViewController
-            controller.reqs = reqObject
-            controller.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-            //controller.preferredContentSize = CGSizeMake(50, 100)
-            //controller.navigationController
-            //showViewController(controller, sender: self)
-            presentViewController(controller, animated: true, completion: nil);
-        }
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return itemHeading.count
     }
-    */
+    
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        
+        var view: UIView! = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 40))
+        view.backgroundColor = UIColor(red: 236.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, alpha: 1)
+        var lblHeading : UILabel! = UILabel(frame: CGRectMake(20, 0, 200, 20))
+        lblHeading.font = UIFont.systemFontOfSize(12)
+        lblHeading.textColor = UIColor.darkGrayColor()
+        lblHeading.text = itemHeading.objectAtIndex(section) as! NSString as String
+        view.addSubview(lblHeading)
+        return view
+    }
     
     @IBAction func presentNavigation(sender: AnyObject?){
         
         self.performSegueWithIdentifier("presentTableNavigation", sender: self)
         
     }
-    
+
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
