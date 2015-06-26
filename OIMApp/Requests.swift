@@ -10,15 +10,16 @@ import Foundation
 
 class Requests {
     
-    //var usr_key : String!
-    var reqCreatedOn : String!
-    var reqExpireOn : String!
+    var reqType : String!
     var reqId : String!
+    var requester : String!
+    var reqCreatedOn : String!
     var reqJustification : String!
     var reqStatus : String!
-    var reqTargetEntities : String!
-    var reqType : String!
-    var requester : String!
+    var reqTargetEntities : [TargetEntities]!
+    var reqTargetNames : String!
+    
+    
     
     init(data : NSDictionary){
         
@@ -28,13 +29,65 @@ class Requests {
         self.reqType = Utils.getStringFromJSON(data, key: "reqType")
         self.reqCreatedOn = Utils.getStringFromJSON(data, key: "reqCreatedOn")
         
+        //let results: NSArray = jsonData["requests"] as! NSArray
+        
+        if let results: NSArray = data["reqTargetEntities"] as? NSArray {
+            //println(data["reqTargetEntities"])
+            
+            var ents = [TargetEntities]()
+            for ent in results{
+                let ent = TargetEntities(data: ent as! NSString)
+                ents.append(ent)
+                //self.reqTargetNames = ent
+                //var names = (names + ent) as! String
+                //self.reqTargetNames += "\(ent)" as! String
+                //names.append(ent as! String)
+                
+                //var variableString = ent as! String
+                //variableString += ent as! String
+                
+                
+                
+                //self.reqTargetNames = variableString
+            }
+            self.reqTargetEntities = ents
+        }
+        
+        /* sample data
+
+reqType: "Heterogeneous Request"
+reqBeneficiaryList: [1]
+0:  {
+User Login: "Danny Crane"
+}-
+-
+reqTargetEntities: [2]
+0:  "Physical Badge Access"
+1:  "East Data Center"
+-
+childRequestIds: [2]
+0:  "6008"
+1:  "6009"
+-
+reqId: "6006"
+requester: "dcrane"
+reqCreatedOn: "Thu Jun 18 15:38:17 EDT 2015"
+reqJustification: "Required access to update servers"
+reqStatus: "Request Awaiting Child Requests Completion"
+
+*/
+        
     }
 }
 
-struct BeneficiaryList {
-    var user_key : String!
+class TargetEntities {
+    var entity : String!
+    
+    init(data : NSString){
+        
+        self.entity = data as! String
+    }
 }
 
-struct TargetEntities {
-    var entity : String!
-}
+
+

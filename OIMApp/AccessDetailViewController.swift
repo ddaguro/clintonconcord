@@ -52,7 +52,7 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
         
         var requestorUserId : String!
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        let url = Persistent.endpoint + "/webapp/rest/useraccounts/all/" + requestorUserId + "/" + requestorUserId
+        let url = Persistent.endpoint + Persistent.baseroot + "/useraccounts/all/" + requestorUserId + "/" + requestorUserId
         
         if catalog == "Applications"{
             labelTitle2.text = "Applications"
@@ -75,7 +75,7 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
     func refresh(){
         var requestorUserId : String!
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        let url = Persistent.endpoint + "/webapp/rest/useraccounts/all/" + requestorUserId + "/" + requestorUserId
+        let url = Persistent.endpoint + Persistent.baseroot + "/useraccounts/all/" + requestorUserId + "/" + requestorUserId
         
         if catalog == "Applications"{
             labelTitle2.text = "Applications"

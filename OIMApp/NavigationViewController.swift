@@ -165,7 +165,7 @@ class NavigationViewController : UIViewController, UITableViewDelegate, UITableV
         
         var requestorUserId : String!
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        let url = Persistent.endpoint + "/webapp/rest/identity/logout/" + requestorUserId
+        let url = Persistent.endpoint + Persistent.baseroot + "/identity/logout/" + requestorUserId
         
         api.LogOut(url) { (succeeded: Bool, msg: String) -> () in
             var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay.")

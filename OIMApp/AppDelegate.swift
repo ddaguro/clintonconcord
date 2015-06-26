@@ -84,8 +84,12 @@ func uicolorFromHex(rgbValue:UInt32)->UIColor{
 }
 
 struct Persistent {
-    // http://ec2-52-11-216-76.us-west-2.compute.amazonaws.com:8080/
+    
     // http://73.50.120.243:9190
+    // http://ec2-52-11-216-76.us-west-2.compute.amazonaws.com:8080/
+    // http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9080/
+    // http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9080/webappv2/rest/
     static let endpoint = "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9080/"
+    static let baseroot = "webappv2/rest"
 }
 

@@ -48,7 +48,7 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         
         var requestorUserId : String!
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        let url = Persistent.endpoint + "/webapp/rest/requests/" + requestorUserId + "/requestsRaisedByMe?cursor=1&limit=10"
+        let url = Persistent.endpoint + Persistent.baseroot + "/requests/" + requestorUserId + "/requestsRaisedByMe?cursor=1&limit=10"
         api.loadRequests(url, completion : didLoadData)
         
         refreshControl = UIRefreshControl()
@@ -61,7 +61,7 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
     func refresh(){
         var requestorUserId : String!
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        let url = Persistent.endpoint + "/webapp/rest/requests/" + requestorUserId + "/requestsRaisedByMe?cursor=1&limit=10"
+        let url = Persistent.endpoint + Persistent.baseroot + "/requests/" + requestorUserId + "/requestsRaisedByMe?cursor=1&limit=10"
         api.loadRequests(url, completion : didLoadData)
         
         SoundPlayer.play("upvote.wav")
@@ -110,7 +110,18 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
             cell.typeImageView.image = UIImage(named: "check-1-icon")
         }
         
-        cell.nameLabel.text = dataObject.reqId + " " + dataObject.reqType
+        //cell.nameLabel.text = dataObject.reqId + " " + dataObject.reqType
+
+        var text = ""
+        for action in dataObject.reqTargetEntities {
+            if text.isEmpty {
+                text = action.entity
+            } else {
+                text += " , \(action.entity)"
+            }
+        }
+        cell.nameLabel.text = text
+
         cell.postLabel?.text = dataObject.reqStatus
         cell.dateLabel.text = dataObject.reqCreatedOn
         

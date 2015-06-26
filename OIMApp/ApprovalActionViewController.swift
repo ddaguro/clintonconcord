@@ -77,7 +77,7 @@ class ApprovalActionViewController: UIViewController {
         let taskactioncomments = textActionComment.text as String!
         let taskaction = textAction.text as String!
         
-        let url = Persistent.endpoint + "/webapp/rest/approvals/performApprovalAction"
+        let url = Persistent.endpoint + Persistent.baseroot + "/approvals/performApprovalAction"
         
         var paramstring = "{\"requester\": {\"User Login\": \""
         paramstring += requestorUserId + "\"},\"task\": [{\"requestId\": \""

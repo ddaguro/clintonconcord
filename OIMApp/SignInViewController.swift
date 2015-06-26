@@ -109,7 +109,7 @@ class SignInViewController : UIViewController {
         
         self.api = API()
         
-        let url = Persistent.endpoint + "/webapp/rest/identity/login"
+        let url = Persistent.endpoint + Persistent.baseroot + "/identity/login"
         
         let username = userTextField.text
         let password = passwordTextField.text
@@ -124,7 +124,7 @@ class SignInViewController : UIViewController {
                 //load user object
                 self.users = [Users]()
                 
-                let url = Persistent.endpoint + "/webapp/rest/identity/" + username + "/" + username
+                let url = Persistent.endpoint + Persistent.baseroot + "/identity/" + username + "/" + username
                 self.api.loadUser(url, completion : self.didLoadUsers)
                 
                 NSUserDefaults.standardUserDefaults().setObject(username, forKey: "requestorUserId")

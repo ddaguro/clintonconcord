@@ -50,7 +50,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         
         var requestorUserId : String!
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        let url = Persistent.endpoint + "/webapp/rest/approvals/pendingapprovals/" + requestorUserId + "?cursor=1&limit=10"
+        let url = Persistent.endpoint + Persistent.baseroot + "/approvals/pendingapprovals/" + requestorUserId + "?cursor=1&limit=10"
         api.loadPendingApprovals(url, completion : didLoadData)
         
         refreshControl = UIRefreshControl()
@@ -63,7 +63,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     func refresh(){
         var requestorUserId : String!
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        let url = Persistent.endpoint + "/webapp/rest/approvals/pendingapprovals/" + requestorUserId + "?cursor=1&limit=10"
+        let url = Persistent.endpoint + Persistent.baseroot + "/approvals/pendingapprovals/" + requestorUserId + "?cursor=1&limit=10"
         api.loadPendingApprovals(url, completion : didLoadData)
         
         //view.showLoading()
@@ -233,7 +233,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
             let textField = alert.textFields![0] as! UITextField
             //PERFORM APPROVAL THRU API
-            let url = Persistent.endpoint + "/webapp/rest/approvals/performApprovalAction"
+            let url = Persistent.endpoint + Persistent.baseroot + "/approvals/performApprovalAction"
             
             var paramstring = "{\"requester\": {\"User Login\": \""
             paramstring += requestorUserId + "\"},\"task\": [{\"requestId\": \""

@@ -48,7 +48,7 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
         
         var requestorUserId : String!
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        let url = Persistent.endpoint + "/webapp/rest/idaas/oig/v1/certifications/users/" + requestorUserId + "/MyPendingCertifications"
+        let url = Persistent.endpoint + Persistent.baseroot + "/idaas/oig/v1/certifications/users/" + requestorUserId + "/MyPendingCertifications"
         api.loadPendingCerts(url, completion : didLoadData)
         
         
@@ -91,7 +91,7 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
         
         var requestorUserId : String!
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        let url = Persistent.endpoint + "/webapp/rest/idaas/oig/v1/certifications/users/" + requestorUserId + "/MyPendingCertifications"
+        let url = Persistent.endpoint + Persistent.baseroot + "/idaas/oig/v1/certifications/users/" + requestorUserId + "/MyPendingCertifications"
         api.loadPendingCerts(url, completion : didLoadData)
         
         SoundPlayer.play("upvote.wav")

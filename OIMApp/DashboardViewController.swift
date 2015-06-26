@@ -44,7 +44,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         
         var requestorUserId : String!
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        let url = Persistent.endpoint + "/webapp/rest/identity/" + requestorUserId + "/" + requestorUserId
+        let url = Persistent.endpoint + Persistent.baseroot + "/identity/" + requestorUserId + "/" + requestorUserId
         api.loadUser(url, completion : didLoadUsers)
         
     }

@@ -570,7 +570,7 @@ class API{
                 var error : NSError?
                 var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
                 
-                let results: NSArray = jsonData["certificationInstances"] as! NSArray
+                let results: NSArray = jsonData["identityCertifications"]!["certificationInstances"] as! NSArray
                 
                 var certs = [Certs]()
                 for cert in results{
@@ -610,7 +610,7 @@ class API{
                 var error : NSError?
                 var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
                 
-                let results: NSArray = jsonData["certificationLineItems"] as! NSArray
+                let results: NSArray = jsonData["identityCertifications"]!["certificationLineItems"] as! NSArray
                 
                 var certs = [CertItem]()
                 for cert in results{
