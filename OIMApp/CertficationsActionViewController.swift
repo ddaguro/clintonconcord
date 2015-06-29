@@ -160,24 +160,20 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         
         alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
             let textField = alert.textFields![0] as! UITextField
-            //PERFORM APPROVAL THRU API
             let url = Persistent.endpoint + Persistent.baseroot + "/idaas/oig/v1/certifications/PerformCertificationAction"
             
-            /*
-            var paramstring = "{\"requester\": {\"User Login\": \""
-            paramstring += requestorUserId + "\"},\"task\": [{\"requestId\": \""
-            paramstring += requestid + "\",\"taskId\": \""
-            paramstring += taskid + "\", \"taskNumber\": \""
-            paramstring += tasknumber + "\",\"taskPriority\": \""
-            paramstring += taskpriority + "\",\"taskState\": \""
-            paramstring += taskstate + "\",\"taskTitle\": \""
-            paramstring += tasktitle + "\" ,\"taskActionComments\": \""
-            paramstring += textField.text + "\",\"taskAction\": \""
-            paramstring += taskaction + "\"}]}"
-            */
-            
-            
-            var jsonstring = "{\"identityCertifications\": {\"certificationLineItemDetails\": [{\"certificationId\": 78,\"entityId\": 142,\"accounts\": [{\"displayName\": \"OUD AI(GDAVIS)\",\"rowEntityId\": \"131\",\"targetAccountUserLogin\": \"GDAVIS\",\"entitlements\": []}]}],\"requesterId\": \"dcrane\",\"certificationType\": \"ApplicationInstance\",\"certificationComments\": \"User need domain account\",\"certificationDecision\": \"CERTIFY\",\"identityPassword\": \"Oracle123\"}}"
+            var jsonstring = "{\"identityCertifications\": {\"certificationLineItemDetails\": [{\"certificationId\": " + "\(94)"
+            jsonstring += ",\"entityId\": " +  "\(170)"
+            jsonstring += ",\"accounts\": [{\"displayName\": \"" + "OUD AI(GDAVIS)"
+            jsonstring += "\",\"rowEntityId\": \"" + "293"
+            jsonstring += "\",\"targetAccountUserLogin\": \"" + "GDAVIS"
+            jsonstring += "\",\"entitlements\": []}]}],"
+            jsonstring += "\"requesterId\": \"" + "dcrane"
+            jsonstring += "\",\"certificationType\": \"" + "ApplicationInstance"
+            jsonstring += "\",\"certificationComments\": \"" + "User need domain account linh"
+            jsonstring += "\",\"certificationDecision\": \"" + "CERTIFY"
+            jsonstring += "\",\"identityPassword\": \"" + "Oracle123"
+            jsonstring += "\"}}"
 
             
             self.api.RequestCertificationsAction(jsonstring, url : url) { (succeeded: Bool, msg: String) -> () in
