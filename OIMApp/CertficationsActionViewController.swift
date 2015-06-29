@@ -74,15 +74,15 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
 
         cell.certifyButton.tag = indexPath.row
         cell.certifyButton.setBackgroundImage(UIImage(named:"btn-certify"), forState: .Normal)
-        cell.certifyButton.addTarget(self, action: "dismiss:", forControlEvents: .TouchUpInside)
+        cell.certifyButton.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
         
         cell.revokeButton.tag = indexPath.row
         cell.revokeButton.setBackgroundImage(UIImage(named:"btn-revoke"), forState: .Normal)
-        cell.revokeButton.addTarget(self, action: "dismiss:", forControlEvents: .TouchUpInside)
+        cell.revokeButton.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
         
         cell.moreButton.tag = indexPath.row
         cell.moreButton.setBackgroundImage(UIImage(named:"btn-more"), forState: .Normal)
-        cell.moreButton.addTarget(self, action: "dismiss:", forControlEvents: .TouchUpInside)
+        cell.moreButton.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
         
         for action in info.appAccounts {
             cell.titleLabel.text = action.displayName
@@ -115,7 +115,7 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
         
         let task = self.certitemdetail[btnsendtag.tag]
-        
+        /*
         var certId : Int!
         var certTitle : String!
         var certType: String!
@@ -128,22 +128,22 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         let taskstate = task.taskState as String!
         let tasktitle = task.taskTitle as String!
         let taskactioncomments = "" as String!
-        
+        */
         var taskaction : String!
         var alerttitle : String!
         var alertmsg : String!
         
-        if action == "Approve" {
+        if action == "Certify" {
             
-            taskaction = "APPROVE"
-            alerttitle = "Approval Confirmation"
-            alertmsg = "Please confirm approval for " + task.requestEntityName + " Requested by " + task.requestRaisedByUser
+            taskaction = "CERTIFY"
+            alerttitle = "Certify Confirmation"
+            alertmsg = "Please confirm approval for " + self.certType
             
-        } else if action == "Decline" {
+        } else if action == "Revoke" {
             
-            taskaction = "REJECT"
-            alerttitle = "Decline Confirmation"
-            alertmsg = "Please confirm rejection of " + task.requestEntityName + " Requested by " + task.requestRaisedByUser
+            taskaction = "REVOKE"
+            alerttitle = "Revoke Confirmation"
+            alertmsg = "Please confirm rejection of " + self.certType
             
         } else if action == "More" {
             
@@ -161,8 +161,9 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
             let textField = alert.textFields![0] as! UITextField
             //PERFORM APPROVAL THRU API
-            let url = Persistent.endpoint + Persistent.baseroot + "/approvals/performApprovalAction"
+            let url = Persistent.endpoint + Persistent.baseroot + "/idaas/oig/v1/certifications/PerformCertificationAction"
             
+            /*
             var paramstring = "{\"requester\": {\"User Login\": \""
             paramstring += requestorUserId + "\"},\"task\": [{\"requestId\": \""
             paramstring += requestid + "\",\"taskId\": \""
@@ -173,8 +174,13 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
             paramstring += tasktitle + "\" ,\"taskActionComments\": \""
             paramstring += textField.text + "\",\"taskAction\": \""
             paramstring += taskaction + "\"}]}"
+            */
             
-            self.api.RequestApprovalAction(paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
+            
+            var jsonstring = "{\"identityCertifications\": {\"certificationLineItemDetails\": [{\"certificationId\": 78,\"entityId\": 142,\"accounts\": [{\"displayName\": \"OUD AI(GDAVIS)\",\"rowEntityId\": \"131\",\"targetAccountUserLogin\": \"GDAVIS\",\"entitlements\": []}]}],\"requesterId\": \"dcrane\",\"certificationType\": \"ApplicationInstance\",\"certificationComments\": \"User need domain account\",\"certificationDecision\": \"CERTIFY\",\"identityPassword\": \"Oracle123\"}}"
+
+            
+            self.api.RequestCertificationsAction(jsonstring, url : url) { (succeeded: Bool, msg: String) -> () in
                 var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
                 if(succeeded) {
                     alert.title = "Success!"
@@ -187,12 +193,13 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
                 }
                 
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    
+                    /*
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
                     let controller = storyboard.instantiateViewControllerWithIdentifier("ApprovalsViewController") as! ApprovalsViewController
                     controller.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
                     self.presentViewController(controller, animated: true, completion: nil)
-                    
+                    */
+                    self.dismissViewControllerAnimated(true, completion: nil)
                 })
             }
         }))

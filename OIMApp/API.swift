@@ -672,4 +672,53 @@ class API{
         
         task.resume()
     }
+    
+    func RequestCertificationsAction(params : String, url : String, postCompleted : (succeeded: Bool, msg: String) -> ()) {
+        var request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        var session = NSURLSession.sharedSession()
+        request.HTTPMethod = "POST"
+        
+        var err: NSError?
+        
+        request.HTTPBody = params.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true);
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        
+        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            
+            var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
+            var err: NSError?
+            var json = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &err) as? NSDictionary
+            
+            var msg = "No message"
+            
+            if(err != nil) {
+                println(err!.localizedDescription)
+                let jsonStr = NSString(data: data, encoding: NSUTF8StringEncoding)
+                println("Error could not parse JSON: '\(jsonStr)'")
+                postCompleted(succeeded: false, msg: "Error")
+            }
+            else {
+                if let parseJSON = json {
+                    var success: Bool? = json!.valueForKey("isSuccess") as? Bool
+                    
+                    if success == true {
+                        postCompleted(succeeded: true, msg: "Approved Certifications")
+                    } else {
+                        postCompleted(succeeded: false, msg: "Certfication Error")
+                    }
+                    return
+                }
+                else {
+                    let jsonStr = NSString(data: data, encoding: NSUTF8StringEncoding)
+                    println("Error could not parse JSON: \(jsonStr)")
+                    postCompleted(succeeded: false, msg: "Error")
+                }
+            }
+        })
+        
+        task.resume()
+    }
+
 }
