@@ -111,28 +111,11 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
         
         let cell = tableView.dequeueReusableCellWithIdentifier("CertsCell") as! CertsCell
         
-        /*
-        cell.approveBtn.tag = indexPath.row
-        cell.approveBtn.setBackgroundImage(UIImage(named:"btn-approve"), forState: .Normal)
-        cell.approveBtn.addTarget(self, action: "dismiss:", forControlEvents: .TouchUpInside)
-        
-        
-        cell.declineBtn.tag = indexPath.row
-        cell.declineBtn.setBackgroundImage(UIImage(named:"btn-decline"), forState: .Normal)
-        cell.declineBtn.addTarget(self, action: "dismiss:", forControlEvents: .TouchUpInside)
-        
-        cell.moreBtn.tag = indexPath.row
-        cell.moreBtn.setBackgroundImage(UIImage(named:"btn-more"), forState: .Normal)
-        cell.moreBtn.addTarget(self, action: "dismiss:", forControlEvents: .TouchUpInside)
-        */
-        
-
-        
         cell.titleLabel.text = cert.title
         cell.statusImage.image = cert.state == "New" ? UIImage(named: "badge-new") : UIImage(named: "Badge-Assigned")
         cell.assigneesLabel.text = "Assignee"
         cell.assignnesUserLabel.text = cert.asignee
-        cell.dateLabel.text = cert.createdDate
+        cell.dateLabel.text = cert.createdDate + " | id " + "\(cert.certificationId)" + " | type " + cert.certificationType
         cell.progressLabel.text = "Progress"
         cell.progressImage.image = cert.percentComplete ==  "0.0"  ? UIImage(named: "percent0") : UIImage(named: "percent50")
         cell.percentLabel.text =  cert.percentComplete ==  "0.0"  ? "0" : "50"
@@ -153,8 +136,6 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
             controller.certType = info.certificationType
             controller.navigationController
             showViewController(controller, sender: self)
-            
-            
         }
     }
     

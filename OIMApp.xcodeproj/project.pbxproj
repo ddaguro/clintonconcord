@@ -72,6 +72,7 @@
 		01A95BBA1B178EBC00869943 /* TasksCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A95BB91B178EBC00869943 /* TasksCell.swift */; };
 		01B7B4FC1B0299FC0090E62E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01B7B4FB1B0299FC0090E62E /* Main.storyboard */; };
 		01B7B4FE1B02A04A0090E62E /* ApprovalsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B7B4FD1B02A04A0090E62E /* ApprovalsViewController.swift */; };
+		01BF89031B41D76300BAD078 /* CertficationsActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BF89021B41D76300BAD078 /* CertficationsActionViewController.swift */; };
 		01DA33BA1B0C5BE6002778DF /* Roles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DA33B91B0C5BE6002778DF /* Roles.swift */; };
 		01DA33BC1B0C5CB7002778DF /* Entitlements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DA33BB1B0C5CB7002778DF /* Entitlements.swift */; };
 		01DA33BE1B0C5D38002778DF /* Applications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DA33BD1B0C5D38002778DF /* Applications.swift */; };
@@ -165,6 +166,7 @@
 		01A95BB91B178EBC00869943 /* TasksCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TasksCell.swift; sourceTree = "<group>"; };
 		01B7B4FB1B0299FC0090E62E /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		01B7B4FD1B02A04A0090E62E /* ApprovalsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApprovalsViewController.swift; sourceTree = "<group>"; };
+		01BF89021B41D76300BAD078 /* CertficationsActionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CertficationsActionViewController.swift; sourceTree = "<group>"; };
 		01DA33B91B0C5BE6002778DF /* Roles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Roles.swift; sourceTree = "<group>"; };
 		01DA33BB1B0C5CB7002778DF /* Entitlements.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Entitlements.swift; sourceTree = "<group>"; };
 		01DA33BD1B0C5D38002778DF /* Applications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Applications.swift; sourceTree = "<group>"; };
@@ -405,6 +407,7 @@
 			children = (
 				016750DB1B1CF1230093FD6A /* CertficationsViewController.swift */,
 				01FF7F511B3884CC0026BE38 /* CertficationsDetailViewController.swift */,
+				01BF89021B41D76300BAD078 /* CertficationsActionViewController.swift */,
 			);
 			name = MyCertifcations;
 			sourceTree = "<group>";
@@ -619,6 +622,7 @@
 				013AB3CE1AFA84F300160A34 /* Identity.swift in Sources */,
 				015C140A1B0BC4F50099B9E7 /* ADVGradientButton.swift in Sources */,
 				013AB3CC1AFA7E2200160A34 /* API.swift in Sources */,
+				01BF89031B41D76300BAD078 /* CertficationsActionViewController.swift in Sources */,
 				01506FB41B0D11B400F9D605 /* MetaCell.swift in Sources */,
 				013AB3A91AFA7CA400160A34 /* AppDelegate.swift in Sources */,
 				015C140C1B0BC4F50099B9E7 /* ADVProgressLayer.swift in Sources */,

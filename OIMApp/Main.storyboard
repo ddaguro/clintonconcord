@@ -1205,11 +1205,11 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="173" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="wYA-Vo-a8R">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="126" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="wYA-Vo-a8R">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="CertsDetailCell" rowHeight="173" id="b1q-4b-5Tq" customClass="CertsDetailCell" customModule="OIMApp" customModuleProvider="target">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="CertsDetailCell" rowHeight="126" id="b1q-4b-5Tq" customClass="CertsDetailCell" customModule="OIMApp" customModuleProvider="target">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="b1q-4b-5Tq" id="YY7-KI-52g">
                                             <autoresizingMask key="autoresizingMask"/>
@@ -1241,20 +1241,6 @@
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="za0-Cd-IsB">
                                                     <rect key="frame" x="81" y="77" width="47" height="10"/>
                                                 </imageView>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ks2-8R-btv">
-                                                    <rect key="frame" x="16" y="122" width="118" height="30"/>
-                                                    <state key="normal" title="Certify">
-                                                        <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                </button>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9iV-aR-VrD">
-                                                    <rect key="frame" x="164" y="122" width="119" height="30"/>
-                                                    <state key="normal" title="Revoke">
-                                                        <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                </button>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DPm-i3-m2P">
                                                     <rect key="frame" x="81" y="100" width="221" height="8"/>
                                                 </imageView>
@@ -1270,24 +1256,14 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cc5-Jt-bbA">
-                                                    <rect key="frame" x="315" y="122" width="52" height="30"/>
-                                                    <state key="normal" title="More">
-                                                        <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                </button>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <inset key="separatorInset" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                                         <connections>
-                                            <outlet property="certifyButton" destination="Ks2-8R-btv" id="lE2-dF-tIK"/>
                                             <outlet property="descriptionLabel" destination="xkZ-0Y-VjL" id="Tqi-f9-vWR"/>
-                                            <outlet property="moreButton" destination="Cc5-Jt-bbA" id="b2r-in-nhb"/>
                                             <outlet property="percentLabel" destination="Piw-EI-UMH" id="f8g-om-NCA"/>
                                             <outlet property="progressImage" destination="DPm-i3-m2P" id="b0l-EE-2H1"/>
                                             <outlet property="progressLabel" destination="fUs-US-1hC" id="EtZ-W0-IQg"/>
-                                            <outlet property="revokeButton" destination="9iV-aR-VrD" id="Ve3-qo-EZK"/>
                                             <outlet property="riskImage" destination="za0-Cd-IsB" id="5dh-K8-RI8"/>
                                             <outlet property="riskLabel" destination="PFH-3Z-ZsJ" id="oDT-vV-AtD"/>
                                             <outlet property="riskStatusLabel" destination="cDg-N7-pHr" id="ewf-E2-ktP"/>
@@ -1311,6 +1287,7 @@
                         <outlet property="navigationBar" destination="a4w-J8-dr4" id="i6B-xO-bdt"/>
                         <outlet property="tableView" destination="wYA-Vo-a8R" id="IoA-Xc-B7x"/>
                         <outlet property="titleLabel" destination="tnX-iG-S4t" id="Jv7-0f-ZS9"/>
+                        <segue destination="GUC-tw-lJY" kind="show" id="WcV-6j-aRt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g6B-Aq-nKm" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1384,6 +1361,127 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vVR-nk-x6r" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2564.5" y="-65.5"/>
+        </scene>
+        <!--Certfications Action View Controller-->
+        <scene sceneID="O5S-rh-26l">
+            <objects>
+                <viewController storyboardIdentifier="CertficationsActionViewController" id="GUC-tw-lJY" customClass="CertficationsActionViewController" customModule="OIMApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="SOL-Jh-cIk"/>
+                        <viewControllerLayoutGuide type="bottom" id="HMk-9p-4de"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="cM1-6Y-Zy4">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RAt-vm-vFX">
+                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <color key="tintColor" red="0.23921568630000001" green="0.5568627451" blue="0.83137254900000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="barTintColor" red="0.23921568630000001" green="0.5568627451" blue="0.83137254900000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <items>
+                                    <navigationItem id="Xp9-1D-j7g">
+                                        <barButtonItem key="leftBarButtonItem" image="back" id="IDI-ij-LZg">
+                                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <connections>
+                                                <action selector="goBack:" destination="GUC-tw-lJY" id="uJz-6g-s3E"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="173" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="KKn-h4-WHp">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="CertsActionCell" rowHeight="173" id="UC9-jX-Jjp" customClass="CertsActionCell" customModule="OIMApp" customModuleProvider="target">
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UC9-jX-Jjp" id="aPb-Pp-hJP">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="251" verticalCompressionResistancePriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KsT-Og-aOc">
+                                                    <rect key="frame" x="16" y="12" width="351" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Risk" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="egx-zH-hpu">
+                                                    <rect key="frame" x="16" y="71" width="42" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w5R-c2-vAm">
+                                                    <rect key="frame" x="16" y="32" width="351" height="22"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Zl-Bd-PyF">
+                                                    <rect key="frame" x="136" y="71" width="231" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yR3-Dd-x1M">
+                                                    <rect key="frame" x="81" y="77" width="47" height="10"/>
+                                                </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eZT-uw-cpa">
+                                                    <rect key="frame" x="16" y="122" width="118" height="30"/>
+                                                    <state key="normal" title="Certify">
+                                                        <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cyp-Yf-JW3">
+                                                    <rect key="frame" x="164" y="122" width="119" height="30"/>
+                                                    <state key="normal" title="Revoke">
+                                                        <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CGp-xg-Yzn">
+                                                    <rect key="frame" x="315" y="122" width="52" height="30"/>
+                                                    <state key="normal" title="More">
+                                                        <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                </button>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <inset key="separatorInset" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
+                                        <connections>
+                                            <outlet property="certifyButton" destination="eZT-uw-cpa" id="pu7-QI-vFL"/>
+                                            <outlet property="descriptionLabel" destination="w5R-c2-vAm" id="eYD-Zl-nnk"/>
+                                            <outlet property="moreButton" destination="CGp-xg-Yzn" id="62D-LU-ARC"/>
+                                            <outlet property="revokeButton" destination="Cyp-Yf-JW3" id="UQM-7l-lhf"/>
+                                            <outlet property="riskImage" destination="yR3-Dd-x1M" id="imY-eT-2RN"/>
+                                            <outlet property="riskLabel" destination="egx-zH-hpu" id="ao7-YH-lCM"/>
+                                            <outlet property="riskStatusLabel" destination="3Zl-Bd-PyF" id="hLm-KI-svD"/>
+                                            <outlet property="titleLabel" destination="KsT-Og-aOc" id="u54-vO-soT"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x8m-cp-Aeh">
+                                <rect key="frame" x="16" y="31" width="343" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.23921568630000001" green="0.5568627451" blue="0.83137254900000002" alpha="1" colorSpace="calibratedRGB"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="B2v-74-1Hs"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="navigationBar" destination="RAt-vm-vFX" id="5kK-Oc-Acf"/>
+                        <outlet property="tableView" destination="KKn-h4-WHp" id="5ML-tm-TfX"/>
+                        <outlet property="titleLabel" destination="x8m-cp-Aeh" id="qJ6-c9-dUX"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZyT-tC-gRu" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3909.5" y="2408.5"/>
         </scene>
     </scenes>
     <resources>

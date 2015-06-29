@@ -29,8 +29,6 @@ class Requests {
         self.reqType = Utils.getStringFromJSON(data, key: "reqType")
         self.reqCreatedOn = Utils.getStringFromJSON(data, key: "reqCreatedOn")
         
-        //let results: NSArray = jsonData["requests"] as! NSArray
-        
         if let results: NSArray = data["reqTargetEntities"] as? NSArray {
             //println(data["reqTargetEntities"])
             
@@ -38,17 +36,6 @@ class Requests {
             for ent in results{
                 let ent = TargetEntities(data: ent as! NSString)
                 ents.append(ent)
-                //self.reqTargetNames = ent
-                //var names = (names + ent) as! String
-                //self.reqTargetNames += "\(ent)" as! String
-                //names.append(ent as! String)
-                
-                //var variableString = ent as! String
-                //variableString += ent as! String
-                
-                
-                
-                //self.reqTargetNames = variableString
             }
             self.reqTargetEntities = ents
         }
