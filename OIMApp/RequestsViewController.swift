@@ -36,6 +36,7 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.dataSource = self
         tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
         tableView.separatorColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
+
         
         menuItem.image = UIImage(named: "menu")
         toolbar.tintColor = UIColor.blackColor()

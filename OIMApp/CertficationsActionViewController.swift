@@ -37,7 +37,6 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         tableView.dataSource = self
         tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
         tableView.separatorColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
-        //tableView.tableFooterView = UIView(frame: CGRectZero)
         
         self.certitemdetail = [CertItemDetail]()
         self.api = API()
@@ -114,40 +113,46 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         var requestorUserId : String!
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
         
-        let task = self.certitemdetail[btnsendtag.tag]
-        /*
-        var certId : Int!
-        var certTitle : String!
-        var certType: String!
-        var applicationInstanceId : Int!
+        let cert = self.certitemdetail[btnsendtag.tag]
         
-        let requestid = task.requestId as String!
-        let taskid = task.taskId as String!
-        let tasknumber = task.taskNumber as String!
-        let taskpriority = task.taskPriority as String!
-        let taskstate = task.taskState as String!
-        let tasktitle = task.taskTitle as String!
-        let taskactioncomments = "" as String!
-        */
-        var taskaction : String!
+        let cid = cert.certificationId as Int!
+        let entityid = cert.entityId as Int!
+        
+        var displayname : String!
+        var rowentityid : String!
+        var targetuser : String!
+        var risksummary : String!
+        
+        for account in cert.appAccounts {
+            displayname = account.displayName
+            rowentityid = account.rowEntityId
+            targetuser = account.targetAccountUserLogin
+            risksummary = account.riskSummary
+        }
+        
+        let ctitle = self.certTitle
+        let ctype = self.certType
+        let certactioncomments = "" as String!
+
+        var certaction : String!
         var alerttitle : String!
         var alertmsg : String!
         
         if action == "Certify" {
             
-            taskaction = "CERTIFY"
+            certaction = "CERTIFY"
             alerttitle = "Certify Confirmation"
             alertmsg = "Please confirm approval for " + self.certType
             
         } else if action == "Revoke" {
             
-            taskaction = "REVOKE"
+            certaction = "REVOKE"
             alerttitle = "Revoke Confirmation"
             alertmsg = "Please confirm rejection of " + self.certType
             
         } else if action == "More" {
             
-            taskaction = "CLAIM"
+            certaction = "CLAIM"
             alerttitle = "More Options"
             alertmsg = ""
         }
@@ -162,15 +167,15 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
             let textField = alert.textFields![0] as! UITextField
             let url = Persistent.endpoint + Persistent.baseroot + "/idaas/oig/v1/certifications/PerformCertificationAction"
             
-            var jsonstring = "{\"identityCertifications\": {\"certificationLineItemDetails\": [{\"certificationId\": " + "\(94)"
-            jsonstring += ",\"entityId\": " +  "\(170)"
-            jsonstring += ",\"accounts\": [{\"displayName\": \"" + "OUD AI(GDAVIS)"
-            jsonstring += "\",\"rowEntityId\": \"" + "293"
-            jsonstring += "\",\"targetAccountUserLogin\": \"" + "GDAVIS"
+            var jsonstring = "{\"identityCertifications\": {\"certificationLineItemDetails\": [{\"certificationId\": " + "\(cid)"
+            jsonstring += ",\"entityId\": " +  "\(entityid)"
+            jsonstring += ",\"accounts\": [{\"displayName\": \"" + displayname
+            jsonstring += "\",\"rowEntityId\": \"" + rowentityid
+            jsonstring += "\",\"targetAccountUserLogin\": \"" + targetuser
             jsonstring += "\",\"entitlements\": []}]}],"
-            jsonstring += "\"requesterId\": \"" + "dcrane"
-            jsonstring += "\",\"certificationType\": \"" + "ApplicationInstance"
-            jsonstring += "\",\"certificationComments\": \"" + "User need domain account linh"
+            jsonstring += "\"requesterId\": \"" + requestorUserId
+            jsonstring += "\",\"certificationType\": \"" + ctype
+            jsonstring += "\",\"certificationComments\": \"" + textField.text
             jsonstring += "\",\"certificationDecision\": \"" + "CERTIFY"
             jsonstring += "\",\"identityPassword\": \"" + "Oracle123"
             jsonstring += "\"}}"

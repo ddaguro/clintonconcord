@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		010C6DF41B1E17AF00944643 /* MakeRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010C6DF31B1E17AF00944643 /* MakeRequestViewController.swift */; };
 		0120B5511B150D8500198119 /* RequestsDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0120B5501B150D8500198119 /* RequestsDetailViewController.swift */; };
+		012219811B44478B00DB6F3D /* DOAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012219801B44478B00DB6F3D /* DOAlertController.swift */; };
 		0138FC641AFAA8D700837EAB /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0138FC631AFAA8D700837EAB /* NavigationViewController.swift */; };
 		0138FC671AFAAAD000837EAB /* MegaTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0138FC661AFAAAD000837EAB /* MegaTheme.swift */; };
 		0138FC6A1AFAABC600837EAB /* NavigationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0138FC691AFAABC600837EAB /* NavigationCell.swift */; };
@@ -98,6 +99,7 @@
 /* Begin PBXFileReference section */
 		010C6DF31B1E17AF00944643 /* MakeRequestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MakeRequestViewController.swift; sourceTree = "<group>"; };
 		0120B5501B150D8500198119 /* RequestsDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestsDetailViewController.swift; sourceTree = "<group>"; };
+		012219801B44478B00DB6F3D /* DOAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DOAlertController.swift; sourceTree = "<group>"; };
 		0138FC631AFAA8D700837EAB /* NavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		0138FC661AFAAAD000837EAB /* MegaTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MegaTheme.swift; sourceTree = "<group>"; };
 		0138FC691AFAABC600837EAB /* NavigationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationCell.swift; sourceTree = "<group>"; };
@@ -203,6 +205,14 @@
 				010C6DF31B1E17AF00944643 /* MakeRequestViewController.swift */,
 			);
 			name = MakeRequest;
+			sourceTree = "<group>";
+		};
+		0122197F1B44478B00DB6F3D /* DOAlertController */ = {
+			isa = PBXGroup;
+			children = (
+				012219801B44478B00DB6F3D /* DOAlertController.swift */,
+			);
+			path = DOAlertController;
 			sourceTree = "<group>";
 		};
 		0138FC651AFAAABB00837EAB /* Theme */ = {
@@ -351,6 +361,7 @@
 		015C13FD1B0BC4F50099B9E7 /* Controls */ = {
 			isa = PBXGroup;
 			children = (
+				0122197F1B44478B00DB6F3D /* DOAlertController */,
 				018060071B20D6B600F4C68D /* Spring */,
 				015C13FE1B0BC4F50099B9E7 /* ADVAnimatedButton */,
 				015C14001B0BC4F50099B9E7 /* ADVGradientButton */,
@@ -590,6 +601,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				01FBA2BD1B14F952006C1915 /* RequestsViewController.swift in Sources */,
+				012219811B44478B00DB6F3D /* DOAlertController.swift in Sources */,
 				018060311B20D6B600F4C68D /* ImageLoader.swift in Sources */,
 				016750DC1B1CF1230093FD6A /* CertficationsViewController.swift in Sources */,
 				015C140D1B0BC4F50099B9E7 /* ADVSegmentedControl.swift in Sources */,

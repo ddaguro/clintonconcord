@@ -79,6 +79,7 @@ class AccessViewController: UIViewController, UITableViewDelegate, UITableViewDa
             self.performSegueWithIdentifier("presentTableNavigation", sender: self)
         }
     }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         let toViewController = segue.destinationViewController as! UIViewController

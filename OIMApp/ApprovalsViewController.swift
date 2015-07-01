@@ -219,60 +219,149 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
             
         } else if action == "More" {
             
-            taskaction = "CLAIM"
+            taskaction = ""
             alerttitle = "More Options"
             alertmsg = ""
         }
         
-        var alert = UIAlertController(title: alerttitle, message: alertmsg, preferredStyle: .Alert)
-
-        alert.addTextFieldWithConfigurationHandler({ (textField) -> Void in
-            textField.text = ""
-        })
+        var alert : UIAlertController
+        var doalert : DOAlertController
         
-        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
-            let textField = alert.textFields![0] as! UITextField
-            //PERFORM APPROVAL THRU API
-            let url = Persistent.endpoint + Persistent.baseroot + "/approvals/performApprovalAction"
+        if action != "More" {
+            //alert = UIAlertController(title: alerttitle, message: alertmsg, preferredStyle: .Alert)
+            //alert.addTextFieldWithConfigurationHandler({ (textField) -> Void in
+            //    textField.text = ""
+            //})
             
-            var paramstring = "{\"requester\": {\"User Login\": \""
-            paramstring += requestorUserId + "\"},\"task\": [{\"requestId\": \""
-            paramstring += requestid + "\",\"taskId\": \""
-            paramstring += taskid + "\", \"taskNumber\": \""
-            paramstring += tasknumber + "\",\"taskPriority\": \""
-            paramstring += taskpriority + "\",\"taskState\": \""
-            paramstring += taskstate + "\",\"taskTitle\": \""
-            paramstring += tasktitle + "\" ,\"taskActionComments\": \""
-            paramstring += textField.text + "\",\"taskAction\": \""
-            paramstring += taskaction + "\"}]}"
+            doalert = DOAlertController(title: alerttitle, message: alertmsg, preferredStyle: .Alert)
             
-            self.api.RequestApprovalAction(paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
-                var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
-                if(succeeded) {
-                    alert.title = "Success!"
-                    alert.message = msg
-                    
-                }
-                else {
-                    alert.title = "Failed : ("
-                    alert.message = msg
-                }
-                
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    
-                    //self.tableView.reloadData()
-                    //alert.show()
-                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    let controller = storyboard.instantiateViewControllerWithIdentifier("ApprovalsViewController") as! ApprovalsViewController
-                    controller.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
-                    self.presentViewController(controller, animated: true, completion: nil)
-                    
-                })
+            // Add the text field for text entry.
+            doalert.addTextFieldWithConfigurationHandler { textField in
+                // If you need to customize the text field, you can do so here.
             }
-        }))
-        
-        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
+            
+            let approveAction = DOAlertAction(title: "OK", style: .Default) { action in
+                let textField = doalert.textFields![0] as! UITextField
+                //PERFORM APPROVAL THRU API
+                let url = Persistent.endpoint + Persistent.baseroot + "/approvals/performApprovalAction"
+                
+                var paramstring = "{\"requester\": {\"User Login\": \""
+                paramstring += requestorUserId + "\"},\"task\": [{\"requestId\": \""
+                paramstring += requestid + "\",\"taskId\": \""
+                paramstring += taskid + "\", \"taskNumber\": \""
+                paramstring += tasknumber + "\",\"taskPriority\": \""
+                paramstring += taskpriority + "\",\"taskState\": \""
+                paramstring += taskstate + "\",\"taskTitle\": \""
+                paramstring += tasktitle + "\" ,\"taskActionComments\": \""
+                paramstring += textField.text + "\",\"taskAction\": \""
+                paramstring += taskaction + "\"}]}"
+                
+                self.api.RequestApprovalAction(paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
+                    var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
+                    if(succeeded) {
+                        alert.title = "Success!"
+                        alert.message = msg
+                        
+                    }
+                    else {
+                        alert.title = "Failed : ("
+                        alert.message = msg
+                    }
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        //self.tableView.reloadData()
+                        //alert.show()
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        let controller = storyboard.instantiateViewControllerWithIdentifier("ApprovalsViewController") as! ApprovalsViewController
+                        controller.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
+                        self.presentViewController(controller, animated: true, completion: nil)
+                        
+                    })
+                }
+            }
+            let cancelAction = DOAlertAction(title: "Cancel", style: .Cancel) { action in
+            }
+            doalert.addAction(cancelAction)
+            doalert.addAction(approveAction)
+            
+            presentViewController(doalert, animated: true, completion: nil)
+            /*
+            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
+                let textField = alert.textFields![0] as! UITextField
+                //PERFORM APPROVAL THRU API
+                let url = Persistent.endpoint + Persistent.baseroot + "/approvals/performApprovalAction"
+                
+                var paramstring = "{\"requester\": {\"User Login\": \""
+                paramstring += requestorUserId + "\"},\"task\": [{\"requestId\": \""
+                paramstring += requestid + "\",\"taskId\": \""
+                paramstring += taskid + "\", \"taskNumber\": \""
+                paramstring += tasknumber + "\",\"taskPriority\": \""
+                paramstring += taskpriority + "\",\"taskState\": \""
+                paramstring += taskstate + "\",\"taskTitle\": \""
+                paramstring += tasktitle + "\" ,\"taskActionComments\": \""
+                paramstring += textField.text + "\",\"taskAction\": \""
+                paramstring += taskaction + "\"}]}"
+                
+                self.api.RequestApprovalAction(paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
+                    var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
+                    if(succeeded) {
+                        alert.title = "Success!"
+                        alert.message = msg
+                        
+                    }
+                    else {
+                        alert.title = "Failed : ("
+                        alert.message = msg
+                    }
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        //self.tableView.reloadData()
+                        //alert.show()
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        let controller = storyboard.instantiateViewControllerWithIdentifier("ApprovalsViewController") as! ApprovalsViewController
+                        controller.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
+                        self.presentViewController(controller, animated: true, completion: nil)
+                        
+                    })
+                }
+            }))
+
+            alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil))
+            presentViewController(alert, animated: true, completion: nil)
+            */
+        } else {
+            doalert = DOAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+            let approveAction = DOAlertAction(title: "Approve", style: .Destructive) { action in
+            }
+            let claimAction = DOAlertAction(title: "Claim", style: .Destructive) { action in
+            }
+            let declineAction = DOAlertAction(title: "Decline", style: .Destructive) { action in
+            }
+            let delegateAction = DOAlertAction(title: "Delegate", style: .Destructive) { action in
+            }
+            let resetAction = DOAlertAction(title: "Reset", style: .Destructive) { action in
+            }
+            let cancelAction = DOAlertAction(title: "Cancel", style: .Cancel) { action in
+            }
+            // Add the action.
+            doalert.addAction(approveAction)
+            doalert.addAction(claimAction)
+            doalert.addAction(declineAction)
+            doalert.addAction(delegateAction)
+            doalert.addAction(resetAction)
+            doalert.addAction(cancelAction)
+            
+            presentViewController(doalert, animated: true, completion: nil)
+            //alert.addAction(UIAlertAction(title: "Approve", style: UIAlertActionStyle.Default, handler: nil))
+            //alert.addAction(UIAlertAction(title: "Claim", style: UIAlertActionStyle.Default, handler: nil))
+            //alert.addAction(UIAlertAction(title: "Decline", style: UIAlertActionStyle.Default, handler: nil))
+            //alert.addAction(UIAlertAction(title: "Delegate", style: UIAlertActionStyle.Default, handler: nil))
+            //alert.addAction(UIAlertAction(title: "Reset", style: UIAlertActionStyle.Destructive, handler: nil))
+            
+        }
+
     }
 
     
