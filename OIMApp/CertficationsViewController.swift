@@ -9,7 +9,7 @@
 import UIKit
 
 class CertficationsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
+    
     
     @IBOutlet var labelTitle: UILabel!
     @IBOutlet var tableView: UITableView!
@@ -28,7 +28,7 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         toolbar.clipsToBounds = true
         
         labelTitle.text = "My Certfications"
@@ -96,7 +96,7 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
         
         SoundPlayer.play("upvote.wav")
     }
-
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if self.certs == nil
         {
@@ -157,13 +157,21 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     @IBAction func presentNavigation(sender: AnyObject) {
-        if self.nagivationStyleToPresent != nil {
+        
+        // Dismiss keyboard (optional)
+        self.view.endEditing(true)
+        self.frostedViewController.view.endEditing(true)
+        
+        // Present the view controller
+        self.frostedViewController.presentMenuViewController()
+        
+        /*if self.nagivationStyleToPresent != nil {
             transitionOperator.transitionStyle = nagivationStyleToPresent!
             self.performSegueWithIdentifier(nagivationStyleToPresent, sender: self)
         } else {
             transitionOperator.transitionStyle = "presentTableNavigation"
             self.performSegueWithIdentifier("presentTableNavigation", sender: self)
-        }
+        }*/
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

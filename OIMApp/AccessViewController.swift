@@ -71,15 +71,22 @@ class AccessViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     
     @IBAction func presentNavigation(sender: AnyObject) {
-        if self.nagivationStyleToPresent != nil {
+        
+        // Dismiss keyboard (optional)
+        self.view.endEditing(true)
+        self.frostedViewController.view.endEditing(true)
+        
+        // Present the view controller
+        self.frostedViewController.presentMenuViewController()
+        
+        /*if self.nagivationStyleToPresent != nil {
             transitionOperator.transitionStyle = nagivationStyleToPresent!
             self.performSegueWithIdentifier(nagivationStyleToPresent, sender: self)
         } else {
             transitionOperator.transitionStyle = "presentTableNavigation"
             self.performSegueWithIdentifier("presentTableNavigation", sender: self)
-        }
+        }*/
     }
-    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         let toViewController = segue.destinationViewController as! UIViewController

@@ -19,7 +19,8 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
     @IBOutlet var navigationBar: UINavigationBar!
     
     @IBAction func goBack(sender: UIBarButtonItem) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.navigationController?.popViewControllerAnimated(true)
+        // self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     var isFirstTime = true
@@ -69,8 +70,32 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
         refreshControl.tintColor = UIColor.redColor()
         refreshControl.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
         tableView.addSubview(refreshControl)
+        
+        //---> Adding Swipe Gesture
+        //------------right  swipe gestures in view--------------//
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: Selector("rightSwiped"))
+        swipeRight.direction = UISwipeGestureRecognizerDirection.Right
+        self.view.addGestureRecognizer(swipeRight)
+        
+        //-----------left swipe gestures in view--------------//
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: Selector("leftSwiped"))
+        swipeLeft.direction = UISwipeGestureRecognizerDirection.Left
+        self.view.addGestureRecognizer(swipeLeft)
 
     }
+    
+    // MARK: swipe gestures
+    func rightSwiped()
+    {
+        println("right swiped ")
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func leftSwiped()
+    {
+        println("left swiped ")
+    }
+    
     
     func refresh(){
         var requestorUserId : String!

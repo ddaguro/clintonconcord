@@ -15,7 +15,8 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
     
     @IBOutlet var navigationBar: UINavigationBar!
     @IBAction func goBack(sender: UIBarButtonItem) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.navigationController?.popViewControllerAnimated(true)
+        // self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     
@@ -23,8 +24,11 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
     var certTitle : String!
     var certType: String!
     
+    
     var certitem : [CertItem]!
+    var entitem : [EntitlementItem]!
     var api : API!
+    
     
     
     override func viewDidLoad() {
@@ -37,22 +41,60 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
         tableView.dataSource = self
         tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
         tableView.separatorColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
-        //tableView.tableFooterView = UIView(frame: CGRectZero)
         
         self.certitem = [CertItem]()
+        self.entitem = [EntitlementItem]()
         self.api = API()
         
         var requestorUserId : String!
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        //webapp/rest/idaas/oig/v1/certifications/users/dcrane/CertificationLineItems/49/ApplicationInstance
+        //idaas/oig/v1/certifications/users/dcrane/CertificationLineItems/49/ApplicationInstance
+        //idaas/oig/v1/certifications/users/dcrane/CertificationLineItems/122/Entitlement
         let url = Persistent.endpoint + Persistent.baseroot + "/idaas/oig/v1/certifications/users/" + requestorUserId + "/CertificationLineItems/" + "\(certId)/" + certType
-        api.loadCertItem(url, completion : didLoadData)
+        
+        if certType == "ApplicationInstance" {
+            api.loadCertItem(url, completion : didLoadData)
+        } else if certType == "Entitlement" {
+            api.loadEntItem(url, completion : didLoadEntitlementData)
+        }
+        
+        //---> Adding Swipe Gesture
+        //------------right  swipe gestures in view--------------//
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: Selector("rightSwiped"))
+        swipeRight.direction = UISwipeGestureRecognizerDirection.Right
+        self.view.addGestureRecognizer(swipeRight)
+        
+        //-----------left swipe gestures in view--------------//
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: Selector("leftSwiped"))
+        swipeLeft.direction = UISwipeGestureRecognizerDirection.Left
+        self.view.addGestureRecognizer(swipeLeft)
         
     }
+    
+    // MARK: swipe gestures
+    func rightSwiped()
+    {
+        println("right swiped ")
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func leftSwiped()
+    {
+        println("left swiped ")
+    }
+    
+    
     func didLoadData(loadedData: [CertItem]){
         
         for data in loadedData {
             self.certitem.append(data)
+        }
+        self.tableView.reloadData()
+    }
+    func didLoadEntitlementData(loadedData: [EntitlementItem]){
+        
+        for data in loadedData {
+            self.entitem.append(data)
         }
         self.tableView.reloadData()
     }
@@ -63,62 +105,90 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return certitem.count
+        var count : Int!
+        
+        if certType == "ApplicationInstance" {
+            count = certitem.count
+        } else if certType == "Entitlement" {
+            count = entitem.count
+        }
+        
+        return count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("CertsDetailCell") as! CertsDetailCell
         
-        let info = certitem[indexPath.row]
-        
-        /*
-        cell.certifyButton.tag = indexPath.row
-        cell.certifyButton.setBackgroundImage(UIImage(named:"btn-certify"), forState: .Normal)
-        cell.certifyButton.addTarget(self, action: "dismiss:", forControlEvents: .TouchUpInside)
-        
-        
-        cell.revokeButton.tag = indexPath.row
-        cell.revokeButton.setBackgroundImage(UIImage(named:"btn-revoke"), forState: .Normal)
-        cell.revokeButton.addTarget(self, action: "dismiss:", forControlEvents: .TouchUpInside)
-        
-        cell.moreButton.tag = indexPath.row
-        cell.moreButton.setBackgroundImage(UIImage(named:"btn-more"), forState: .Normal)
-        cell.moreButton.addTarget(self, action: "dismiss:", forControlEvents: .TouchUpInside)
-        */
-        
-        cell.titleLabel.text = info.applicationInstanceName
-        cell.riskLabel.text = "Risk"
-        
-        var itemRiskImage = UIImage()
-        if info.itemRisk == "Low Risk" {
-            itemRiskImage = UIImage(named: "risk-low")!
-        } else if info.itemRisk == "Medium Risk" {
-            itemRiskImage = UIImage(named: "risk-medium")!
-        } else if info.itemRisk == "High Risk" {
-            itemRiskImage = UIImage(named: "risk-high")!
+        if certType == "ApplicationInstance" {
+            let info = certitem[indexPath.row]
+            cell.titleLabel.text = info.applicationInstanceName
+            cell.riskLabel.text = "Risk"
+            
+            var itemRiskImage = UIImage()
+            if info.itemRisk == "Low Risk" {
+                itemRiskImage = UIImage(named: "risk-low")!
+            } else if info.itemRisk == "Medium Risk" {
+                itemRiskImage = UIImage(named: "risk-medium")!
+            } else if info.itemRisk == "High Risk" {
+                itemRiskImage = UIImage(named: "risk-high")!
+            }
+            cell.riskImage.image = itemRiskImage
+            cell.riskStatusLabel.text = info.itemRisk
+            cell.descriptionLabel.text = info.resourceType + " | cid " + "\(info.certificationId)" + " | type " + info.certificationType + " | aid " + "\(info.applicationInstanceId)"
+            cell.progressLabel.text = "Progress"
+            
+            var percentCompleteImage = UIImage()
+            
+            if info.percentComplete == 0 {
+                percentCompleteImage = UIImage(named: "percent0")!
+            } else if info.percentComplete == 25 {
+                percentCompleteImage = UIImage(named: "percent25")!
+            } else if info.percentComplete == 50 {
+                percentCompleteImage = UIImage(named: "percent50")!
+            } else if info.percentComplete == 75 {
+                percentCompleteImage = UIImage(named: "percent75")!
+            } else if info.percentComplete == 100 {
+                percentCompleteImage = UIImage(named: "percent100")!
+            }
+            
+            cell.progressImage.image = percentCompleteImage
+            cell.percentLabel.text = "\(info.percentComplete)"
+        } else if certType == "Entitlement" {
+            let info = entitem[indexPath.row]
+            cell.titleLabel.text = info.applicationInstanceName + " (" + info.entitlementDisplayName + ")"
+            cell.riskLabel.text = "Risk"
+            
+            var itemRiskImage = UIImage()
+            if info.itemRisk == "Low Risk" {
+                itemRiskImage = UIImage(named: "risk-low")!
+            } else if info.itemRisk == "Medium Risk" {
+                itemRiskImage = UIImage(named: "risk-medium")!
+            } else if info.itemRisk == "High Risk" {
+                itemRiskImage = UIImage(named: "risk-high")!
+            }
+            cell.riskImage.image = itemRiskImage
+            cell.riskStatusLabel.text = info.itemRisk
+            cell.descriptionLabel.text = info.certificationType + " | cid " + "\(info.certificationId)" + " | type " + info.certificationType + " | eid " + "\(info.entitlementId)"
+            cell.progressLabel.text = "Progress"
+            
+            var percentCompleteImage = UIImage()
+            
+            if info.percentComplete == 0 {
+                percentCompleteImage = UIImage(named: "percent0")!
+            } else if info.percentComplete == 25 {
+                percentCompleteImage = UIImage(named: "percent25")!
+            } else if info.percentComplete == 50 {
+                percentCompleteImage = UIImage(named: "percent50")!
+            } else if info.percentComplete == 75 {
+                percentCompleteImage = UIImage(named: "percent75")!
+            } else if info.percentComplete == 100 {
+                percentCompleteImage = UIImage(named: "percent100")!
+            }
+            
+            cell.progressImage.image = percentCompleteImage
+            cell.percentLabel.text = "\(info.percentComplete)"
         }
-        cell.riskImage.image = itemRiskImage
-        cell.riskStatusLabel.text = info.itemRisk
-        cell.descriptionLabel.text = info.resourceType + " | cid " + "\(info.certificationId)" + " | type " + info.certificationType + " | aid " + "\(info.applicationInstanceId)"
-        cell.progressLabel.text = "Progress"
-        
-        var percentCompleteImage = UIImage()
-        
-        if info.percentComplete == 0 {
-            percentCompleteImage = UIImage(named: "percent0")!
-        } else if info.percentComplete == 25 {
-            percentCompleteImage = UIImage(named: "percent25")!
-        } else if info.percentComplete == 50 {
-            percentCompleteImage = UIImage(named: "percent50")!
-        } else if info.percentComplete == 75 {
-            percentCompleteImage = UIImage(named: "percent75")!
-        } else if info.percentComplete == 100 {
-            percentCompleteImage = UIImage(named: "percent100")!
-        }
-        
-        cell.progressImage.image = percentCompleteImage
-        cell.percentLabel.text = "\(info.percentComplete)"
         
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
@@ -126,17 +196,25 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let controller = storyboard.instantiateViewControllerWithIdentifier("CertficationsActionViewController") as! CertficationsActionViewController
         
-        let info = certitem[indexPath.row]
+        
         if let indexPath = self.tableView.indexPathForSelectedRow() {
-            let info = certitem[indexPath.row]
             
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let controller = storyboard.instantiateViewControllerWithIdentifier("CertficationsActionViewController") as! CertficationsActionViewController
-            controller.certId = info.certificationId
-            controller.certTitle = info.applicationInstanceName
-            controller.certType = info.certificationType
-            controller.applicationInstanceId = info.applicationInstanceId
+            if certType == "ApplicationInstance" {
+                let info = certitem[indexPath.row]
+                controller.certId = info.certificationId
+                controller.certTitle = info.applicationInstanceName
+                controller.certType = info.certificationType
+                controller.applicationInstanceId = info.applicationInstanceId
+            } else if certType == "Entitlement" {
+                let info = entitem[indexPath.row]
+                controller.certId = info.certificationId
+                controller.certTitle = info.applicationInstanceName
+                controller.certType = info.certificationType
+                controller.entitlementId = info.entitlementId
+            }
             controller.navigationController
             showViewController(controller, sender: self)
         }

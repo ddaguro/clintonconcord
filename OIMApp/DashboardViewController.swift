@@ -25,6 +25,16 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        println("----->>> DashboardViewController")
+        
+        var requestorUserId : String!
+        requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
+        
+        /*if requestorUserId == nil {
+            let SignInViewController:UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("SignInViewController") as! UIViewController
+            self.presentViewController(SignInViewController, animated: true, completion: nil)
+            
+        } else {*/
         
         toolbar.clipsToBounds = true
 
@@ -42,11 +52,10 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         self.users = [Users]()
         self.api = API()
         
-        var requestorUserId : String!
-        requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
         let url = Persistent.endpoint + Persistent.baseroot + "/identity/" + requestorUserId + "/" + requestorUserId
         api.loadUser(url, completion : didLoadUsers)
         
+        //}
     }
     
     func didLoadUsers(loadedUsers: [Users]){
@@ -89,13 +98,24 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     @IBAction func presentNavigation(sender: AnyObject) {
-        if self.nagivationStyleToPresent != nil {
+        // Dismiss keyboard (optional)
+        self.view.endEditing(true)
+        self.frostedViewController.view.endEditing(true)
+        
+        // Present the view controller
+         self.frostedViewController.presentMenuViewController()
+        
+    
+        /*let SignInViewController:UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("MenuViewController") as! UIViewController
+        self.showViewController(SignInViewController, sender:self)
+        */
+        /*if self.nagivationStyleToPresent != nil {
             transitionOperator.transitionStyle = nagivationStyleToPresent!
             self.performSegueWithIdentifier(nagivationStyleToPresent, sender: self)
         } else {
             transitionOperator.transitionStyle = "presentTableNavigation"
             self.performSegueWithIdentifier("presentTableNavigation", sender: self)
-        }
+        }*/
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

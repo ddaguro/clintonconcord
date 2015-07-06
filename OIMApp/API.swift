@@ -29,14 +29,14 @@ class API{
                 
                 //let results: NSArray = identitiesData["restaurants"] as! NSArray
                 let results: NSArray = identitiesData["Users"] as! NSArray
-
+                
                 var identities = [Identity]()
                 for identity in results{
                     let identity = Identity(data: identity as! NSDictionary)
                     identities.append(identity)
                 }
-
-                    
+                
+                
                 
                 let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
                 dispatch_async(dispatch_get_global_queue(priority, 0)) {
@@ -81,15 +81,15 @@ class API{
                 let results2: NSArray = identitiesData["userAccounts"]!["userEntitlements"] as! NSArray
                 
                 for identity in results2{
-                    let identity = Accounts(data: identity as! NSDictionary)
-                    identities.append(identity)
+                let identity = Accounts(data: identity as! NSDictionary)
+                identities.append(identity)
                 }
-
+                
                 let results3: NSArray = identitiesData["userAccounts"]!["userRoles"] as! NSArray
                 
                 for identity in results3{
-                    let identity = Accounts(data: identity as! NSDictionary)
-                    identities.append(identity)
+                let identity = Accounts(data: identity as! NSDictionary)
+                identities.append(identity)
                 }
                 */
                 
@@ -237,7 +237,7 @@ class API{
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         
-
+        
         var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             
             //println("Response: \(response)")
@@ -365,7 +365,7 @@ class API{
                     let user = Users(data: user as! NSDictionary)
                     users.append(user)
                 }
-
+                
                 let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
                 dispatch_async(dispatch_get_global_queue(priority, 0)) {
                     dispatch_async(dispatch_get_main_queue()) {
@@ -397,22 +397,22 @@ class API{
                 
                 /*
                 if data.length > 0 && error == nil{
-                    let html = NSString(data: data, encoding: NSUTF8StringEncoding)
-                    println("html = \(html)")
-                    
-                    var newArrayofDicts : NSMutableArray = NSMutableArray()
-                    var arrayOfDicts : NSMutableArray? = NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.MutableContainers, error:nil) as? NSMutableArray
-                    if arrayOfDicts != nil {
-                        for item in arrayOfDicts! {
-                            if var dict  = item as? NSMutableDictionary{
-                                var newDict : NSMutableDictionary = NSMutableDictionary()
-                                if dict["taskId"] != nil && dict["taskId"] != nil{
-                                    newDict["taskTitle"] = dict["taskTitle"]
-                                    newArrayofDicts.addObject(newDict)
-                                }
-                            }
-                        }
-                    }
+                let html = NSString(data: data, encoding: NSUTF8StringEncoding)
+                println("html = \(html)")
+                
+                var newArrayofDicts : NSMutableArray = NSMutableArray()
+                var arrayOfDicts : NSMutableArray? = NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.MutableContainers, error:nil) as? NSMutableArray
+                if arrayOfDicts != nil {
+                for item in arrayOfDicts! {
+                if var dict  = item as? NSMutableDictionary{
+                var newDict : NSMutableDictionary = NSMutableDictionary()
+                if dict["taskId"] != nil && dict["taskId"] != nil{
+                newDict["taskTitle"] = dict["taskTitle"]
+                newArrayofDicts.addObject(newDict)
+                }
+                }
+                }
+                }
                 }
                 */
                 
@@ -434,7 +434,7 @@ class API{
                         completion(tasks)
                     }
                 }
-
+                
             }
         }
         
@@ -652,7 +652,6 @@ class API{
                 
                 let results: NSArray = jsonData["identityCertifications"]!["certificationLineItemDetails"]  as! NSArray
                 
-                
                 var certs = [CertItemDetail]()
                 for cert in results{
                     let cert = CertItemDetail(data: cert as! NSDictionary)
@@ -720,5 +719,210 @@ class API{
         
         task.resume()
     }
-
+    // ok 07/01
+    func loadEntItem(apiUrl: String, completion: (([EntitlementItem]) -> Void)!) {
+        
+        var urlString = apiUrl
+        
+        let session = NSURLSession.sharedSession()
+        let sUrl = NSURL(string: urlString)
+        
+        var task = session.dataTaskWithURL(sUrl!){
+            (data, response, error) -> Void in
+            
+            if error != nil {
+                println(error.localizedDescription)
+            } else {
+                
+                var error : NSError?
+                var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
+                
+                let results: NSArray = jsonData["identityCertifications"]!["entitlementCertificationLineItems"] as! NSArray
+                
+                var ents = [EntitlementItem]()
+                for ent in results{
+                    let ent = EntitlementItem(data: ent as! NSDictionary)
+                    ents.append(ent)
+                }
+                
+                
+                let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+                dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        completion(ents)
+                    }
+                }
+                
+            }
+        }
+        
+        task.resume()
+    }
+    
+    // ok 07/01
+    func loadCertEntItemDetails(apiUrl: String, completion: (([EntitlementItemDetail]) -> Void)!) {
+        
+        var urlString = apiUrl
+        
+        let session = NSURLSession.sharedSession()
+        let sUrl = NSURL(string: urlString)
+        
+        var task = session.dataTaskWithURL(sUrl!){
+            (data, response, error) -> Void in
+            
+            if error != nil {
+                println(error.localizedDescription)
+            } else {
+                
+                var error : NSError?
+                var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
+                
+                let results: NSArray = jsonData["identityCertifications"]!["entitlementCertLineItemDetails"]  as! NSArray
+                
+                
+                var ents = [EntitlementItemDetail]()
+                for ent in results{
+                    let ent = EntitlementItemDetail(data: ent as! NSDictionary)
+                    ents.append(ent)
+                }
+                
+                
+                let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+                dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        completion(ents)
+                    }
+                }
+                
+            }
+        }
+        
+        task.resume()
+    }
+    
+    // ok 7/2
+    func loadAllApplications(identitiesUrl: String, completion: (([Applications]) -> Void)!) {
+        
+        var urlString = identitiesUrl
+        
+        let session = NSURLSession.sharedSession()
+        let identitiesUrl = NSURL(string: urlString)
+        
+        var task = session.dataTaskWithURL(identitiesUrl!){
+            (data, response, error) -> Void in
+            
+            if error != nil {
+                println(error.localizedDescription)
+            } else {
+                
+                var error : NSError?
+                var identitiesData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
+                
+                let results: NSArray = identitiesData["accounts"]!["appInstances"] as! NSArray
+                
+                var identities = [Applications]()
+                for identity in results{
+                    let identity = Applications(data: identity as! NSDictionary)
+                    identities.append(identity)
+                }
+                
+                
+                let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+                dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        completion(identities)
+                    }
+                }
+                
+            }
+        }
+        
+        task.resume()
+    }
+    func loadAllEntitlements(apiUrl: String, completion: (([Entitlements]) -> Void)!) {
+        
+        var urlString = apiUrl
+        
+        let session = NSURLSession.sharedSession()
+        let sUrl = NSURL(string: urlString)
+        
+        var task = session.dataTaskWithURL(sUrl!){
+            (data, response, error) -> Void in
+            
+            if error != nil {
+                println(error.localizedDescription)
+            } else {
+                
+                var error : NSError?
+                var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
+                
+                let results: NSArray = jsonData["accounts"]!["entitlements"] as! NSArray
+                
+                var ents = [Entitlements]()
+                for ent in results{
+                    let ent = Entitlements(data: ent as! NSDictionary)
+                    ents.append(ent)
+                }
+                
+                let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+                dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        completion(ents)
+                    }
+                }
+                
+            }
+        }
+        
+        task.resume()
+    }
+    
+    func RequestAction(params : String, url : String, postCompleted : (succeeded: Bool, msg: String) -> ()) {
+        var request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        var session = NSURLSession.sharedSession()
+        request.HTTPMethod = "POST"
+        
+        var err: NSError?
+        
+        request.HTTPBody = params.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true);
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        
+        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            
+            var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
+            var err: NSError?
+            var json = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &err) as? NSDictionary
+            
+            var msg = "No message"
+            
+            if(err != nil) {
+                println(err!.localizedDescription)
+                let jsonStr = NSString(data: data, encoding: NSUTF8StringEncoding)
+                println("Error could not parse JSON: '\(jsonStr)'")
+                postCompleted(succeeded: false, msg: "Error")
+            }
+            else {
+                if let parseJSON = json {
+                    var success: String? = json!.valueForKey("requestresults") as? String
+                    
+                    if (success?.rangeOfString("Request Raised") != nil) {
+                        postCompleted(succeeded: true, msg: "Success")
+                    } else {
+                        postCompleted(succeeded: false, msg: "Error")
+                    }
+                    return
+                }
+                else {
+                    let jsonStr = NSString(data: data, encoding: NSUTF8StringEncoding)
+                    println("Error could not parse JSON: \(jsonStr)")
+                    postCompleted(succeeded: false, msg: "Error")
+                }
+            }
+        })
+        
+        task.resume()
+    }
+    
 }

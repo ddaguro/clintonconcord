@@ -134,22 +134,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         return cell
         
     }
-    /*
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
-        if let indexPath = self.tableView.indexPathForSelectedRow() {
-            let taskObject = tasks[indexPath.row]
-            
-            
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let controller = storyboard.instantiateViewControllerWithIdentifier("ApprovalActionViewController") as! ApprovalActionViewController
-            controller.tasks = taskObject
-            controller.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-            presentViewController(controller, animated: true, completion: nil);
-            
-        }
-    }
-    */
+    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return itemHeading.count
     }
@@ -169,7 +154,14 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     
     @IBAction func presentNavigation(sender: AnyObject?){
         
-        self.performSegueWithIdentifier("presentTableNavigation", sender: self)
+        // Dismiss keyboard (optional)
+        self.view.endEditing(true)
+        self.frostedViewController.view.endEditing(true)
+        
+        // Present the view controller
+        self.frostedViewController.presentMenuViewController()
+        
+        // self.performSegueWithIdentifier("presentTableNavigation", sender: self)
         
     }
     
@@ -188,7 +180,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     {
         var btnsendtag:UIButton = sender
         let action = sender.currentTitle
-
+        
         var requestorUserId : String!
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
         
@@ -228,11 +220,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         var doalert : DOAlertController
         
         if action != "More" {
-            //alert = UIAlertController(title: alerttitle, message: alertmsg, preferredStyle: .Alert)
-            //alert.addTextFieldWithConfigurationHandler({ (textField) -> Void in
-            //    textField.text = ""
-            //})
-            
+           
             doalert = DOAlertController(title: alerttitle, message: alertmsg, preferredStyle: .Alert)
             
             // Add the text field for text entry.
@@ -286,51 +274,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
             doalert.addAction(approveAction)
             
             presentViewController(doalert, animated: true, completion: nil)
-            /*
-            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
-                let textField = alert.textFields![0] as! UITextField
-                //PERFORM APPROVAL THRU API
-                let url = Persistent.endpoint + Persistent.baseroot + "/approvals/performApprovalAction"
-                
-                var paramstring = "{\"requester\": {\"User Login\": \""
-                paramstring += requestorUserId + "\"},\"task\": [{\"requestId\": \""
-                paramstring += requestid + "\",\"taskId\": \""
-                paramstring += taskid + "\", \"taskNumber\": \""
-                paramstring += tasknumber + "\",\"taskPriority\": \""
-                paramstring += taskpriority + "\",\"taskState\": \""
-                paramstring += taskstate + "\",\"taskTitle\": \""
-                paramstring += tasktitle + "\" ,\"taskActionComments\": \""
-                paramstring += textField.text + "\",\"taskAction\": \""
-                paramstring += taskaction + "\"}]}"
-                
-                self.api.RequestApprovalAction(paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
-                    var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
-                    if(succeeded) {
-                        alert.title = "Success!"
-                        alert.message = msg
-                        
-                    }
-                    else {
-                        alert.title = "Failed : ("
-                        alert.message = msg
-                    }
-                    
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        
-                        //self.tableView.reloadData()
-                        //alert.show()
-                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                        let controller = storyboard.instantiateViewControllerWithIdentifier("ApprovalsViewController") as! ApprovalsViewController
-                        controller.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
-                        self.presentViewController(controller, animated: true, completion: nil)
-                        
-                    })
-                }
-            }))
-
-            alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil))
-            presentViewController(alert, animated: true, completion: nil)
-            */
+   
         } else {
             doalert = DOAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
             let approveAction = DOAlertAction(title: "Approve", style: .Destructive) { action in
@@ -354,15 +298,9 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
             doalert.addAction(cancelAction)
             
             presentViewController(doalert, animated: true, completion: nil)
-            //alert.addAction(UIAlertAction(title: "Approve", style: UIAlertActionStyle.Default, handler: nil))
-            //alert.addAction(UIAlertAction(title: "Claim", style: UIAlertActionStyle.Default, handler: nil))
-            //alert.addAction(UIAlertAction(title: "Decline", style: UIAlertActionStyle.Default, handler: nil))
-            //alert.addAction(UIAlertAction(title: "Delegate", style: UIAlertActionStyle.Default, handler: nil))
-            //alert.addAction(UIAlertAction(title: "Reset", style: UIAlertActionStyle.Destructive, handler: nil))
             
         }
-
+        
     }
-
     
 }

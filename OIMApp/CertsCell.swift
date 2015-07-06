@@ -48,5 +48,5 @@ class CertsCell: UITableViewCell {
         percentLabel.textColor = MegaTheme.lightColor
         
     }
-
+    
 }

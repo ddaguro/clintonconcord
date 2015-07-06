@@ -30,7 +30,7 @@ class NavigationViewController : UIViewController, UITableViewDelegate, UITableV
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        println("in MenuViewController - NavigationViewController")
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorColor = UIColor(white: 0.20, alpha: 1.0)
@@ -138,8 +138,6 @@ class NavigationViewController : UIViewController, UITableViewDelegate, UITableV
             let controller = storyboard.instantiateViewControllerWithIdentifier("WebViewController") as! WebViewController
             showViewController(controller, sender: self)
         }
-        
-        
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

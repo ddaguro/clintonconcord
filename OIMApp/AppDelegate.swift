@@ -12,11 +12,9 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        
         
         var navAppearance = UINavigationBar.appearance()
         //48A0DC
@@ -73,7 +71,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 
+    // MARK: - Slide menu methods
+    func setSideMenu() {
+        println("setSlideMenu is Called...")
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        // Create frosted view controller
+        let frostedViewController: REFrostedViewController = storyboard.instantiateViewControllerWithIdentifier("RootViewController") as! REFrostedViewController
+        frostedViewController.direction = REFrostedViewControllerDirection.Left
+        
+        // Make it a root controller
+        self.window!.rootViewController = frostedViewController;
+    }
+
+    
 }
+
+   // MARK: - Custom Methods
 
 func uicolorFromHex(rgbValue:UInt32)->UIColor{
     let red = CGFloat((rgbValue & 0xFF0000) >> 16)/256.0

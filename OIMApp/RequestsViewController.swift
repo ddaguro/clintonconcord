@@ -36,7 +36,6 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.dataSource = self
         tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
         tableView.separatorColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
-
         
         menuItem.image = UIImage(named: "menu")
         toolbar.tintColor = UIColor.blackColor()
@@ -149,8 +148,14 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     @IBAction func presentNavigation(sender: AnyObject?){
+        // Dismiss keyboard (optional)
+        self.view.endEditing(true)
+        self.frostedViewController.view.endEditing(true)
         
-        self.performSegueWithIdentifier("presentTableNavigation", sender: self)
+        // Present the view controller
+        self.frostedViewController.presentMenuViewController()
+        
+        // self.performSegueWithIdentifier("presentTableNavigation", sender: self)
         
     }
 

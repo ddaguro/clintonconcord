@@ -38,11 +38,9 @@ class SignInViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
+        println("----->>> SignInViewController")
         bgImageView.image = UIImage(named: "login-bg")
         bgImageView.contentMode = .ScaleAspectFill
-        
         
         //titleLabel.text = "Sign In"
         //titleLabel.font = UIFont(name: MegaTheme.semiBoldFontName, size: 45)
@@ -78,12 +76,16 @@ class SignInViewController : UIViewController {
         userLabel.font = UIFont(name: MegaTheme.fontName, size: 20)
         userLabel.textColor = UIColor.whiteColor()
         
-        userTextField.text = "dcrane"
+        // userTextField.text = "dcrane"
         userTextField.font = UIFont(name: MegaTheme.fontName, size: 20)
         userTextField.textColor = UIColor.whiteColor()
         
         var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         view.addGestureRecognizer(tap)
+        
+        for key in NSUserDefaults.standardUserDefaults().dictionaryRepresentation().keys {
+            NSUserDefaults.standardUserDefaults().removeObjectForKey(key.description)
+        }
         
     }
     
@@ -99,11 +101,12 @@ class SignInViewController : UIViewController {
     func dismiss(){
         dismissViewControllerAnimated(true, completion: nil)
     }
-    
+   
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let controller = segue.destinationViewController as! DashboardViewController
         controller.nagivationStyleToPresent = "presentTableNavigation"
     }
+    
     
     func LoggedIn(){
         
@@ -140,7 +143,13 @@ class SignInViewController : UIViewController {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 if(succeeded)
                 {
-                    self.performSegueWithIdentifier("dashboardNav", sender: self)
+                    self.performSegueWithIdentifier("SegueDashboard", sender: self)
+                    
+                    // let DashboardViewController:UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("DashboardViewController") as! UIViewController
+                    // self.showViewController(DashboardViewController, sender: self)
+                    // self.navigationController?.pushViewController(DashboardViewController, animated: true)
+                    // self.dismissViewControllerAnimated(true, completion: nil)
+                   
                 } else {
                     alert.show()
                 }

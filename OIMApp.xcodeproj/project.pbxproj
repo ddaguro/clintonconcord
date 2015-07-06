@@ -9,13 +9,11 @@
 /* Begin PBXBuildFile section */
 		010C6DF41B1E17AF00944643 /* MakeRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010C6DF31B1E17AF00944643 /* MakeRequestViewController.swift */; };
 		0120B5511B150D8500198119 /* RequestsDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0120B5501B150D8500198119 /* RequestsDetailViewController.swift */; };
-		012219811B44478B00DB6F3D /* DOAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012219801B44478B00DB6F3D /* DOAlertController.swift */; };
 		0138FC641AFAA8D700837EAB /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0138FC631AFAA8D700837EAB /* NavigationViewController.swift */; };
 		0138FC671AFAAAD000837EAB /* MegaTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0138FC661AFAAAD000837EAB /* MegaTheme.swift */; };
 		0138FC6A1AFAABC600837EAB /* NavigationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0138FC691AFAABC600837EAB /* NavigationCell.swift */; };
 		0138FC6C1AFAAD5D00837EAB /* TransistionOperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0138FC6B1AFAAD5C00837EAB /* TransistionOperator.swift */; };
 		0138FC711AFAB89100837EAB /* TimelineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0138FC701AFAB89100837EAB /* TimelineCell.swift */; };
-		0139BA4D1B151607004B36F4 /* ApprovalActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0139BA4C1B151607004B36F4 /* ApprovalActionViewController.swift */; };
 		013AB3A91AFA7CA400160A34 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013AB3A81AFA7CA400160A34 /* AppDelegate.swift */; };
 		013AB3B51AFA7CA400160A34 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 013AB3B31AFA7CA400160A34 /* LaunchScreen.xib */; };
 		013AB3C11AFA7CA400160A34 /* OIMAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013AB3C01AFA7CA400160A34 /* OIMAppTests.swift */; };
@@ -24,6 +22,10 @@
 		013AB3D11AFA854400160A34 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013AB3D01AFA854400160A34 /* Utils.swift */; };
 		0141C7ED1B3B23B9000B674B /* refresh.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0141C7EB1B3B23B9000B674B /* refresh.wav */; };
 		0141C7EE1B3B23B9000B674B /* upvote.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0141C7EC1B3B23B9000B674B /* upvote.wav */; };
+		014FC4901B4B1BEA0035CB6A /* CertficationsActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014FC48F1B4B1BEA0035CB6A /* CertficationsActionViewController.swift */; };
+		014FC4921B4B1E590035CB6A /* RequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014FC4911B4B1E590035CB6A /* RequestCell.swift */; };
+		014FC4951B4B1E780035CB6A /* DOAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014FC4941B4B1E780035CB6A /* DOAlertController.swift */; };
+		014FC4971B4B2EE80035CB6A /* MakeRequestActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014FC4961B4B2EE80035CB6A /* MakeRequestActionViewController.swift */; };
 		01506FB01B0D0BDB00F9D605 /* AccessDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01506FAF1B0D0BDB00F9D605 /* AccessDetailViewController.swift */; };
 		01506FB21B0D10EE00F9D605 /* AccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01506FB11B0D10EE00F9D605 /* AccessViewController.swift */; };
 		01506FB41B0D11B400F9D605 /* MetaCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01506FB31B0D11B400F9D605 /* MetaCell.swift */; };
@@ -73,7 +75,6 @@
 		01A95BBA1B178EBC00869943 /* TasksCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A95BB91B178EBC00869943 /* TasksCell.swift */; };
 		01B7B4FC1B0299FC0090E62E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01B7B4FB1B0299FC0090E62E /* Main.storyboard */; };
 		01B7B4FE1B02A04A0090E62E /* ApprovalsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B7B4FD1B02A04A0090E62E /* ApprovalsViewController.swift */; };
-		01BF89031B41D76300BAD078 /* CertficationsActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BF89021B41D76300BAD078 /* CertficationsActionViewController.swift */; };
 		01DA33BA1B0C5BE6002778DF /* Roles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DA33B91B0C5BE6002778DF /* Roles.swift */; };
 		01DA33BC1B0C5CB7002778DF /* Entitlements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DA33BB1B0C5CB7002778DF /* Entitlements.swift */; };
 		01DA33BE1B0C5D38002778DF /* Applications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DA33BD1B0C5D38002778DF /* Applications.swift */; };
@@ -84,6 +85,13 @@
 		01FF7F501B3367E70026BE38 /* Certs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF7F4F1B3367E70026BE38 /* Certs.swift */; };
 		01FF7F521B3884CC0026BE38 /* CertficationsDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF7F511B3884CC0026BE38 /* CertficationsDetailViewController.swift */; };
 		01FF7F541B3885890026BE38 /* CertsDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF7F531B3885890026BE38 /* CertsDetailCell.swift */; };
+		78DA3C326D0CBB615661FC93 /* libPods-OIMApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C1487844F63E24D9C30F69B /* libPods-OIMApp.a */; };
+		B7F7B5F11B42F9C1006E7E08 /* iToast.m in Sources */ = {isa = PBXBuildFile; fileRef = B7F7B5F01B42F9C1006E7E08 /* iToast.m */; };
+		B7F7B5F91B431630006E7E08 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7F7B5F81B431630006E7E08 /* Accelerate.framework */; };
+		B7F7B5FF1B431FCA006E7E08 /* REFrostedNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7F7B5FC1B431FCA006E7E08 /* REFrostedNavigationController.m */; };
+		B7F7B6001B431FCA006E7E08 /* REFrostedRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7F7B5FE1B431FCA006E7E08 /* REFrostedRootViewController.m */; };
+		B7FA06641B445B8400CB4FF0 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7FA06631B445B8400CB4FF0 /* MenuViewController.swift */; };
+		B7FA06671B445D9B00CB4FF0 /* MenuCC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7FA06661B445D9B00CB4FF0 /* MenuCC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,13 +107,11 @@
 /* Begin PBXFileReference section */
 		010C6DF31B1E17AF00944643 /* MakeRequestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MakeRequestViewController.swift; sourceTree = "<group>"; };
 		0120B5501B150D8500198119 /* RequestsDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestsDetailViewController.swift; sourceTree = "<group>"; };
-		012219801B44478B00DB6F3D /* DOAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DOAlertController.swift; sourceTree = "<group>"; };
 		0138FC631AFAA8D700837EAB /* NavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		0138FC661AFAAAD000837EAB /* MegaTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MegaTheme.swift; sourceTree = "<group>"; };
 		0138FC691AFAABC600837EAB /* NavigationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationCell.swift; sourceTree = "<group>"; };
 		0138FC6B1AFAAD5C00837EAB /* TransistionOperator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransistionOperator.swift; sourceTree = "<group>"; };
 		0138FC701AFAB89100837EAB /* TimelineCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineCell.swift; sourceTree = "<group>"; };
-		0139BA4C1B151607004B36F4 /* ApprovalActionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApprovalActionViewController.swift; sourceTree = "<group>"; };
 		013AB3A31AFA7CA400160A34 /* OIMApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OIMApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		013AB3A71AFA7CA400160A34 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		013AB3A81AFA7CA400160A34 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -118,6 +124,10 @@
 		013AB3D01AFA854400160A34 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		0141C7EB1B3B23B9000B674B /* refresh.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = refresh.wav; sourceTree = "<group>"; };
 		0141C7EC1B3B23B9000B674B /* upvote.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = upvote.wav; sourceTree = "<group>"; };
+		014FC48F1B4B1BEA0035CB6A /* CertficationsActionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CertficationsActionViewController.swift; sourceTree = "<group>"; };
+		014FC4911B4B1E590035CB6A /* RequestCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestCell.swift; sourceTree = "<group>"; };
+		014FC4941B4B1E780035CB6A /* DOAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DOAlertController.swift; sourceTree = "<group>"; };
+		014FC4961B4B2EE80035CB6A /* MakeRequestActionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MakeRequestActionViewController.swift; sourceTree = "<group>"; };
 		01506FAF1B0D0BDB00F9D605 /* AccessDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessDetailViewController.swift; sourceTree = "<group>"; };
 		01506FB11B0D10EE00F9D605 /* AccessViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessViewController.swift; sourceTree = "<group>"; };
 		01506FB31B0D11B400F9D605 /* MetaCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetaCell.swift; sourceTree = "<group>"; };
@@ -168,7 +178,6 @@
 		01A95BB91B178EBC00869943 /* TasksCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TasksCell.swift; sourceTree = "<group>"; };
 		01B7B4FB1B0299FC0090E62E /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		01B7B4FD1B02A04A0090E62E /* ApprovalsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApprovalsViewController.swift; sourceTree = "<group>"; };
-		01BF89021B41D76300BAD078 /* CertficationsActionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CertficationsActionViewController.swift; sourceTree = "<group>"; };
 		01DA33B91B0C5BE6002778DF /* Roles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Roles.swift; sourceTree = "<group>"; };
 		01DA33BB1B0C5CB7002778DF /* Entitlements.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Entitlements.swift; sourceTree = "<group>"; };
 		01DA33BD1B0C5D38002778DF /* Applications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Applications.swift; sourceTree = "<group>"; };
@@ -179,6 +188,19 @@
 		01FF7F4F1B3367E70026BE38 /* Certs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Certs.swift; sourceTree = "<group>"; };
 		01FF7F511B3884CC0026BE38 /* CertficationsDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CertficationsDetailViewController.swift; sourceTree = "<group>"; };
 		01FF7F531B3885890026BE38 /* CertsDetailCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CertsDetailCell.swift; sourceTree = "<group>"; };
+		2CA58A0DFD537CD8CA8C9DE3 /* Pods-OIMApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OIMApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OIMApp/Pods-OIMApp.debug.xcconfig"; sourceTree = "<group>"; };
+		8C1487844F63E24D9C30F69B /* libPods-OIMApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OIMApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9DB1E52A881BFB606627985C /* Pods-OIMApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OIMApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-OIMApp/Pods-OIMApp.release.xcconfig"; sourceTree = "<group>"; };
+		B7F7B5EE1B42F9C0006E7E08 /* OIMApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OIMApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		B7F7B5EF1B42F9C1006E7E08 /* iToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iToast.h; path = iToast/iToast.h; sourceTree = "<group>"; };
+		B7F7B5F01B42F9C1006E7E08 /* iToast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = iToast.m; path = iToast/iToast.m; sourceTree = "<group>"; };
+		B7F7B5F81B431630006E7E08 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		B7F7B5FB1B431FCA006E7E08 /* REFrostedNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REFrostedNavigationController.h; sourceTree = "<group>"; };
+		B7F7B5FC1B431FCA006E7E08 /* REFrostedNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = REFrostedNavigationController.m; sourceTree = "<group>"; };
+		B7F7B5FD1B431FCA006E7E08 /* REFrostedRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REFrostedRootViewController.h; sourceTree = "<group>"; };
+		B7F7B5FE1B431FCA006E7E08 /* REFrostedRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = REFrostedRootViewController.m; sourceTree = "<group>"; };
+		B7FA06631B445B8400CB4FF0 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		B7FA06661B445D9B00CB4FF0 /* MenuCC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuCC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,6 +208,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7F7B5F91B431630006E7E08 /* Accelerate.framework in Frameworks */,
+				78DA3C326D0CBB615661FC93 /* libPods-OIMApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,17 +226,10 @@
 		010C6DF21B1E176400944643 /* MakeRequest */ = {
 			isa = PBXGroup;
 			children = (
+				014FC4961B4B2EE80035CB6A /* MakeRequestActionViewController.swift */,
 				010C6DF31B1E17AF00944643 /* MakeRequestViewController.swift */,
 			);
 			name = MakeRequest;
-			sourceTree = "<group>";
-		};
-		0122197F1B44478B00DB6F3D /* DOAlertController */ = {
-			isa = PBXGroup;
-			children = (
-				012219801B44478B00DB6F3D /* DOAlertController.swift */,
-			);
-			path = DOAlertController;
 			sourceTree = "<group>";
 		};
 		0138FC651AFAAABB00837EAB /* Theme */ = {
@@ -226,6 +243,7 @@
 		0138FC681AFAABA700837EAB /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				014FC4911B4B1E590035CB6A /* RequestCell.swift */,
 				0138FC691AFAABC600837EAB /* NavigationCell.swift */,
 				0138FC701AFAB89100837EAB /* TimelineCell.swift */,
 				01506FB31B0D11B400F9D605 /* MetaCell.swift */,
@@ -236,20 +254,20 @@
 			name = Cells;
 			sourceTree = "<group>";
 		};
-		0138FC6D1AFAB71C00837EAB /* Views */ = {
+		0138FC6D1AFAB71C00837EAB /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				B7FA06651B445D3F00CB4FF0 /* MenuViewController */,
 				010C6DF21B1E176400944643 /* MakeRequest */,
 				016750DA1B1CF0F60093FD6A /* MyCertifcations */,
 				01FBA2BB1B14F8C5006C1915 /* MyRequests */,
 				015C13F81B0BC3500099B9E7 /* MyDashboard */,
 				01AA540B1B0298B700E19CBD /* MyApprovals */,
 				01F70E201B014DD300EA7C7F /* MyAccess */,
-				0138FC631AFAA8D700837EAB /* NavigationViewController.swift */,
 				015334BC1AFBECC60050C985 /* SignInViewController.swift */,
 				01757EFF1B391F7D00FEAB27 /* WebViewController.swift */,
 			);
-			name = Views;
+			name = ViewControllers;
 			sourceTree = "<group>";
 		};
 		013AB39A1AFA7CA400160A34 = {
@@ -258,6 +276,8 @@
 				013AB3A51AFA7CA400160A34 /* OIMApp */,
 				013AB3BD1AFA7CA400160A34 /* OIMAppTests */,
 				013AB3A41AFA7CA400160A34 /* Products */,
+				02E7915A3353368E842EAEFC /* Pods */,
+				CCB8EBB523CECF0302BDF82E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -284,7 +304,8 @@
 				013AB3A61AFA7CA400160A34 /* Supporting Files */,
 				0138FC651AFAAABB00837EAB /* Theme */,
 				013AB3CF1AFA851900160A34 /* Utils */,
-				0138FC6D1AFAB71C00837EAB /* Views */,
+				0138FC6D1AFAB71C00837EAB /* ViewControllers */,
+				B7F7B5F21B42F9D0006E7E08 /* Bridging-Header */,
 			);
 			path = OIMApp;
 			sourceTree = "<group>";
@@ -335,6 +356,8 @@
 		013AB3CF1AFA851900160A34 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				B7F7B5FA1B431FCA006E7E08 /* REFrosted */,
+				B7F7B5F31B42FBBE006E7E08 /* iToast */,
 				0138FC6B1AFAAD5C00837EAB /* TransistionOperator.swift */,
 				013AB3D01AFA854400160A34 /* Utils.swift */,
 			);
@@ -350,6 +373,14 @@
 			path = Sounds;
 			sourceTree = "<group>";
 		};
+		014FC4931B4B1E780035CB6A /* DOAlertController */ = {
+			isa = PBXGroup;
+			children = (
+				014FC4941B4B1E780035CB6A /* DOAlertController.swift */,
+			);
+			path = DOAlertController;
+			sourceTree = "<group>";
+		};
 		015C13F81B0BC3500099B9E7 /* MyDashboard */ = {
 			isa = PBXGroup;
 			children = (
@@ -361,7 +392,7 @@
 		015C13FD1B0BC4F50099B9E7 /* Controls */ = {
 			isa = PBXGroup;
 			children = (
-				0122197F1B44478B00DB6F3D /* DOAlertController */,
+				014FC4931B4B1E780035CB6A /* DOAlertController */,
 				018060071B20D6B600F4C68D /* Spring */,
 				015C13FE1B0BC4F50099B9E7 /* ADVAnimatedButton */,
 				015C14001B0BC4F50099B9E7 /* ADVGradientButton */,
@@ -416,9 +447,9 @@
 		016750DA1B1CF0F60093FD6A /* MyCertifcations */ = {
 			isa = PBXGroup;
 			children = (
+				014FC48F1B4B1BEA0035CB6A /* CertficationsActionViewController.swift */,
 				016750DB1B1CF1230093FD6A /* CertficationsViewController.swift */,
 				01FF7F511B3884CC0026BE38 /* CertficationsDetailViewController.swift */,
-				01BF89021B41D76300BAD078 /* CertficationsActionViewController.swift */,
 			);
 			name = MyCertifcations;
 			sourceTree = "<group>";
@@ -464,7 +495,6 @@
 			isa = PBXGroup;
 			children = (
 				01B7B4FD1B02A04A0090E62E /* ApprovalsViewController.swift */,
-				0139BA4C1B151607004B36F4 /* ApprovalActionViewController.swift */,
 			);
 			name = MyApprovals;
 			sourceTree = "<group>";
@@ -495,6 +525,62 @@
 			name = MyRequests;
 			sourceTree = "<group>";
 		};
+		02E7915A3353368E842EAEFC /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				2CA58A0DFD537CD8CA8C9DE3 /* Pods-OIMApp.debug.xcconfig */,
+				9DB1E52A881BFB606627985C /* Pods-OIMApp.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		B7F7B5F21B42F9D0006E7E08 /* Bridging-Header */ = {
+			isa = PBXGroup;
+			children = (
+				B7F7B5EE1B42F9C0006E7E08 /* OIMApp-Bridging-Header.h */,
+			);
+			name = "Bridging-Header";
+			sourceTree = "<group>";
+		};
+		B7F7B5F31B42FBBE006E7E08 /* iToast */ = {
+			isa = PBXGroup;
+			children = (
+				B7F7B5EF1B42F9C1006E7E08 /* iToast.h */,
+				B7F7B5F01B42F9C1006E7E08 /* iToast.m */,
+			);
+			name = iToast;
+			sourceTree = "<group>";
+		};
+		B7F7B5FA1B431FCA006E7E08 /* REFrosted */ = {
+			isa = PBXGroup;
+			children = (
+				B7F7B5FB1B431FCA006E7E08 /* REFrostedNavigationController.h */,
+				B7F7B5FC1B431FCA006E7E08 /* REFrostedNavigationController.m */,
+				B7F7B5FD1B431FCA006E7E08 /* REFrostedRootViewController.h */,
+				B7F7B5FE1B431FCA006E7E08 /* REFrostedRootViewController.m */,
+			);
+			path = REFrosted;
+			sourceTree = "<group>";
+		};
+		B7FA06651B445D3F00CB4FF0 /* MenuViewController */ = {
+			isa = PBXGroup;
+			children = (
+				0138FC631AFAA8D700837EAB /* NavigationViewController.swift */,
+				B7FA06661B445D9B00CB4FF0 /* MenuCC.swift */,
+				B7FA06631B445B8400CB4FF0 /* MenuViewController.swift */,
+			);
+			name = MenuViewController;
+			sourceTree = "<group>";
+		};
+		CCB8EBB523CECF0302BDF82E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B7F7B5F81B431630006E7E08 /* Accelerate.framework */,
+				8C1487844F63E24D9C30F69B /* libPods-OIMApp.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -502,9 +588,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 013AB3C41AFA7CA400160A34 /* Build configuration list for PBXNativeTarget "OIMApp" */;
 			buildPhases = (
+				434EC61CA8BBEE61797095B6 /* Check Pods Manifest.lock */,
 				013AB39F1AFA7CA400160A34 /* Sources */,
 				013AB3A01AFA7CA400160A34 /* Frameworks */,
 				013AB3A11AFA7CA400160A34 /* Resources */,
+				1E7BC0C9DF3B675AB3563374 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -595,15 +683,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		1E7BC0C9DF3B675AB3563374 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OIMApp/Pods-OIMApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		434EC61CA8BBEE61797095B6 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		013AB39F1AFA7CA400160A34 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				01FBA2BD1B14F952006C1915 /* RequestsViewController.swift in Sources */,
-				012219811B44478B00DB6F3D /* DOAlertController.swift in Sources */,
 				018060311B20D6B600F4C68D /* ImageLoader.swift in Sources */,
 				016750DC1B1CF1230093FD6A /* CertficationsViewController.swift in Sources */,
+				B7F7B6001B431FCA006E7E08 /* REFrostedRootViewController.m in Sources */,
 				015C140D1B0BC4F50099B9E7 /* ADVSegmentedControl.swift in Sources */,
 				0180602A1B20D6B600F4C68D /* DesignableButton.swift in Sources */,
 				015C13F71B0B8CA30099B9E7 /* Authenication.swift in Sources */,
@@ -613,9 +734,9 @@
 				0138FC6C1AFAAD5D00837EAB /* TransistionOperator.swift in Sources */,
 				015C14101B0BE0C00099B9E7 /* DashboardViewController.swift in Sources */,
 				0120B5511B150D8500198119 /* RequestsDetailViewController.swift in Sources */,
-				0139BA4D1B151607004B36F4 /* ApprovalActionViewController.swift in Sources */,
 				018060411B20D6B600F4C68D /* TransitionZoom.swift in Sources */,
 				015334BD1AFBECC60050C985 /* SignInViewController.swift in Sources */,
+				014FC4901B4B1BEA0035CB6A /* CertficationsActionViewController.swift in Sources */,
 				0180603F1B20D6B600F4C68D /* SpringView.swift in Sources */,
 				01FF7F4E1B3364EB0026BE38 /* CertsCell.swift in Sources */,
 				018060341B20D6B600F4C68D /* LoadingView.swift in Sources */,
@@ -624,6 +745,7 @@
 				01506FB81B0D3D3E00F9D605 /* Users.swift in Sources */,
 				018060301B20D6B600F4C68D /* DesignableView.swift in Sources */,
 				01B7B4FE1B02A04A0090E62E /* ApprovalsViewController.swift in Sources */,
+				B7F7B5F11B42F9C1006E7E08 /* iToast.m in Sources */,
 				018060381B20D6B600F4C68D /* Spring.swift in Sources */,
 				01DA33BA1B0C5BE6002778DF /* Roles.swift in Sources */,
 				0180602E1B20D6B600F4C68D /* DesignableTextField.swift in Sources */,
@@ -631,12 +753,15 @@
 				0180603C1B20D6B600F4C68D /* SpringLabel.swift in Sources */,
 				0180603E1B20D6B600F4C68D /* SpringTextView.swift in Sources */,
 				01DA33BC1B0C5CB7002778DF /* Entitlements.swift in Sources */,
+				014FC4921B4B1E590035CB6A /* RequestCell.swift in Sources */,
 				013AB3CE1AFA84F300160A34 /* Identity.swift in Sources */,
 				015C140A1B0BC4F50099B9E7 /* ADVGradientButton.swift in Sources */,
 				013AB3CC1AFA7E2200160A34 /* API.swift in Sources */,
-				01BF89031B41D76300BAD078 /* CertficationsActionViewController.swift in Sources */,
+				B7F7B5FF1B431FCA006E7E08 /* REFrostedNavigationController.m in Sources */,
 				01506FB41B0D11B400F9D605 /* MetaCell.swift in Sources */,
+				B7FA06641B445B8400CB4FF0 /* MenuViewController.swift in Sources */,
 				013AB3A91AFA7CA400160A34 /* AppDelegate.swift in Sources */,
+				014FC4971B4B2EE80035CB6A /* MakeRequestActionViewController.swift in Sources */,
 				015C140C1B0BC4F50099B9E7 /* ADVProgressLayer.swift in Sources */,
 				01FBA2BF1B14FBD8006C1915 /* Requests.swift in Sources */,
 				01DA33BE1B0C5D38002778DF /* Applications.swift in Sources */,
@@ -656,6 +781,7 @@
 				0180602D1B20D6B600F4C68D /* DesignableTabBarController.swift in Sources */,
 				0138FC671AFAAAD000837EAB /* MegaTheme.swift in Sources */,
 				018060281B20D6B600F4C68D /* AutoTextView.swift in Sources */,
+				B7FA06671B445D9B00CB4FF0 /* MenuCC.swift in Sources */,
 				018060271B20D6B600F4C68D /* AsyncImageView.swift in Sources */,
 				01A95BBA1B178EBC00869943 /* TasksCell.swift in Sources */,
 				010C6DF41B1E17AF00944643 /* MakeRequestViewController.swift in Sources */,
@@ -665,6 +791,7 @@
 				0180603D1B20D6B600F4C68D /* SpringTextField.swift in Sources */,
 				01FBA2BA1B14EA53006C1915 /* Tasks.swift in Sources */,
 				0138FC6A1AFAABC600837EAB /* NavigationCell.swift in Sources */,
+				014FC4951B4B1E780035CB6A /* DOAlertController.swift in Sources */,
 				0180602C1B20D6B600F4C68D /* DesignableLabel.swift in Sources */,
 				018060371B20D6B600F4C68D /* SoundPlayer.swift in Sources */,
 				01757F001B391F7D00FEAB27 /* WebViewController.swift in Sources */,
@@ -785,26 +912,33 @@
 		};
 		013AB3C51AFA7CA400160A34 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2CA58A0DFD537CD8CA8C9DE3 /* Pods-OIMApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = OIMApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "OIMApp/OIMApp-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		013AB3C61AFA7CA400160A34 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9DB1E52A881BFB606627985C /* Pods-OIMApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = OIMApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "OIMApp/OIMApp-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
