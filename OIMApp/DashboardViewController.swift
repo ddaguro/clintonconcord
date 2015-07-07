@@ -109,6 +109,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             myRequest = requests
             //println(requests)
             self.labelRequestCnt.text = "\(requests)"
+            totalCounter = (cert + approval + requests)
             self.lblTotalCounts.text = "\(requests + approval + cert)"
         })
     }

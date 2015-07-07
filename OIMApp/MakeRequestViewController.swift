@@ -16,6 +16,7 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
     @IBOutlet var menuItem: UIBarButtonItem!
     @IBOutlet var toolbar: UIToolbar!
     
+    @IBOutlet var lblTotalCounter: UILabel!
     var nagivationStyleToPresent : String?
     let transitionOperator = TransitionOperator()
     
@@ -31,6 +32,11 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.lblTotalCounter.layer.cornerRadius = 9;
+        lblTotalCounter.layer.masksToBounds = true;
+        self.lblTotalCounter.text = "\(totalCounter)"
+        
         toolbar.clipsToBounds = true
         labelTitle.text = "Make A Request"
         

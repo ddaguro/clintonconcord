@@ -15,6 +15,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet var toolbar : UIToolbar!
     @IBOutlet var labelTitle: UILabel!
     
+    @IBOutlet var lblTotalCounter: UILabel!
     var imageAsync : UIImage!
     var isFirstTime = true
     var refreshControl:UIRefreshControl!
@@ -31,6 +32,10 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.lblTotalCounter.layer.cornerRadius = 9;
+        lblTotalCounter.layer.masksToBounds = true;
+        self.lblTotalCounter.text = "\(totalCounter)"
         
         toolbar.clipsToBounds = true
         

@@ -42,6 +42,7 @@
 		015C14101B0BE0C00099B9E7 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015C140F1B0BE0C00099B9E7 /* DashboardViewController.swift */; };
 		015C14121B0BF16E0099B9E7 /* Accounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015C14111B0BF16E0099B9E7 /* Accounts.swift */; };
 		016750DC1B1CF1230093FD6A /* CertficationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016750DB1B1CF1230093FD6A /* CertficationsViewController.swift */; };
+		0168D77F1B4C84C4006D6222 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0168D77E1B4C84C4006D6222 /* Main.storyboard */; };
 		01757F001B391F7D00FEAB27 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01757EFF1B391F7D00FEAB27 /* WebViewController.swift */; };
 		018060031B1F879200F4C68D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 018060021B1F879200F4C68D /* Images.xcassets */; };
 		018060261B20D6B600F4C68D /* AsyncButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018060081B20D6B600F4C68D /* AsyncButton.swift */; };
@@ -74,7 +75,6 @@
 		018060411B20D6B600F4C68D /* TransitionZoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018060241B20D6B600F4C68D /* TransitionZoom.swift */; };
 		018060421B20D6B600F4C68D /* UnwindSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018060251B20D6B600F4C68D /* UnwindSegue.swift */; };
 		01A95BBA1B178EBC00869943 /* TasksCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A95BB91B178EBC00869943 /* TasksCell.swift */; };
-		01B7B4FC1B0299FC0090E62E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01B7B4FB1B0299FC0090E62E /* Main.storyboard */; };
 		01B7B4FE1B02A04A0090E62E /* ApprovalsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B7B4FD1B02A04A0090E62E /* ApprovalsViewController.swift */; };
 		01DA33BA1B0C5BE6002778DF /* Roles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DA33B91B0C5BE6002778DF /* Roles.swift */; };
 		01DA33BC1B0C5CB7002778DF /* Entitlements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DA33BB1B0C5CB7002778DF /* Entitlements.swift */; };
@@ -145,6 +145,7 @@
 		015C140F1B0BE0C00099B9E7 /* DashboardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 		015C14111B0BF16E0099B9E7 /* Accounts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Accounts.swift; sourceTree = "<group>"; };
 		016750DB1B1CF1230093FD6A /* CertficationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CertficationsViewController.swift; sourceTree = "<group>"; };
+		0168D77E1B4C84C4006D6222 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		01757EFF1B391F7D00FEAB27 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		018060021B1F879200F4C68D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		018060081B20D6B600F4C68D /* AsyncButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncButton.swift; sourceTree = "<group>"; };
@@ -178,7 +179,6 @@
 		018060241B20D6B600F4C68D /* TransitionZoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionZoom.swift; sourceTree = "<group>"; };
 		018060251B20D6B600F4C68D /* UnwindSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnwindSegue.swift; sourceTree = "<group>"; };
 		01A95BB91B178EBC00869943 /* TasksCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TasksCell.swift; sourceTree = "<group>"; };
-		01B7B4FB1B0299FC0090E62E /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		01B7B4FD1B02A04A0090E62E /* ApprovalsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApprovalsViewController.swift; sourceTree = "<group>"; };
 		01DA33B91B0C5BE6002778DF /* Roles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Roles.swift; sourceTree = "<group>"; };
 		01DA33BB1B0C5CB7002778DF /* Entitlements.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Entitlements.swift; sourceTree = "<group>"; };
@@ -505,7 +505,7 @@
 		01F70E191B01280600EA7C7F /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
-				01B7B4FB1B0299FC0090E62E /* Main.storyboard */,
+				0168D77E1B4C84C4006D6222 /* Main.storyboard */,
 			);
 			name = Storyboards;
 			sourceTree = "<group>";
@@ -667,10 +667,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0168D77F1B4C84C4006D6222 /* Main.storyboard in Resources */,
 				018060321B20D6B600F4C68D /* Info.plist in Resources */,
 				018060031B1F879200F4C68D /* Images.xcassets in Resources */,
 				013AB3B51AFA7CA400160A34 /* LaunchScreen.xib in Resources */,
-				01B7B4FC1B0299FC0090E62E /* Main.storyboard in Resources */,
 				0141C7ED1B3B23B9000B674B /* refresh.wav in Resources */,
 				0141C7EE1B3B23B9000B674B /* upvote.wav in Resources */,
 				018060351B20D6B600F4C68D /* LoadingView.xib in Resources */,

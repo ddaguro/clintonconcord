@@ -15,12 +15,17 @@ class AccessViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet var menuItem : UIBarButtonItem!
     @IBOutlet var toolbar : UIToolbar!
     
+    @IBOutlet var lblTotalCounter: UILabel!
     @IBOutlet var labelTitle: UILabel!
     var nagivationStyleToPresent : String?
     let transitionOperator = TransitionOperator()
        
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.lblTotalCounter.layer.cornerRadius = 9;
+        lblTotalCounter.layer.masksToBounds = true;
+        self.lblTotalCounter.text = "\(totalCounter)"
         
         toolbar.clipsToBounds = true
         tableView.tableFooterView = UIView(frame: CGRectZero)

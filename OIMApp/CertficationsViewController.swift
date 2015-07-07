@@ -16,6 +16,7 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
     @IBOutlet var menuItem: UIBarButtonItem!
     @IBOutlet var toolbar: UIToolbar!
     
+    @IBOutlet var lblTotalCounter: UILabel!
     
     var isFirstTime = true
     var nagivationStyleToPresent : String?
@@ -28,6 +29,10 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.lblTotalCounter.layer.cornerRadius = 9;
+        lblTotalCounter.layer.masksToBounds = true;
+        self.lblTotalCounter.text = "\(totalCounter)"
         
         toolbar.clipsToBounds = true
         

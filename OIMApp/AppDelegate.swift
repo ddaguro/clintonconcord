@@ -11,6 +11,7 @@ import UIKit
 var myCertificates: Int = 0
 var myApprovals: Int = 0
 var myRequest: Int = 0
+var totalCounter: Int = 0
 var myRequestorId : String = ""
 
 @UIApplicationMain
