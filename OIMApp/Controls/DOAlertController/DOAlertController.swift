@@ -223,7 +223,8 @@ class DOAlertController : UIViewController, UITextFieldDelegate, UIViewControlle
     var buttonTextColor: [DOAlertActionStyle : UIColor] = [
         .Default : UIColor.whiteColor(),
         .Cancel  : UIColor.whiteColor(),
-        .Destructive  : UIColor.whiteColor()
+        .Destructive  : UIColor(red:128/255, green:185/255, blue:87/255, alpha:1)
+     /* .Destructive  : UIColor.whiteColor(),  */
     ]
     /*
     var buttonBgColor: [DOAlertActionStyle : UIColor] = [
@@ -235,12 +236,14 @@ class DOAlertController : UIViewController, UITextFieldDelegate, UIViewControlle
     var buttonBgColor: [DOAlertActionStyle : UIColor] = [
         .Default : UIColor(red:128/255, green:185/255, blue:87/255, alpha:1),
         .Cancel  : UIColor(red:127/255, green:140/255, blue:141/255, alpha:1),
-        .Destructive  : UIColor(red:128/255, green:185/255, blue:87/255, alpha:1)
+        .Destructive  : UIColor.whiteColor()
+    /*    .Destructive  : UIColor(red:128/255, green:185/255, blue:87/255, alpha:1)   */
     ]
     var buttonBgColorHighlighted: [DOAlertActionStyle : UIColor] = [
         .Default : UIColor(red:74/255, green:163/255, blue:223/255, alpha:1),
         .Cancel  : UIColor(red:140/255, green:152/255, blue:153/255, alpha:1),
-        .Destructive  : UIColor(red:234/255, green:97/255, blue:83/255, alpha:1)
+        .Destructive  : UIColor(red:221/255, green:225/255, blue:228/255, alpha:1)
+    /*    .Destructive  : UIColor(red:234/255, green:97/255, blue:83/255, alpha:1)   */
     ]
     private var buttonCornerRadius: CGFloat = 4.0
     
