@@ -140,15 +140,15 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
             
             var percentCompleteImage = UIImage()
             
-            if info.percentComplete == 0 {
+            if info.percentComplete <= 0 {
                 percentCompleteImage = UIImage(named: "percent0")!
-            } else if info.percentComplete == 25 {
+            } else if info.percentComplete <= 25 {
                 percentCompleteImage = UIImage(named: "percent25")!
-            } else if info.percentComplete == 50 {
+            } else if info.percentComplete <= 50 {
                 percentCompleteImage = UIImage(named: "percent50")!
-            } else if info.percentComplete == 75 {
+            } else if info.percentComplete <= 75 {
                 percentCompleteImage = UIImage(named: "percent75")!
-            } else if info.percentComplete == 100 {
+            } else if info.percentComplete <= 100 {
                 percentCompleteImage = UIImage(named: "percent100")!
             }
             
@@ -174,15 +174,15 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
             
             var percentCompleteImage = UIImage()
             
-            if info.percentComplete == 0 {
+            if info.percentComplete <= 0 {
                 percentCompleteImage = UIImage(named: "percent0")!
-            } else if info.percentComplete == 25 {
+            } else if info.percentComplete <= 25 {
                 percentCompleteImage = UIImage(named: "percent25")!
-            } else if info.percentComplete == 50 {
+            } else if info.percentComplete <= 50 {
                 percentCompleteImage = UIImage(named: "percent50")!
-            } else if info.percentComplete == 75 {
+            } else if info.percentComplete <= 75 {
                 percentCompleteImage = UIImage(named: "percent75")!
-            } else if info.percentComplete == 100 {
+            } else if info.percentComplete <= 100 {
                 percentCompleteImage = UIImage(named: "percent100")!
             }
             

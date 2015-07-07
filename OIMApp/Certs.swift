@@ -99,23 +99,43 @@ class CertItem {
 
 class CertItemDetail {
     
+    var requesterId : String!
+    var certificationType : String!
     var certificationId : Int!
     var entityId : Int!
     
-    var appAccounts : [AppAccounts]!
+    var lastCertificationActionDetails : String!
+    var riskSummary : String!
+    var itemRisk : String!
+    var rowEntityId : String!
+    var targetAccountUserLogin : String!
+    var displayName : String!
+    var comments : String!
+    
+    var certacctentitlements : [CertAcctEntitlements]!
     
     init(data : NSDictionary){
         
-        self.certificationId = data["certificationId"] as! Int
-        self.entityId = data["entityId"] as! Int
         
-        if let results: NSArray = data["accounts"] as? NSArray {
-            var accts = [AppAccounts]()
-            for act in results{
-                let act = AppAccounts(data: act as! NSDictionary)
-                accts.append(act)
+        //self.requesterId = Utils.getStringFromJSON(data, key: "requesterId")
+        //self.certificationType = Utils.getStringFromJSON(data, key: "certificationType")
+        //self.certificationId = data["certificationId"] as! Int
+        //self.entityId = data["entityId"] as! Int
+        self.lastCertificationActionDetails = Utils.getStringFromJSON(data, key: "lastCertificationActionDetails")
+        self.riskSummary = Utils.getStringFromJSON(data, key: "riskSummary")
+        self.itemRisk = Utils.getStringFromJSON(data, key: "itemRisk")
+        self.rowEntityId = Utils.getStringFromJSON(data, key: "rowEntityId")
+        self.targetAccountUserLogin = Utils.getStringFromJSON(data, key: "targetAccountUserLogin")
+        self.displayName = Utils.getStringFromJSON(data, key: "displayName")
+        self.comments = Utils.getStringFromJSON(data, key: "comments")
+        
+        if let results: NSArray = data["entitlements"] as? NSArray {
+            var acctents = [CertAcctEntitlements]()
+            for ent in results{
+                let ent = CertAcctEntitlements(data: ent as! NSDictionary)
+                acctents.append(ent)
             }
-            self.appAccounts = accts
+            self.certacctentitlements = acctents
         }
     }
     
@@ -144,25 +164,18 @@ class CertItemDetail {
 }
 
 
-class AppAccounts {
-    var rowEntityId : String!
-    var targetAccountUserLogin : String!
-    var displayName : String!
+class CertAcctEntitlements {
     var riskSummary : String!
+    var itemRisk : String!
+    var rowEntityId : String!
+    var entitlementDisplayName : String!
     
     init(data : NSDictionary){
         
-        self.rowEntityId = Utils.getStringFromJSON(data, key: "rowEntityId")
-        self.targetAccountUserLogin = Utils.getStringFromJSON(data, key: "targetAccountUserLogin")
-        self.displayName = Utils.getStringFromJSON(data, key: "displayName")
         self.riskSummary = Utils.getStringFromJSON(data, key: "riskSummary")
+        self.itemRisk = Utils.getStringFromJSON(data, key: "itemRisk")
+        self.rowEntityId = Utils.getStringFromJSON(data, key: "rowEntityId")
+        self.entitlementDisplayName = Utils.getStringFromJSON(data, key: "entitlementDisplayName")
         
-        
-        /*
-        rowEntityId: "3"
-        targetAccountUserLogin: "KCLARK"
-        entitlements: [0]
-        displayName: "Physical Badge Access(kclark)"
-        */
     }
 }

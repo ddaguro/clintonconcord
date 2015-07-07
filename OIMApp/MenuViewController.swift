@@ -11,6 +11,7 @@ import UIKit
 class MenuViewController: UITableViewController {
 
     var lblName = UILabel(frame: CGRectMake(0, 150, 0, 24))
+    var imageView = UIImageView(frame: CGRectMake(0, 40, 100, 100))
     var api : API!
     var users : [Users]!
     @IBOutlet var tblView: UITableView!
@@ -42,8 +43,11 @@ class MenuViewController: UITableViewController {
         // self.tblView.backgroundColor = UIColor.lightGrayColor()
         
         //---> Setting UITableView Header
+
+        
+        
         var view = UIView(frame: CGRectMake(0, 0, 0, 184.0))
-        var imageView = UIImageView(frame: CGRectMake(0, 40, 100, 100))
+        /*var imageView = UIImageView(frame: CGRectMake(0, 40, 100, 100))*/
         imageView.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleRightMargin
         imageView.image = UIImage(named: "profileBlankPic")
         imageView.layer.masksToBounds = true;
@@ -99,6 +103,20 @@ class MenuViewController: UITableViewController {
         lblName.sizeToFit();
         lblName.center = CGPointMake(self.tblView.tableFooterView!.frame.size.width / 2, 160);
         lblName.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleRightMargin
+        
+        if let url = NSURL(string: Persistent.endpoint + Persistent.baseroot + "/avatar/" + myRequestorId + "/" + myRequestorId) {
+            if let data = NSData(contentsOfURL: url){
+                imageView.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleRightMargin
+                imageView.layer.masksToBounds = true;
+                imageView.layer.cornerRadius = 50.0;
+                imageView.layer.borderColor = UIColor.whiteColor().CGColor;
+                imageView.layer.rasterizationScale = UIScreen.mainScreen().scale
+                imageView.layer.shouldRasterize = true;
+                imageView.clipsToBounds = true
+                imageView.contentMode = UIViewContentMode.ScaleAspectFit
+                imageView.image = UIImage(data: data)
+            }
+        }
         
         self.tblView.reloadData()
     }

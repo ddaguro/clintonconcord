@@ -36,6 +36,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         var requestorUserId : String!
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
         
+        myRequestorId = requestorUserId
         
         toolbar.clipsToBounds = true
 

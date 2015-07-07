@@ -139,24 +139,33 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
             cell.moreButton.tag = indexPath.row
             cell.moreButton.setBackgroundImage(UIImage(named:"btn-more"), forState: .Normal)
             cell.moreButton.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
-
-            for action in info.appAccounts {
-                cell.titleLabel.text = action.displayName
-                cell.riskLabel.text = "Risk"
-                
-                var itemRiskImage = UIImage()
-                if action.riskSummary == "Low Risk" {
-                    itemRiskImage = UIImage(named: "risk-low")!
-                } else if action.riskSummary == "Medium Risk" {
-                    itemRiskImage = UIImage(named: "risk-medium")!
-                } else if action.riskSummary == "High Risk" {
-                    itemRiskImage = UIImage(named: "risk-high")!
-                }
-                cell.riskImage.image = itemRiskImage
-                
-                cell.riskStatusLabel.text = action.riskSummary
-                cell.descriptionLabel.text = action.targetAccountUserLogin
+            
+            cell.titleLabel.text = info.displayName
+            cell.riskLabel.text = "Risk"
+            
+            var itemRiskImage = UIImage()
+            if info.riskSummary == "Low Risk" {
+                itemRiskImage = UIImage(named: "risk-low")!
+            } else if info.riskSummary == "Medium Risk" {
+                itemRiskImage = UIImage(named: "risk-medium")!
+            } else if info.riskSummary == "High Risk" {
+                itemRiskImage = UIImage(named: "risk-high")!
             }
+            cell.riskImage.image = itemRiskImage
+            
+            cell.riskStatusLabel.text = info.riskSummary
+            
+            var text = ""
+            for ent in info.certacctentitlements {
+                if text.isEmpty {
+                    text = ent.entitlementDisplayName
+                } else {
+                    text += " , \(ent.entitlementDisplayName)"
+                }
+            }
+            
+            
+            cell.descriptionLabel.text = "Entitlements: " + text
         } else if certType == "Entitlement" {
             let info = certentitemdetail[indexPath.row]
             
@@ -205,20 +214,26 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         
         let cert = self.certitemdetail[btnsendtag.tag]
         
-        let cid = cert.certificationId as Int!
-        let entityid = cert.entityId as Int!
+        let cid = certId //cert.certificationId as Int!
+        let entityid = entitlementId //cert.entityId as Int!
         
         var displayname : String!
         var rowentityid : String!
         var targetuser : String!
         var risksummary : String!
         
+        displayname = cert.displayName
+        rowentityid = cert.rowEntityId
+        targetuser = cert.targetAccountUserLogin
+        risksummary = cert.riskSummary
+        /*
         for account in cert.appAccounts {
-            displayname = account.displayName
-            rowentityid = account.rowEntityId
-            targetuser = account.targetAccountUserLogin
-            risksummary = account.riskSummary
+        displayname = account.displayName
+        rowentityid = account.rowEntityId
+        targetuser = account.targetAccountUserLogin
+        risksummary = account.riskSummary
         }
+        */
         
         let ctitle = self.certTitle
         let ctype = self.certType
@@ -263,7 +278,7 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
                 let url = Persistent.endpoint + Persistent.baseroot + "/idaas/oig/v1/certifications/PerformCertificationAction"
                 
                 var jsonstring = "{\"identityCertifications\": {\"certificationLineItemDetails\": [{\"certificationId\": " + "\(cid)"
-                jsonstring += ",\"entityId\": " +  "\(entityid)"
+                jsonstring += ",\"entityId\": " +  "\(self.applicationInstanceId)"
                 jsonstring += ",\"accounts\": [{\"displayName\": \"" + displayname
                 jsonstring += "\",\"rowEntityId\": \"" + rowentityid
                 jsonstring += "\",\"targetAccountUserLogin\": \"" + targetuser
