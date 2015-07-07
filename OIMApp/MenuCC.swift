@@ -13,7 +13,7 @@ class MenuCC: UITableViewCell {
     
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var viewImage: UIImageView!
-    
+    @IBOutlet weak var lblNotification: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

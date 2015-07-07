@@ -56,7 +56,19 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
         refreshControl.tintColor = UIColor.redColor()
         refreshControl.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
         tableView.addSubview(refreshControl)
+        
+        //---> PanGestureRecognizer
+        let recognizer = UIPanGestureRecognizer(target: self, action: "panGestureRecognized:")
+        self.view.addGestureRecognizer(recognizer)
     }
+    
+    // MARK: swipe gestures
+    func panGestureRecognized(sender: UIPanGestureRecognizer) {
+        self.view.endEditing(true)
+        self.frostedViewController.view.endEditing(true)
+        self.frostedViewController.panGestureRecognized(sender)
+    }
+
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

@@ -90,7 +90,6 @@ class MenuViewController: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
         var displayname = NSUserDefaults.standardUserDefaults().objectForKey("DisplayName") as? String
         // print("displayname----->>> ")
         // println(displayname)
@@ -100,6 +99,8 @@ class MenuViewController: UITableViewController {
         lblName.sizeToFit();
         lblName.center = CGPointMake(self.tblView.tableFooterView!.frame.size.width / 2, 160);
         lblName.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleRightMargin
+        
+        self.tblView.reloadData()
     }
     
     func btnSettingAction() {
@@ -171,28 +172,47 @@ class MenuViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell:MenuCC = self.tblView.dequeueReusableCellWithIdentifier("MenuCC") as! MenuCC
-
+        
         if indexPath.row == 0 {
             cell.lblTitle.text = "DASHBOARD"
             cell.viewImage.image = UIImage(named: "menuicon-dashboard")
+            
         } else if indexPath.row == 1 {
             cell.lblTitle.text = "MY ACCESS"
             cell.viewImage.image = UIImage(named: "menuicon-myaccess")
+            
         } else if indexPath.row == 2 {
             cell.lblTitle.text = "MY CERTIFICATIONS"
             cell.viewImage.image = UIImage(named: "menuicon-mycertifications")
+            cell.lblNotification.hidden = false;
+            cell.lblNotification.text = myCertificates.description
+            cell.lblNotification.layer.cornerRadius = 10;
+            cell.lblNotification.layer.masksToBounds = true;
+
         } else if indexPath.row == 3 {
             cell.lblTitle.text = "MY APPROVALS"
             cell.viewImage.image = UIImage(named: "menuicon-myapprovals")
+            cell.lblNotification.hidden = false;
+            cell.lblNotification.text = myApprovals.description
+            cell.lblNotification.layer.cornerRadius = 10;
+            cell.lblNotification.layer.masksToBounds = true;
+            
         } else if indexPath.row == 4 {
             cell.lblTitle.text = "MY REQUESTS"
             cell.viewImage.image = UIImage(named: "menuicon-myrequests")
+            cell.lblNotification.hidden = false;
+            cell.lblNotification.text = myRequest.description
+            cell.lblNotification.layer.cornerRadius = 10;
+            cell.lblNotification.layer.masksToBounds = true;
+            
         } else if indexPath.row == 5 {
             cell.lblTitle.text = "MAKE A REQUEST"
             cell.viewImage.image = UIImage(named: "menuicon-makearequest")
+            
         } else if indexPath.row == 6 {
             cell.lblTitle.text = "API DOCS"
             cell.viewImage.image = UIImage(named: "menu-icon-apidocs")
+            
         }  /*else if indexPath.row == 7 {
             cell.lblTitle.text = "LOGOUT"
         }*/

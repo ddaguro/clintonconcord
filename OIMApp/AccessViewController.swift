@@ -35,7 +35,19 @@ class AccessViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         menuItem.image = UIImage(named: "menu")
         toolbar.tintColor = UIColor.blackColor()
+        
+        //---> PanGestureRecognizer
+        let recognizer = UIPanGestureRecognizer(target: self, action: "panGestureRecognized:")
+        self.view.addGestureRecognizer(recognizer)
     }
+    
+    // MARK: swipe gestures
+    func panGestureRecognized(sender: UIPanGestureRecognizer) {
+        self.view.endEditing(true)
+        self.frostedViewController.view.endEditing(true)
+        self.frostedViewController.panGestureRecognized(sender)
+    }
+
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewLinks.count;

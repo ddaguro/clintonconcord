@@ -12,6 +12,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     
     var nagivationStyleToPresent : String?
     
+    @IBOutlet weak var lblTotalCounts: UILabel!
     @IBOutlet var labelTitle: UILabel!
     @IBOutlet var tableView: UITableView!
     @IBOutlet var menuItem: UIBarButtonItem!
@@ -61,7 +62,19 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         api.loadUser(url, completion : didLoadUsers)
         
         getPendingCounts(requestorUserId)
+        
+        //---> PanGestureRecognizer
+        let recognizer = UIPanGestureRecognizer(target: self, action: "panGestureRecognized:")
+        self.view.addGestureRecognizer(recognizer)
     }
+    
+    // MARK: swipe gestures
+    func panGestureRecognized(sender: UIPanGestureRecognizer) {
+        self.view.endEditing(true)
+        self.frostedViewController.view.endEditing(true)
+        self.frostedViewController.panGestureRecognized(sender)
+    }
+
     
     func didLoadUsers(loadedUsers: [Users]){
         
@@ -72,6 +85,9 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func getPendingCounts(requestorUserId: String) {
+        self.lblTotalCounts.layer.cornerRadius = 9;
+        lblTotalCounts.layer.masksToBounds = true;
+        
         api = API()
         
         let url = Persistent.endpoint + Persistent.baseroot + "/idaas/oig/v1/dashboard/users/" + requestorUserId + "/PendingOperationsCount"
@@ -79,16 +95,20 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             //println(success)
             var approval : Int!
             approval = NSUserDefaults.standardUserDefaults().objectForKey("dashapp") as! Int
+            myApprovals = approval
             self.labelCount.text = "\(approval)"
             //println(approval)
             var cert : Int!
             cert = NSUserDefaults.standardUserDefaults().objectForKey("dashcert") as! Int
+            myCertificates = cert
             //println(cert)
             self.labelCertCnt.text = "\(cert)"
             var requests : Int!
             requests = NSUserDefaults.standardUserDefaults().objectForKey("dashreq") as! Int
+            myRequest = requests
             //println(requests)
             self.labelRequestCnt.text = "\(requests)"
+            self.lblTotalCounts.text = "\(requests + approval + cert)"
         })
     }
     

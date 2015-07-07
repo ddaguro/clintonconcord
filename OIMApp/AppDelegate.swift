@@ -8,6 +8,10 @@
 
 import UIKit
 
+var myCertificates: Int = 0
+var myApprovals: Int = 0
+var myRequest: Int = 0
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 

@@ -71,7 +71,18 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         })()
         //self.tableView.reloadData()
         
+        //---> PanGestureRecognizer
+        let recognizer = UIPanGestureRecognizer(target: self, action: "panGestureRecognized:")
+        self.view.addGestureRecognizer(recognizer)
     }
+    
+    // MARK: swipe gestures
+    func panGestureRecognized(sender: UIPanGestureRecognizer) {
+        self.view.endEditing(true)
+        self.frostedViewController.view.endEditing(true)
+        self.frostedViewController.panGestureRecognized(sender)
+    }
+
     
     func refresh(){
         var requestorUserId : String!
