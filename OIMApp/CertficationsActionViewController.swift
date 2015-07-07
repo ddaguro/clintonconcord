@@ -300,14 +300,14 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         if action == "Certify" {
             
             certaction = "CERTIFY"
-            alerttitle = "Certify Confirmation"
-            alertmsg = "Please confirm approval for " + self.certType
+            alerttitle = "Certification Confirmation"
+            alertmsg = "Please confirm certification for " + cert.displayName
             
         } else if action == "Revoke" {
             
             certaction = "REVOKE"
-            alerttitle = "Revoke Confirmation"
-            alertmsg = "Please confirm rejection of " + self.certType
+            alerttitle = "Certification Revoke Confirmation"
+            alertmsg = "Please confirm certification revoke for " + cert.displayName
             
         } else if action == "More" {
             
@@ -325,6 +325,7 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
             // Add the text field for text entry.
             doalert.addTextFieldWithConfigurationHandler { textField in
                 // If you need to customize the text field, you can do so here.
+                textField.placeholder = "Enter Comments"
             }
             let certifyAction = DOAlertAction(title: "OK", style: .Default) { action in
                 let textField = doalert.textFields![0] as! UITextField
