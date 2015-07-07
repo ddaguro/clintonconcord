@@ -152,13 +152,15 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
             }
         }
         */
-        
-        if let checkedUrl = NSURL(string: Persistent.endpoint + Persistent.baseroot + "/avatar/" + myRequestorId + "/" + username) {
-            downloadImage(checkedUrl)
+        let url = NSURL(string: Persistent.endpoint + Persistent.baseroot + "/avatar/" + myRequestorId + "/" + username)
+        self.api.getDataFromUrl(url!) { data in
+            dispatch_async(dispatch_get_main_queue()) {
+                if let postCell = tableView.cellForRowAtIndexPath(indexPath) as? TasksCell {
+                    postCell.typeImageView.image = UIImage(data: data!)
+                }
+            }
         }
         
-        
-        cell.typeImageView.image = imageAsync
         //cell.typeImageView.image = UIImage(named: "Clock-1")
         cell.nameLabel.text = task.requestEntityName
         cell.postLabel?.text = task.requestType
@@ -210,14 +212,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     func dismiss(){
         dismissViewControllerAnimated(true, completion: nil)
     }
-    
-    func downloadImage(url:NSURL){
-        self.api.getDataFromUrl(url) { data in
-            dispatch_async(dispatch_get_main_queue()) {
-                self.imageAsync = UIImage(data: data!)
-            }
-        }
-    }
+
     
     func buttonAction(sender:UIButton!)
     {
