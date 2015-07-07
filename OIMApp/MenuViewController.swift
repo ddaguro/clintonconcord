@@ -18,6 +18,7 @@ class MenuViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.api = API()
         println("----->>> MenuViewController")
         
         //---> Adding UIButton in UITableView Footer
@@ -104,6 +105,11 @@ class MenuViewController: UITableViewController {
         lblName.center = CGPointMake(self.tblView.tableFooterView!.frame.size.width / 2, 160);
         lblName.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleRightMargin
         
+        //imageView.autoresizingMask.contentMode = UIViewContentMode.ScaleAspectFit
+        if let checkedUrl = NSURL(string: Persistent.endpoint + Persistent.baseroot + "/avatar/" + myRequestorId + "/" + myRequestorId) {
+            downloadImage(checkedUrl)
+        }
+        /*
         if let url = NSURL(string: Persistent.endpoint + Persistent.baseroot + "/avatar/" + myRequestorId + "/" + myRequestorId) {
             if let data = NSData(contentsOfURL: url){
                 imageView.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleRightMargin
@@ -117,7 +123,7 @@ class MenuViewController: UITableViewController {
                 imageView.image = UIImage(data: data)
             }
         }
-        
+        */
         self.tblView.reloadData()
     }
     
@@ -375,6 +381,16 @@ class MenuViewController: UITableViewController {
         
         for usr in loadedUsers {
             users.append(usr)
+        }
+    }
+    
+    func downloadImage(url:NSURL){
+        //println("Started downloading \"\(url.lastPathComponent!.stringByDeletingPathExtension)\".")
+        self.api.getDataFromUrl(url) { data in
+            dispatch_async(dispatch_get_main_queue()) {
+                //println("Finished downloading \"\(url.lastPathComponent!.stringByDeletingPathExtension)\".")
+                self.imageView.image = UIImage(data: data!)
+            }
         }
     }
     

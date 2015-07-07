@@ -15,6 +15,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet var toolbar : UIToolbar!
     @IBOutlet var labelTitle: UILabel!
     
+    var imageAsync : UIImage!
     var isFirstTime = true
     var refreshControl:UIRefreshControl!
     
@@ -135,7 +136,30 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.moreBtn.setBackgroundImage(UIImage(named:"btn-more"), forState: .Normal)
         cell.moreBtn.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
         
-        cell.typeImageView.image = UIImage(named: "Clock-1")
+        var username : String
+        if task.beneficiearyUser == "Kevin Clark" {
+            username = "kclark"
+        } else if task.beneficiearyUser == "Grace Davis" {
+            username = "gdavis"
+        } else {
+            username = "dcrane"
+        }
+        
+        /*
+        if let url = NSURL(string: Persistent.endpoint + Persistent.baseroot + "/avatar/" + myRequestorId + "/" + username) {
+            if let data = NSData(contentsOfURL: url){
+                cell.typeImageView.image = UIImage(data: data)
+            }
+        }
+        */
+        
+        if let checkedUrl = NSURL(string: Persistent.endpoint + Persistent.baseroot + "/avatar/" + myRequestorId + "/" + username) {
+            downloadImage(checkedUrl)
+        }
+        
+        
+        cell.typeImageView.image = imageAsync
+        //cell.typeImageView.image = UIImage(named: "Clock-1")
         cell.nameLabel.text = task.requestEntityName
         cell.postLabel?.text = task.requestType
         cell.beneficiaryLabel.text = "Beneficiaries"
@@ -185,6 +209,14 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func dismiss(){
         dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func downloadImage(url:NSURL){
+        self.api.getDataFromUrl(url) { data in
+            dispatch_async(dispatch_get_main_queue()) {
+                self.imageAsync = UIImage(data: data!)
+            }
+        }
     }
     
     func buttonAction(sender:UIButton!)

@@ -12,11 +12,14 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
     
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var tableView: UITableView!
-    
     @IBOutlet var navigationBar: UINavigationBar!
+    
     @IBAction func goBack(sender: UIBarButtonItem) {
         self.navigationController?.popViewControllerAnimated(true)
     }
+    
+    var isFirstTime = true
+    var refreshControl:UIRefreshControl!
     
     var certId : Int!
     var certTitle : String!
@@ -63,6 +66,12 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
             api.loadCertEntItemDetails(url, completion : didLoadEntDetailData)
         }
         
+        refreshControl = UIRefreshControl()
+        refreshControl.tintColor = UIColor.redColor()
+        refreshControl.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
+        tableView.addSubview(refreshControl)
+        
+        
         //---> Adding Swipe Gesture
         //------------right  swipe gestures in view--------------//
         let swipeRight = UISwipeGestureRecognizer(target: self, action: Selector("rightSwiped"))
@@ -89,23 +98,60 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
     }
     
     func didLoadData(loadedData: [CertItemDetail]){
-        
+        self.certitemdetail = [CertItemDetail]()
         for data in loadedData {
             self.certitemdetail.append(data)
         }
+        if isFirstTime  {
+            self.view.showLoading()
+        }
         self.tableView.reloadData()
+        self.view.hideLoading()
+        self.refreshControl?.endRefreshing()
     }
     func didLoadEntDetailData(loadedData: [EntitlementItemDetail]){
-        
+        self.certentitemdetail = [EntitlementItemDetail]()
         for data in loadedData {
             self.certentitemdetail.append(data)
         }
+        if isFirstTime  {
+            self.view.showLoading()
+        }
         self.tableView.reloadData()
+        self.view.hideLoading()
+        self.refreshControl?.endRefreshing()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if isFirstTime {
+            view.showLoading()
+            isFirstTime = false
+        }
+    }
+    
+    func refresh(){
+        var certdetailid : Int!
+        if certType == "ApplicationInstance" {
+            certdetailid = applicationInstanceId
+        } else if certType == "Entitlement" {
+            certdetailid = entitlementId
+        }
+        let url = Persistent.endpoint + Persistent.baseroot + "/idaas/oig/v1/certifications/users/" + myRequestorId + "/CertificationLineItemsDetails/" + "\(certId)/" + certType + "/\(certdetailid)"
+        
+        if certType == "ApplicationInstance" {
+            api.loadCertItemDetails(url, completion : didLoadData)
+        } else if certType == "Entitlement" {
+            api.loadCertEntItemDetails(url, completion : didLoadEntDetailData)
+        }
+        
+        SoundPlayer.play("upvote.wav")
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -128,17 +174,25 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         if certType == "ApplicationInstance" {
             let info = certitemdetail[indexPath.row]
             
-            cell.certifyButton.tag = indexPath.row
-            cell.certifyButton.setBackgroundImage(UIImage(named:"btn-certify"), forState: .Normal)
-            cell.certifyButton.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
+            if (info.lastCertificationActionDetails.rangeOfString("Action : Certify Taken By") == nil) {
+                cell.certifyButton.tag = indexPath.row
+                cell.certifyButton.setBackgroundImage(UIImage(named:"btn-certify"), forState: .Normal)
+                cell.certifyButton.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
+                
+                cell.revokeButton.tag = indexPath.row
+                cell.revokeButton.setBackgroundImage(UIImage(named:"btn-revoke"), forState: .Normal)
+                cell.revokeButton.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
+                
+                cell.moreButton.tag = indexPath.row
+                cell.moreButton.setBackgroundImage(UIImage(named:"btn-more"), forState: .Normal)
+                cell.moreButton.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
+            } else {
+                cell.certifyButton.setBackgroundImage(UIImage(named:"btn-certified"), forState: .Normal)
+                cell.revokeButton.hidden = true
+                cell.moreButton.hidden = true
+            }
             
-            cell.revokeButton.tag = indexPath.row
-            cell.revokeButton.setBackgroundImage(UIImage(named:"btn-revoke"), forState: .Normal)
-            cell.revokeButton.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
-            
-            cell.moreButton.tag = indexPath.row
-            cell.moreButton.setBackgroundImage(UIImage(named:"btn-more"), forState: .Normal)
-            cell.moreButton.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
+
             
             cell.titleLabel.text = info.displayName
             cell.riskLabel.text = "Risk"

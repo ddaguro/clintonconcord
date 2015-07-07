@@ -1017,7 +1017,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="15" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hr7-IM-mfb">
-                                            <rect key="frame" x="222" y="15" width="20" height="20"/>
+                                            <rect key="frame" x="41" y="4" width="20" height="20"/>
                                             <color key="backgroundColor" red="0.92941176470588238" green="0.44313725490196076" blue="0.38039215686274508" alpha="1" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="11"/>
                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>

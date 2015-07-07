@@ -176,14 +176,7 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
         
         // Present the view controller
         self.frostedViewController.presentMenuViewController()
-        
-        /*if self.nagivationStyleToPresent != nil {
-            transitionOperator.transitionStyle = nagivationStyleToPresent!
-            self.performSegueWithIdentifier(nagivationStyleToPresent, sender: self)
-        } else {
-            transitionOperator.transitionStyle = "presentTableNavigation"
-            self.performSegueWithIdentifier("presentTableNavigation", sender: self)
-        }*/
+
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

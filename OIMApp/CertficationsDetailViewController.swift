@@ -12,24 +12,20 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
     
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var tableView: UITableView!
-    
     @IBOutlet var navigationBar: UINavigationBar!
+    
     @IBAction func goBack(sender: UIBarButtonItem) {
         self.navigationController?.popViewControllerAnimated(true)
-        // self.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    
+    var isFirstTime = true
+    var refreshControl:UIRefreshControl!
     var certId : Int!
     var certTitle : String!
     var certType: String!
-    
-    
     var certitem : [CertItem]!
     var entitem : [EntitlementItem]!
     var api : API!
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +54,12 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
             api.loadEntItem(url, completion : didLoadEntitlementData)
         }
         
+        refreshControl = UIRefreshControl()
+        refreshControl.tintColor = UIColor.redColor()
+        refreshControl.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
+        tableView.addSubview(refreshControl)
+        
+        
         //---> Adding Swipe Gesture
         //------------right  swipe gestures in view--------------//
         let swipeRight = UISwipeGestureRecognizer(target: self, action: Selector("rightSwiped"))
@@ -83,25 +85,61 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
         println("left swiped ")
     }
     
-    
     func didLoadData(loadedData: [CertItem]){
-        
+        self.certitem = [CertItem]()
         for data in loadedData {
             self.certitem.append(data)
         }
+        if isFirstTime  {
+            self.view.showLoading()
+        }
         self.tableView.reloadData()
+        self.view.hideLoading()
+        self.refreshControl?.endRefreshing()
+
     }
+    
     func didLoadEntitlementData(loadedData: [EntitlementItem]){
+        self.entitem = [EntitlementItem]()
         
         for data in loadedData {
             self.entitem.append(data)
         }
+        
+        if isFirstTime  {
+            self.view.showLoading()
+        }
         self.tableView.reloadData()
+        self.view.hideLoading()
+        self.refreshControl?.endRefreshing()
+
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if isFirstTime {
+            view.showLoading()
+            isFirstTime = false
+        }
+    }
+    
+    func refresh(){
+        
+        let url = Persistent.endpoint + Persistent.baseroot + "/idaas/oig/v1/certifications/users/" + myRequestorId + "/CertificationLineItems/" + "\(certId)/" + certType
+        
+        if certType == "ApplicationInstance" {
+            api.loadCertItem(url, completion : didLoadData)
+        } else if certType == "Entitlement" {
+            api.loadEntItem(url, completion : didLoadEntitlementData)
+        }
+        
+        SoundPlayer.play("upvote.wav")
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
