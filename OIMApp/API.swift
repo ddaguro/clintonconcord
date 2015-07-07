@@ -925,4 +925,42 @@ class API{
         task.resume()
     }
     
+    func getDashboardCount(apiUrl: String, completion: ((success: Int) -> Void)!) {
+        var urlString = apiUrl
+        var count : Int
+        
+        let session = NSURLSession.sharedSession()
+        let sUrl = NSURL(string: urlString)
+        let results: Int = 0
+        
+        var task = session.dataTaskWithURL(sUrl!){
+            (data, response, error) -> Void in
+            
+            if error != nil {
+                println(error.localizedDescription)
+            } else {
+                var error : NSError?
+                var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
+                
+                let cntapp: Int = jsonData["count"]!["approvals"] as! Int
+                let cntcert: Int = jsonData["count"]!["certifications"] as! Int
+                let cntreq: Int = jsonData["count"]!["requests"] as! Int
+                
+                NSUserDefaults.standardUserDefaults().setObject(cntapp, forKey: "dashapp")
+                NSUserDefaults.standardUserDefaults().setObject(cntcert, forKey: "dashcert")
+                NSUserDefaults.standardUserDefaults().setObject(cntreq, forKey: "dashreq")
+                NSUserDefaults.standardUserDefaults().synchronize()
+                let results = 1
+                
+                
+                let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+                dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        completion(success: results)
+                    }
+                }
+            }
+        }
+        task.resume()
+    }
 }

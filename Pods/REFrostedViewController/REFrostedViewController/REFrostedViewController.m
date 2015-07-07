@@ -70,7 +70,7 @@
     self.wantsFullScreenLayout = YES;
 #pragma clang diagnostic pop
     _panGestureEnabled = YES;
-    _animationDuration = 0.35f;
+    _animationDuration = 0.18f;
     _backgroundFadeAmount = 0.3f;
     _blurTintColor = REUIKitIsFlatMode() ? nil : [UIColor colorWithWhite:1 alpha:0.75f];
     _blurSaturationDeltaFactor = 1.8f;

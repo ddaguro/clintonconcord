@@ -76,14 +76,14 @@ class MakeRequestActionViewController: UIViewController, UITableViewDelegate, UI
         cell.titleLabel.text = displayName
         cell.descriptionLabel.text = "aid: " + "\(appInstanceKey)" + " cid: " + catalogId
         
-        cell.addButton.setBackgroundImage(UIImage(named:"btn-certify"), forState: .Normal)
+        cell.addButton.setBackgroundImage(UIImage(named:"btn-makerequest"), forState: .Normal)
         cell.addButton.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
         
-        cell.cancelButton.setBackgroundImage(UIImage(named:"btn-revoke"), forState: .Normal)
-        cell.cancelButton.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
+        //cell.cancelButton.setBackgroundImage(UIImage(named:"btn-revoke"), forState: .Normal)
+        //cell.cancelButton.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
             
-        cell.moreButton.setBackgroundImage(UIImage(named:"btn-more"), forState: .Normal)
-        cell.moreButton.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
+        //cell.moreButton.setBackgroundImage(UIImage(named:"btn-more"), forState: .Normal)
+        //cell.moreButton.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
         
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         

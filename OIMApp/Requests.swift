@@ -89,5 +89,19 @@ class TargetEntities {
     }
 }
 
-
+class OperationCounts {
+    
+    var approvals : Int!
+    var certifications : Int!
+    var requests : Int!
+    
+    
+    init(data : NSDictionary){
+        
+        self.approvals = data["approvals"] as! Int
+        self.certifications = data["certifications"] as! Int
+        self.requests = data["requests"] as! Int
+        
+    }
+}
 

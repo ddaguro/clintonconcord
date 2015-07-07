@@ -18,6 +18,11 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     
     @IBOutlet var toolbar: UIToolbar!
     
+    @IBOutlet var labelRequestCnt: UILabel!
+    @IBOutlet var imageDash: UIImageView!
+    @IBOutlet var labelCount: UILabel!
+    @IBOutlet var labelCertCnt: UILabel!
+    
     var users : [Users]!
     var api : API!
     
@@ -25,16 +30,11 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        println("----->>> DashboardViewController")
+        //println("----->>> DashboardViewController")
         
         var requestorUserId : String!
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
         
-        /*if requestorUserId == nil {
-            let SignInViewController:UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("SignInViewController") as! UIViewController
-            self.presentViewController(SignInViewController, animated: true, completion: nil)
-            
-        } else {*/
         
         toolbar.clipsToBounds = true
 
@@ -42,12 +42,17 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.delegate = self
         tableView.dataSource = self
         
-        tableView.estimatedRowHeight = 100.0;
         tableView.rowHeight = UITableViewAutomaticDimension;
         tableView.separatorStyle = UITableViewCellSeparatorStyle.None
 
         menuItem.image = UIImage(named: "menu")
-        toolbar.tintColor = UIColor.blackColor()
+        imageDash.image = UIImage(named: "MyDashboard-headerless-1")
+        
+        labelCount.font = UIFont(name: MegaTheme.fontName, size: 35)
+        labelCertCnt.font = UIFont(name: MegaTheme.fontName, size: 20)
+        labelRequestCnt.font = UIFont(name: MegaTheme.fontName, size: 20)
+        
+        //toolbar.tintColor = UIColor.blackColor()
         
         self.users = [Users]()
         self.api = API()
@@ -55,7 +60,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         let url = Persistent.endpoint + Persistent.baseroot + "/identity/" + requestorUserId + "/" + requestorUserId
         api.loadUser(url, completion : didLoadUsers)
         
-        //}
+        getPendingCounts(requestorUserId)
     }
     
     func didLoadUsers(loadedUsers: [Users]){
@@ -64,6 +69,27 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             self.users.append(usr)
         }
         tableView.reloadData()
+    }
+    
+    func getPendingCounts(requestorUserId: String) {
+        api = API()
+        
+        let url = Persistent.endpoint + Persistent.baseroot + "/idaas/oig/v1/dashboard/users/" + requestorUserId + "/PendingOperationsCount"
+        api.getDashboardCount(url, completion: { (success) -> () in
+            //println(success)
+            var approval : Int!
+            approval = NSUserDefaults.standardUserDefaults().objectForKey("dashapp") as! Int
+            self.labelCount.text = "\(approval)"
+            //println(approval)
+            var cert : Int!
+            cert = NSUserDefaults.standardUserDefaults().objectForKey("dashcert") as! Int
+            //println(cert)
+            self.labelCertCnt.text = "\(cert)"
+            var requests : Int!
+            requests = NSUserDefaults.standardUserDefaults().objectForKey("dashreq") as! Int
+            //println(requests)
+            self.labelRequestCnt.text = "\(requests)"
+        })
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -82,13 +108,11 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("usersMetaCell") as! MetaCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("DashboardCell") as! DashboardCell
         
         let info = users[indexPath.row]
-        cell.titleLabel.text = ""//info.DisplayName
-        cell.subtitleLabel.text = ""
-        cell.dateImage?.image = UIImage(named: "")
-        cell.dateLabel?.text = ""
+        cell.titleLabel.text = info.DisplayName
+        cell.subtitleLabel.text = info.Email
         
         NSUserDefaults.standardUserDefaults().setObject(info.DisplayName, forKey: "DisplayName")
         NSUserDefaults.standardUserDefaults().setObject(info.Title, forKey: "Title")
@@ -105,17 +129,6 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         // Present the view controller
          self.frostedViewController.presentMenuViewController()
         
-    
-        /*let SignInViewController:UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("MenuViewController") as! UIViewController
-        self.showViewController(SignInViewController, sender:self)
-        */
-        /*if self.nagivationStyleToPresent != nil {
-            transitionOperator.transitionStyle = nagivationStyleToPresent!
-            self.performSegueWithIdentifier(nagivationStyleToPresent, sender: self)
-        } else {
-            transitionOperator.transitionStyle = "presentTableNavigation"
-            self.performSegueWithIdentifier("presentTableNavigation", sender: self)
-        }*/
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

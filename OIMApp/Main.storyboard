@@ -31,13 +31,13 @@
                         <viewControllerLayoutGuide type="bottom" id="tVj-x6-v61"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="2Dy-u8-0nD">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0q3-CO-mXf">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0q3-CO-mXf">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zvU-4E-BxK">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zvU-4E-BxK">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G7h-PQ-ACX">
@@ -52,7 +52,7 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dw8-B0-Ke6">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dw8-B0-Ke6">
                                 <rect key="frame" x="0.0" y="0.0" width="359" height="200"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P0a-IE-elO">
@@ -70,7 +70,7 @@
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0yE-MW-74f">
                                         <rect key="frame" x="253" y="73" width="15" height="20"/>
                                     </imageView>
-                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zjx-jv-GWn">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zjx-jv-GWn">
                                         <rect key="frame" x="0.0" y="150" width="359" height="50"/>
                                         <color key="backgroundColor" white="0.31792249179999998" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
@@ -556,14 +556,10 @@
                                 <color key="barTintColor" red="0.23921568630000001" green="0.5568627451" blue="0.83137254900000002" alpha="1" colorSpace="calibratedRGB"/>
                             </toolbar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="746" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Ui6-CY-F82">
-                                <rect key="frame" x="0.0" y="64" width="375" height="1297"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="84"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <imageView key="tableFooterView" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="MyDashboard-headerless" id="7uD-Sr-Typ">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="1550"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                </imageView>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="usersMetaCell" rowHeight="746" id="Lju-cR-kbl" customClass="MetaCell" customModule="OIMApp" customModuleProvider="target">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DashboardCell" rowHeight="746" id="Lju-cR-kbl" customClass="DashboardCell" customModule="OIMApp" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Lju-cR-kbl" id="bWC-Wu-lwK">
@@ -596,6 +592,27 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="MyDashboard-headerless-1" translatesAutoresizingMaskIntoConstraints="NO" id="eSm-aD-8Ac">
+                                <rect key="frame" x="0.0" y="148" width="375" height="1550"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="12" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GTl-Cu-pna">
+                                <rect key="frame" x="83" y="486" width="23" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="14" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mMf-zw-mg7">
+                                <rect key="frame" x="267" y="486" width="25" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="16" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E97-JH-J5I">
+                                <rect key="frame" x="165" y="257" width="44" height="36"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="40"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.23921568630000001" green="0.5568627451" blue="0.83137254900000002" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="tintColor" red="0.23921568630000001" green="0.5568627451" blue="0.83137254900000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -605,6 +622,10 @@
                     </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
+                        <outlet property="imageDash" destination="eSm-aD-8Ac" id="sLi-OU-bud"/>
+                        <outlet property="labelCertCnt" destination="mMf-zw-mg7" id="mAI-OE-SW4"/>
+                        <outlet property="labelCount" destination="E97-JH-J5I" id="754-i1-Ugf"/>
+                        <outlet property="labelRequestCnt" destination="GTl-Cu-pna" id="zM2-eR-dKg"/>
                         <outlet property="labelTitle" destination="Nkm-xZ-DeC" id="q6p-YJ-nAT"/>
                         <outlet property="menuItem" destination="wKp-OA-R7R" id="xfg-aF-Cf3"/>
                         <outlet property="tableView" destination="Ui6-CY-F82" id="G1s-Uh-ykX"/>
@@ -614,7 +635,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ASa-SU-ZPd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2016.5" y="426.5"/>
+            <point key="canvasLocation" x="2085.5" y="392.5"/>
         </scene>
         <!--Access Detail View Controller-->
         <scene sceneID="gzK-hk-TDw">
@@ -1181,7 +1202,7 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
             </objects>
-            <point key="canvasLocation" x="958" y="1100"/>
+            <point key="canvasLocation" x="1218" y="-280"/>
         </scene>
         <!--Certfications Detail View Controller-->
         <scene sceneID="X38-cd-GVa">
@@ -1575,22 +1596,8 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bhw-Y7-q6e">
-                                                    <rect key="frame" x="16" y="71" width="118" height="30"/>
+                                                    <rect key="frame" x="249" y="62" width="118" height="30"/>
                                                     <state key="normal" title="Add">
-                                                        <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                </button>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KVJ-D8-ZiX">
-                                                    <rect key="frame" x="164" y="71" width="119" height="30"/>
-                                                    <state key="normal" title="Cancel">
-                                                        <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                </button>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5a3-eQ-g8H">
-                                                    <rect key="frame" x="315" y="71" width="52" height="30"/>
-                                                    <state key="normal" title="More">
                                                         <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
@@ -1600,9 +1607,7 @@
                                         <inset key="separatorInset" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                                         <connections>
                                             <outlet property="addButton" destination="Bhw-Y7-q6e" id="rLt-vP-vps"/>
-                                            <outlet property="cancelButton" destination="KVJ-D8-ZiX" id="Ezm-kb-gEV"/>
                                             <outlet property="descriptionLabel" destination="uKH-b9-XD6" id="7mW-dv-YQP"/>
-                                            <outlet property="moreButton" destination="5a3-eQ-g8H" id="Qd8-a5-CLl"/>
                                             <outlet property="titleLabel" destination="clc-qJ-rlQ" id="wMe-go-T80"/>
                                         </connections>
                                     </tableViewCell>
@@ -1631,12 +1636,12 @@
         </scene>
     </scenes>
     <resources>
-        <image name="MyDashboard-headerless" width="640" height="2675"/>
+        <image name="MyDashboard-headerless-1" width="1280" height="5350"/>
         <image name="back" width="33" height="33"/>
         <image name="icon-close" width="19" height="19"/>
         <image name="menu" width="22" height="22"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Ept-XB-R0M"/>
+        <segue reference="KEA-Xf-9Ke"/>
     </inferredMetricsTieBreakers>
 </document>

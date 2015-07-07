@@ -76,7 +76,7 @@ class SignInViewController : UIViewController {
         userLabel.font = UIFont(name: MegaTheme.fontName, size: 20)
         userLabel.textColor = UIColor.whiteColor()
         
-        // userTextField.text = "dcrane"
+        userTextField.text = "dcrane"
         userTextField.font = UIFont(name: MegaTheme.fontName, size: 20)
         userTextField.textColor = UIColor.whiteColor()
         

@@ -26,6 +26,7 @@
 		014FC4921B4B1E590035CB6A /* RequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014FC4911B4B1E590035CB6A /* RequestCell.swift */; };
 		014FC4951B4B1E780035CB6A /* DOAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014FC4941B4B1E780035CB6A /* DOAlertController.swift */; };
 		014FC4971B4B2EE80035CB6A /* MakeRequestActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014FC4961B4B2EE80035CB6A /* MakeRequestActionViewController.swift */; };
+		014FC4991B4B39170035CB6A /* DashboardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014FC4981B4B39170035CB6A /* DashboardCell.swift */; };
 		01506FB01B0D0BDB00F9D605 /* AccessDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01506FAF1B0D0BDB00F9D605 /* AccessDetailViewController.swift */; };
 		01506FB21B0D10EE00F9D605 /* AccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01506FB11B0D10EE00F9D605 /* AccessViewController.swift */; };
 		01506FB41B0D11B400F9D605 /* MetaCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01506FB31B0D11B400F9D605 /* MetaCell.swift */; };
@@ -128,6 +129,7 @@
 		014FC4911B4B1E590035CB6A /* RequestCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestCell.swift; sourceTree = "<group>"; };
 		014FC4941B4B1E780035CB6A /* DOAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DOAlertController.swift; sourceTree = "<group>"; };
 		014FC4961B4B2EE80035CB6A /* MakeRequestActionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MakeRequestActionViewController.swift; sourceTree = "<group>"; };
+		014FC4981B4B39170035CB6A /* DashboardCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardCell.swift; sourceTree = "<group>"; };
 		01506FAF1B0D0BDB00F9D605 /* AccessDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessDetailViewController.swift; sourceTree = "<group>"; };
 		01506FB11B0D10EE00F9D605 /* AccessViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessViewController.swift; sourceTree = "<group>"; };
 		01506FB31B0D11B400F9D605 /* MetaCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetaCell.swift; sourceTree = "<group>"; };
@@ -250,6 +252,7 @@
 				01A95BB91B178EBC00869943 /* TasksCell.swift */,
 				01FF7F4D1B3364EB0026BE38 /* CertsCell.swift */,
 				01FF7F531B3885890026BE38 /* CertsDetailCell.swift */,
+				014FC4981B4B39170035CB6A /* DashboardCell.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -739,6 +742,7 @@
 				014FC4901B4B1BEA0035CB6A /* CertficationsActionViewController.swift in Sources */,
 				0180603F1B20D6B600F4C68D /* SpringView.swift in Sources */,
 				01FF7F4E1B3364EB0026BE38 /* CertsCell.swift in Sources */,
+				014FC4991B4B39170035CB6A /* DashboardCell.swift in Sources */,
 				018060341B20D6B600F4C68D /* LoadingView.swift in Sources */,
 				01506FB21B0D10EE00F9D605 /* AccessViewController.swift in Sources */,
 				0180602F1B20D6B600F4C68D /* DesignableTextView.swift in Sources */,
