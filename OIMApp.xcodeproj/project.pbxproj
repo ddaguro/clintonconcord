@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		010C6DF41B1E17AF00944643 /* MakeRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010C6DF31B1E17AF00944643 /* MakeRequestViewController.swift */; };
-		0120B5511B150D8500198119 /* RequestsDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0120B5501B150D8500198119 /* RequestsDetailViewController.swift */; };
 		0138FC641AFAA8D700837EAB /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0138FC631AFAA8D700837EAB /* NavigationViewController.swift */; };
 		0138FC671AFAAAD000837EAB /* MegaTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0138FC661AFAAAD000837EAB /* MegaTheme.swift */; };
 		0138FC6A1AFAABC600837EAB /* NavigationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0138FC691AFAABC600837EAB /* NavigationCell.swift */; };
@@ -107,7 +106,6 @@
 
 /* Begin PBXFileReference section */
 		010C6DF31B1E17AF00944643 /* MakeRequestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MakeRequestViewController.swift; sourceTree = "<group>"; };
-		0120B5501B150D8500198119 /* RequestsDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestsDetailViewController.swift; sourceTree = "<group>"; };
 		0138FC631AFAA8D700837EAB /* NavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		0138FC661AFAAAD000837EAB /* MegaTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MegaTheme.swift; sourceTree = "<group>"; };
 		0138FC691AFAABC600837EAB /* NavigationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationCell.swift; sourceTree = "<group>"; };
@@ -523,7 +521,6 @@
 			isa = PBXGroup;
 			children = (
 				01FBA2BC1B14F952006C1915 /* RequestsViewController.swift */,
-				0120B5501B150D8500198119 /* RequestsDetailViewController.swift */,
 			);
 			name = MyRequests;
 			sourceTree = "<group>";
@@ -736,7 +733,6 @@
 				0138FC711AFAB89100837EAB /* TimelineCell.swift in Sources */,
 				0138FC6C1AFAAD5D00837EAB /* TransistionOperator.swift in Sources */,
 				015C14101B0BE0C00099B9E7 /* DashboardViewController.swift in Sources */,
-				0120B5511B150D8500198119 /* RequestsDetailViewController.swift in Sources */,
 				018060411B20D6B600F4C68D /* TransitionZoom.swift in Sources */,
 				015334BD1AFBECC60050C985 /* SignInViewController.swift in Sources */,
 				014FC4901B4B1BEA0035CB6A /* CertficationsActionViewController.swift in Sources */,

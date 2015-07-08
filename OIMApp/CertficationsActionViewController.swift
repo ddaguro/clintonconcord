@@ -332,12 +332,12 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
                 //PERFORM APPROVAL THRU API
                 let url = Persistent.endpoint + Persistent.baseroot + "/idaas/oig/v1/certifications/PerformCertificationAction"
                 
-                var jsonstring = "{\"identityCertifications\": {\"certificationLineItemDetails\": [{\"certificationId\": " + "\(cid)"
+                var jsonstring = "{\"identityCertifications\": {\"certificationId\": " + "\(cid)"
                 jsonstring += ",\"entityId\": " +  "\(self.applicationInstanceId)"
                 jsonstring += ",\"accounts\": [{\"displayName\": \"" + displayname
                 jsonstring += "\",\"rowEntityId\": \"" + rowentityid
                 jsonstring += "\",\"targetAccountUserLogin\": \"" + targetuser
-                jsonstring += "\",\"entitlements\": []}]}],"
+                jsonstring += "\",\"entitlements\": []}],"
                 jsonstring += "\"requesterId\": \"" + requestorUserId
                 jsonstring += "\",\"certificationType\": \"" + ctype
                 jsonstring += "\",\"certificationComments\": \"" + textField.text

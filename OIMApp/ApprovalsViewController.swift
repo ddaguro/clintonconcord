@@ -294,13 +294,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
                     }
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        
-                        //self.tableView.reloadData()
-                        //alert.show()
-                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                        let controller = storyboard.instantiateViewControllerWithIdentifier("ApprovalsViewController") as! ApprovalsViewController
-                        controller.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
-                        self.presentViewController(controller, animated: true, completion: nil)
+                        self.refresh()
                         
                     })
                 }
