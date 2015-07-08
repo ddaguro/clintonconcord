@@ -570,14 +570,16 @@ class API{
                 var error : NSError?
                 var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
                 
-                let results: NSArray = jsonData["identityCertifications"]!["certificationInstances"] as! NSArray
-                
                 var certs = [Certs]()
-                for cert in results{
-                    let cert = Certs(data: cert as! NSDictionary)
-                    certs.append(cert)
-                }
                 
+                if jsonData["count"] as! NSNumber != 0 {
+                    let results: NSArray = jsonData["identityCertifications"]!["certificationInstances"] as! NSArray
+                    
+                    for cert in results{
+                        let cert = Certs(data: cert as! NSDictionary)
+                        certs.append(cert)
+                    }
+                }
                 
                 let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
                 dispatch_async(dispatch_get_global_queue(priority, 0)) {
@@ -585,7 +587,6 @@ class API{
                         completion(certs)
                     }
                 }
-                
             }
         }
         
