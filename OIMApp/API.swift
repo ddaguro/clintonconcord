@@ -263,10 +263,10 @@ class API{
                     let success = parseJSON["isAuthenticated"] as? Int
                     if success == 1 {
                         //println("Succes: \(success)")
-                        postCompleted(succeeded: true, msg: "Logged in.")
+                        postCompleted(succeeded: true, msg: "Successful")
                     } else {
                         //println("Succes: \(success)")
-                        postCompleted(succeeded: false, msg: "Logged in error.")
+                        postCompleted(succeeded: false, msg: "Incorrect username and password")
                         
                     }
                     return

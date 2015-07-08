@@ -162,7 +162,7 @@ class MenuViewController: UITableViewController {
                 if(succeeded)
                 {
                     //self.performSegueWithIdentifier("dashboardNav", sender: self)
-                    
+                    //alert.show()
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
                     var navigationController = storyboard.instantiateViewControllerWithIdentifier("REFrostedNavigationController") as! REFrostedNavigationController
                     let signInViewController = storyboard.instantiateViewControllerWithIdentifier("SignInViewController") as! SignInViewController

@@ -118,43 +118,44 @@ class SignInViewController : UIViewController {
         let password = passwordTextField.text
         let paramstring = "username=" + username + "&password=" + password
         
-        api.LogIn(paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
-            var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay.")
-            if(succeeded) {
-                alert.title = "Success!"
-                alert.message = msg
-                
-                //load user object
-                self.users = [Users]()
-                
-                let url = Persistent.endpoint + Persistent.baseroot + "/identity/" + username + "/" + username
-                self.api.loadUser(url, completion : self.didLoadUsers)
-                
-                NSUserDefaults.standardUserDefaults().setObject(username, forKey: "requestorUserId")
-                NSUserDefaults.standardUserDefaults().setObject(username, forKey: "searchUserId")
-                NSUserDefaults.standardUserDefaults().synchronize()
-            }
-            else {
-                alert.title = "Failed : ("
-                alert.message = msg
-            }
-            
-            // Move to the UI thread
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                if(succeeded)
-                {
-                    self.performSegueWithIdentifier("SegueDashboard", sender: self)
+        if username != "" {
+            api.LogIn(paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
+                var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay.")
+                if(succeeded) {
+                    alert.title = "Success!"
+                    alert.message = msg
                     
-                    // let DashboardViewController:UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("DashboardViewController") as! UIViewController
-                    // self.showViewController(DashboardViewController, sender: self)
-                    // self.navigationController?.pushViewController(DashboardViewController, animated: true)
-                    // self.dismissViewControllerAnimated(true, completion: nil)
-                   
-                } else {
-                    alert.show()
+                    //load user object
+                    self.users = [Users]()
+                    
+                    let url = Persistent.endpoint + Persistent.baseroot + "/identity/" + username + "/" + username
+                    self.api.loadUser(url, completion : self.didLoadUsers)
+                    
+                    NSUserDefaults.standardUserDefaults().setObject(username, forKey: "requestorUserId")
+                    NSUserDefaults.standardUserDefaults().setObject(username, forKey: "searchUserId")
+                    NSUserDefaults.standardUserDefaults().synchronize()
                 }
-            })
+                else {
+                    alert.title = "Failed : ("
+                    alert.message = msg
+                }
+                
+                // Move to the UI thread
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    if(succeeded)
+                    {
+                        self.performSegueWithIdentifier("SegueDashboard", sender: self)
+                        
+                    } else {
+                        alert.show()
+                    }
+                })
+            }
+        } else {
+            var alert = UIAlertView(title: "Failed : (", message: "Incorrect username and password", delegate: nil, cancelButtonTitle: "Okay")
+            alert.show()
         }
+
     }
     
     func didLoadUsers(loadedUsers: [Users]){
