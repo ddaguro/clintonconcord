@@ -174,25 +174,25 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         if certType == "ApplicationInstance" {
             let info = certitemdetail[indexPath.row]
             
-            if (info.lastCertificationActionDetails == "") {
+            if (info.lastCertificationActionDetails != "") {
+                cell.certifyButton.setBackgroundImage(UIImage(named:"btn-certified"), forState: .Normal)
+                cell.revokeButton.hidden = true
+                cell.moreButton.hidden = true
+            } else {
                 cell.certifyButton.tag = indexPath.row
                 cell.certifyButton.setBackgroundImage(UIImage(named:"btn-certify"), forState: .Normal)
                 cell.certifyButton.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
                 
                 cell.revokeButton.tag = indexPath.row
                 cell.revokeButton.setBackgroundImage(UIImage(named:"btn-revoke"), forState: .Normal)
+                cell.revokeButton.hidden = false
                 cell.revokeButton.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
                 
                 cell.moreButton.tag = indexPath.row
                 cell.moreButton.setBackgroundImage(UIImage(named:"btn-more"), forState: .Normal)
+                cell.moreButton.hidden = false
                 cell.moreButton.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
-            } else {
-                cell.certifyButton.setBackgroundImage(UIImage(named:"btn-certified"), forState: .Normal)
-                cell.revokeButton.hidden = true
-                cell.moreButton.hidden = true
             }
-            
-
             
             cell.titleLabel.text = info.displayName
             cell.riskLabel.text = "Risk"
@@ -358,7 +358,8 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
                     }
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        self.dismissViewControllerAnimated(true, completion: nil)
+                        self.view.showLoading()
+                        self.refresh()
                         
                     })
                 }
@@ -433,14 +434,14 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         if action == "Certify" {
             
             certaction = "CERTIFY"
-            alerttitle = "Certify Confirmation"
-            alertmsg = "Please confirm approval for " + displayname
+            alerttitle = "Certification Confirmation"
+            alertmsg = "Please confirm certification for " + displayname
             
         } else if action == "Revoke" {
             
             certaction = "REVOKE"
-            alerttitle = "Revoke Confirmation"
-            alertmsg = "Please confirm rejection of " + displayname
+            alerttitle = "Certification Revoke Confirmation"
+            alertmsg = "Please confirm certification revoke for " + displayname
             
         } else if action == "More" {
             
@@ -456,9 +457,15 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
             doalert = DOAlertController(title: alerttitle, message: alertmsg, preferredStyle: .Alert)
             
             doalert.addTextFieldWithConfigurationHandler { textField in
+                textField.placeholder = "Enter Comments"
             }
             let certifyAction = DOAlertAction(title: "OK", style: .Default) { action in
                 let textField = doalert.textFields![0] as! UITextField
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.navigationController?.popViewControllerAnimated(true)
+                    
+                })
             }
             let cancelAction = DOAlertAction(title: "Cancel", style: .Cancel) { action in
             }

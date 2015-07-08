@@ -294,6 +294,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
                     }
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.view.showLoading()
                         self.refresh()
                         
                     })

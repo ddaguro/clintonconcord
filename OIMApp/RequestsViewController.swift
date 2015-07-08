@@ -118,12 +118,8 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         
         if dataObject.reqStatus == "Request Completed" {
             cell.typeImageView.image = UIImage(named: "check-1-icon")
-        } else if dataObject.reqStatus == "Request Awaiting Child Requests Completion" {
-            cell.typeImageView.image = UIImage(named: "Clock-1")
-        } else if dataObject.reqStatus == "Obtaining Operation Approval" {
-            cell.typeImageView.image = UIImage(named: "approval")
         } else {
-            cell.typeImageView.image = UIImage(named: "check-1-icon")
+            cell.typeImageView.image = UIImage(named: "Clock-1")
         }
         
         //cell.nameLabel.text = dataObject.reqId + " " + dataObject.reqType
