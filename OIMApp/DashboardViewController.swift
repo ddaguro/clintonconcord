@@ -16,9 +16,19 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet var labelTitle: UILabel!
     @IBOutlet var tableView: UITableView!
     @IBOutlet var menuItem: UIBarButtonItem!
-    
     @IBOutlet var toolbar: UIToolbar!
     
+    @IBAction func goApprovals(sender: AnyObject) {
+        self.performSegueWithIdentifier("SegueApprovals", sender: self)
+        
+    }
+    @IBAction func goRequests(sender: AnyObject) {
+        self.performSegueWithIdentifier("SegueRequests", sender: self)
+    }
+    
+    @IBAction func goCerts(sender: AnyObject) {
+        self.performSegueWithIdentifier("SegueCerts", sender: self)
+    }
     var users : [Users]!
     var api : API!
     

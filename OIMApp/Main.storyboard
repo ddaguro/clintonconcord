@@ -436,6 +436,36 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4L2-xq-vGN">
+                                                    <rect key="frame" x="111" y="189" width="153" height="30"/>
+                                                    <state key="normal">
+                                                        <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="goApprovals:" destination="KOF-aa-eKn" eventType="touchUpInside" id="dju-4q-gVv"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZAp-da-VP2">
+                                                    <rect key="frame" x="66" y="406" width="56" height="30"/>
+                                                    <state key="normal">
+                                                        <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="goRequests:" destination="KOF-aa-eKn" eventType="touchUpInside" id="FgY-PW-htr"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z4K-1o-mWD">
+                                                    <rect key="frame" x="250" y="406" width="56" height="30"/>
+                                                    <state key="normal">
+                                                        <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="goCerts:" destination="KOF-aa-eKn" eventType="touchUpInside" id="L8N-Iv-Zi1"/>
+                                                    </connections>
+                                                </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="14" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mMf-zw-mg7">
                                                     <rect key="frame" x="266" y="410" width="25" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
@@ -482,6 +512,9 @@
                         <outlet property="menuItem" destination="wKp-OA-R7R" id="xfg-aF-Cf3"/>
                         <outlet property="tableView" destination="Ui6-CY-F82" id="G1s-Uh-ykX"/>
                         <outlet property="toolbar" destination="0eV-S0-Afm" id="fBb-in-keg"/>
+                        <segue destination="YZM-gJ-8Q6" kind="show" identifier="SegueApprovals" id="Uph-vL-81J"/>
+                        <segue destination="8MM-oA-hbj" kind="show" identifier="SegueRequests" id="QjR-1G-c4z"/>
+                        <segue destination="igV-iu-gpi" kind="show" identifier="SegueCerts" id="e2X-en-paC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ASa-SU-ZPd" userLabel="First Responder" sceneMemberID="firstResponder"/>
