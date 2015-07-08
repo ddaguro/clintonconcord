@@ -19,11 +19,6 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     
     @IBOutlet var toolbar: UIToolbar!
     
-    @IBOutlet var labelRequestCnt: UILabel!
-    @IBOutlet var imageDash: UIImageView!
-    @IBOutlet var labelCount: UILabel!
-    @IBOutlet var labelCertCnt: UILabel!
-    
     var users : [Users]!
     var api : API!
     
@@ -44,15 +39,14 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.delegate = self
         tableView.dataSource = self
         
-        tableView.rowHeight = UITableViewAutomaticDimension;
         tableView.separatorStyle = UITableViewCellSeparatorStyle.None
 
         menuItem.image = UIImage(named: "menu")
-        imageDash.image = UIImage(named: "MyDashboard-headerless-1")
         
-        labelCount.font = UIFont(name: MegaTheme.fontName, size: 35)
-        labelCertCnt.font = UIFont(name: MegaTheme.fontName, size: 20)
-        labelRequestCnt.font = UIFont(name: MegaTheme.fontName, size: 20)
+        
+        //labelCount.font = UIFont(name: MegaTheme.fontName, size: 35)
+        //labelCertCnt.font = UIFont(name: MegaTheme.fontName, size: 20)
+        //labelRequestCnt.font = UIFont(name: MegaTheme.fontName, size: 20)
         
         //toolbar.tintColor = UIColor.blackColor()
         
@@ -93,22 +87,15 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         
         let url = Persistent.endpoint + Persistent.baseroot + "/idaas/oig/v1/dashboard/users/" + requestorUserId + "/PendingOperationsCount"
         api.getDashboardCount(url, completion: { (success) -> () in
-            //println(success)
             var approval : Int!
             approval = NSUserDefaults.standardUserDefaults().objectForKey("dashapp") as! Int
             myApprovals = approval
-            self.labelCount.text = "\(approval)"
-            //println(approval)
             var cert : Int!
             cert = NSUserDefaults.standardUserDefaults().objectForKey("dashcert") as! Int
             myCertificates = cert
-            //println(cert)
-            self.labelCertCnt.text = "\(cert)"
             var requests : Int!
             requests = NSUserDefaults.standardUserDefaults().objectForKey("dashreq") as! Int
             myRequest = requests
-            //println(requests)
-            self.labelRequestCnt.text = "\(requests)"
             totalCounter = (cert + approval + requests)
             self.lblTotalCounts.text = "\(requests + approval + cert)"
         })
@@ -133,6 +120,10 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         let cell = tableView.dequeueReusableCellWithIdentifier("DashboardCell") as! DashboardCell
         
         let info = users[indexPath.row]
+        cell.bgImage.image = UIImage(named: "MyDashboard-headerless-1")
+        cell.approvalsLabel.text = "\(myApprovals)"
+        cell.requestsLabel.text = "\(myRequest)"
+        cell.certsLabel.text = "\(myCertificates)"
         cell.titleLabel.text = info.DisplayName
         cell.subtitleLabel.text = info.Email
         

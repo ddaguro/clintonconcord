@@ -174,7 +174,7 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         if certType == "ApplicationInstance" {
             let info = certitemdetail[indexPath.row]
             
-            if (info.lastCertificationActionDetails.rangeOfString("Action : Certify Taken By") == nil) {
+            if (info.lastCertificationActionDetails == "") {
                 cell.certifyButton.tag = indexPath.row
                 cell.certifyButton.setBackgroundImage(UIImage(named:"btn-certify"), forState: .Normal)
                 cell.certifyButton.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
