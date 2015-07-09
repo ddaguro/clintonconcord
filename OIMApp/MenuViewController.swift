@@ -146,15 +146,12 @@ class MenuViewController: UITableViewController {
                 alert.title = "Success!"
                 alert.message = msg
                 
+                
                 for key in NSUserDefaults.standardUserDefaults().dictionaryRepresentation().keys {
                     NSUserDefaults.standardUserDefaults().removeObjectForKey(key.description)
                 }
                 
-                myCertificates = 0
-                myApprovals = 0
-                myRequest = 0
-                totalCounter = 0
-                myRequestorId = ""
+
                 
             }
             else {
@@ -222,6 +219,7 @@ class MenuViewController: UITableViewController {
                 cell.lblNotification.layer.masksToBounds = true;
             } else {
                 // do nothing
+                cell.lblNotification.hidden = true
             }
             
         } else if indexPath.row == 3 {
@@ -234,6 +232,7 @@ class MenuViewController: UITableViewController {
                 cell.lblNotification.layer.masksToBounds = true;
             } else {
                 // do nothing
+                cell.lblNotification.hidden = true
             }
             
         } else if indexPath.row == 4 {
@@ -246,6 +245,7 @@ class MenuViewController: UITableViewController {
                 cell.lblNotification.layer.masksToBounds = true;
             } else {
                 // do nothing
+                cell.lblNotification.hidden = true
             }
             
         } else if indexPath.row == 5 {
