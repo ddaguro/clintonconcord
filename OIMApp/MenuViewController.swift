@@ -149,6 +149,13 @@ class MenuViewController: UITableViewController {
                 for key in NSUserDefaults.standardUserDefaults().dictionaryRepresentation().keys {
                     NSUserDefaults.standardUserDefaults().removeObjectForKey(key.description)
                 }
+                
+                myCertificates = 0
+                myApprovals = 0
+                myRequest = 0
+                totalCounter = 0
+                myRequestorId = ""
+                
             }
             else {
                 alert.title = "Failed : ("

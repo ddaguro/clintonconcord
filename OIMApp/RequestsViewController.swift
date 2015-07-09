@@ -113,6 +113,7 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         return reqs.count
     }
     

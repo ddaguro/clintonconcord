@@ -300,3 +300,9 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
 
 }
 
+struct RequestAccess {
+    var key : Int
+    var catagoryId : String
+    var name : String
+}
+
