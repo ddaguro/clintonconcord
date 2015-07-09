@@ -8,18 +8,16 @@
 
 import UIKit
 
-class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    
+class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating {
     
     @IBOutlet var labelTitle: UILabel!
     @IBOutlet var tableView: UITableView!
     @IBOutlet var menuItem: UIBarButtonItem!
     @IBOutlet var toolbar: UIToolbar!
-    
     @IBOutlet var lblTotalCounter: UILabel!
+    
     var nagivationStyleToPresent : String?
     let transitionOperator = TransitionOperator()
-    
     var refreshControl:UIRefreshControl!
     var isFirstTime = true
     
@@ -28,7 +26,8 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
     var applications : [Applications]!
     var api : API!
     
-    var filteredTableData = [Applications]()
+    var tableData : NSMutableArray! = NSMutableArray()
+    var filteredTableData = [String]()
     var resultSearchController = UISearchController()
     
     var itemHeading: NSMutableArray! = NSMutableArray()
@@ -36,9 +35,14 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.lblTotalCounter.layer.cornerRadius = 9;
-        lblTotalCounter.layer.masksToBounds = true;
-        self.lblTotalCounter.text = "\(totalCounter)"
+        if (totalCounter > 0) {
+            self.lblTotalCounter.hidden = false
+            self.lblTotalCounter.layer.cornerRadius = 9;
+            lblTotalCounter.layer.masksToBounds = true;
+            self.lblTotalCounter.text = "\(totalCounter)"
+        } else {
+            self.lblTotalCounter.hidden = true
+        }
         
         toolbar.clipsToBounds = true
         labelTitle.text = "Make A Request"
@@ -54,19 +58,19 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         itemHeading.addObject("Roles")
         itemHeading.addObject("Entitlements")
         itemHeading.addObject("Accounts")
+        
         self.roles = [Roles]()
         self.entitlements = [Entitlements]()
         self.applications = [Applications]()
-        
         self.api = API()
         
         var requestorUserId : String!
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
         let url = Persistent.endpoint + Persistent.baseroot + "/accounts/all/" + requestorUserId
         
-        api.loadAllRoles(url, completion : didLoadRoles)
+        //api.loadAllRoles(url, completion : didLoadRoles)
         api.loadAllEntitlements(url, completion : didLoadEntitlements)
-        api.loadAllApplications(url, completion : didLoadApplications)
+        //api.loadAllApplications(url, completion : didLoadApplications)
         
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = UIColor.redColor()
@@ -75,7 +79,7 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         
         self.resultSearchController = ({
             let controller = UISearchController(searchResultsController: nil)
-            //controller.searchResultsUpdater = self
+            controller.searchResultsUpdater = self
             controller.dimsBackgroundDuringPresentation = false
             controller.searchBar.sizeToFit()
             
@@ -83,7 +87,6 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
             
             return controller
         })()
-        //self.tableView.reloadData()
         
         //---> PanGestureRecognizer
         let recognizer = UIPanGestureRecognizer(target: self, action: "panGestureRecognized:")
@@ -97,15 +100,14 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         self.frostedViewController.panGestureRecognized(sender)
     }
 
-    
     func refresh(){
         var requestorUserId : String!
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
         let url = Persistent.endpoint + Persistent.baseroot + "/accounts/all/" + requestorUserId
         
-        api.loadAllRoles(url, completion : didLoadRoles)
+        //api.loadAllRoles(url, completion : didLoadRoles)
         api.loadAllEntitlements(url, completion : didLoadEntitlements)
-        api.loadAllApplications(url, completion : didLoadApplications)
+        //api.loadAllApplications(url, completion : didLoadApplications)
         SoundPlayer.play("upvote.wav")
     }
     
@@ -122,6 +124,7 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         
         for role in loadedRoles {
             self.roles.append(role)
+            //self.tableData.addObject(role.roleName)
         }
         
         if isFirstTime  {
@@ -137,6 +140,7 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         
         for ent in loadedEntitlements {
             self.entitlements.append(ent)
+            self.tableData.addObject(ent.entitlementDisplayName)
         }
         
         if isFirstTime  {
@@ -146,11 +150,13 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         self.view.hideLoading()
         self.refreshControl?.endRefreshing()
     }
+    
     func didLoadApplications(loadedApplications: [Applications]){
         self.applications = [Applications]()
         
         for app in loadedApplications {
             self.applications.append(app)
+            //self.tableData.addObject(app.displayName)
         }
         
         if isFirstTime  {
@@ -163,66 +169,71 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        switch (section) {
-        case 0: // roles
-            return roles.count
-        case 1: // entitlements
-            return entitlements.count
-        case 2: // accounts
-            return applications.count
-        default:
-            return 0
+        if (self.resultSearchController.active) {
+            return self.filteredTableData.count
         }
-        
-        
+        else {
+            /*
+            switch (section) {
+            case 0: // roles
+                return roles.count
+            case 1: // entitlements
+                return entitlements.count
+            case 2: // accounts
+                return applications.count
+            default:
+                return 0
+            }
+            */
+            return entitlements.count
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("RequestCell") as! RequestCell
         
-        switch (indexPath.section) {
-        case 0: // roles
-            let dataObject = roles[indexPath.row]
-            cell.titleLabel.text = dataObject.roleName
-            cell.descriptionLabel.text = "n/a"
-            cell.displaynameLabel.text = "Role Key: " + "\(dataObject.roleKey)" + " | Catgory Id: " + dataObject.catalogId
-        case 1: // entitlements
+        if (self.resultSearchController.active) {
+            cell.titleLabel.text = filteredTableData[indexPath.row]
+        }
+        else {
+            
+            /*
+            switch (indexPath.section) {
+            case 0: // roles
+                let dataObject = roles[indexPath.row]
+                cell.titleLabel.text = dataObject.roleName
+                cell.descriptionLabel.text = "n/a"
+                cell.displaynameLabel.text = "Role Key: " + "\(dataObject.roleKey)" + " | Catgory Id: " + dataObject.catalogId
+            case 1: // entitlements
+                let dataObject = entitlements[indexPath.row]
+                cell.titleLabel.text = dataObject.entitlementDisplayName
+                cell.descriptionLabel.text = dataObject.entitlementDescription
+                cell.displaynameLabel.text = "Ent Key: " + "\(dataObject.entitlementKey)" + " | Catgory Id: " + dataObject.catalogId
+            case 2: // accounts
+                let dataObject = applications[indexPath.row]
+                cell.titleLabel.text = dataObject.displayName
+                cell.descriptionLabel.text = dataObject.description
+                cell.displaynameLabel.text = "App Key: " + "\(dataObject.appInstanceKey)" + " | Catgory Id: " + dataObject.catagoryId
+                
+            default:
+                cell.titleLabel.text = "Other"
+            }
+            */
             let dataObject = entitlements[indexPath.row]
             cell.titleLabel.text = dataObject.entitlementDisplayName
             cell.descriptionLabel.text = dataObject.entitlementDescription
             cell.displaynameLabel.text = "Ent Key: " + "\(dataObject.entitlementKey)" + " | Catgory Id: " + dataObject.catalogId
-        case 2: // accounts
-            let dataObject = applications[indexPath.row]
-            cell.titleLabel.text = dataObject.displayName
-            cell.descriptionLabel.text = dataObject.description
-            cell.displaynameLabel.text = "App Key: " + "\(dataObject.appInstanceKey)" + " | Catgory Id: " + dataObject.catagoryId
-            
-        default:
-            cell.titleLabel.text = "Other"
         }
-        
-        
+
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
         return cell;
-        /*
-        if (self.resultSearchController.active) {
-        let filterdata = filteredTableData[indexPath.row]
-        cell.textLabel?.text = filterdata.displayName
-        
-        return cell
-        }
-        else {
-        cell.titleLabel.text = dataObject.displayName
-        cell.descriptionLabel.text = dataObject.description
-        cell.displaynameLabel.text = dataObject.applicationInstanceName
-        return cell
-        }
-        */
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        
         
         if let indexPath = self.tableView.indexPathForSelectedRow() {
             let info = entitlements[indexPath.row]
@@ -233,16 +244,17 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
             controller.appInstanceKey = info.entitlementKey
             controller.catalogId = info.catalogId
             controller.navigationController
+            
+            self.resultSearchController.active = false
             showViewController(controller, sender: self)
         }
     }
-    
+    /*
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return itemHeading.count
     }
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
         
         var view: UIView! = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 40))
         view.backgroundColor = UIColor(red: 236.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, alpha: 1)
@@ -253,7 +265,7 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         view.addSubview(lblHeading)
         return view
     }
-    
+    */
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -274,16 +286,17 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         toViewController.transitioningDelegate = self.transitionOperator
         
     }
-    /*
+    
     func updateSearchResultsForSearchController(searchController: UISearchController)
     {
-    //filteredTableData.removeAll(keepCapacity: false)
-    
-    //let searchPredicate = NSPredicate(format: "name CONTAINS[c] %@", searchController.searchBar.text)
-    //let array = (applications as NSArray).filteredArrayUsingPredicate(searchPredicate)
-    //filteredTableData = array as! [Applications]
-    //self.tableView.reloadData()
+        filteredTableData.removeAll(keepCapacity: false)
+        
+        let searchPredicate = NSPredicate(format: "SELF CONTAINS[c] %@", searchController.searchBar.text)
+        let array = (tableData as NSArray).filteredArrayUsingPredicate(searchPredicate)
+        filteredTableData = array as! [String]
+        
+        self.tableView.reloadData()
     }
-    */
+
 }
 

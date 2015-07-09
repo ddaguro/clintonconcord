@@ -48,7 +48,7 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
         userLabel.font = UIFont(name: MegaTheme.fontName, size: 20)
         userLabel.textColor = UIColor.whiteColor()
         
-        userTextField.text = ""
+        userTextField.text = "dcrane"
         userTextField.font = UIFont(name: MegaTheme.fontName, size: 20)
         userTextField.textColor = UIColor.whiteColor()
         
@@ -59,7 +59,7 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
         passwordLabel.textColor = UIColor.whiteColor()
         
         passwordTextField.delegate = self
-        passwordTextField.text = ""
+        passwordTextField.text = "Oracle123"
         passwordTextField.font = UIFont(name: MegaTheme.fontName, size: 20)
         passwordTextField.textColor = UIColor.whiteColor()
         passwordTextField.secureTextEntry = true

@@ -107,7 +107,14 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             requests = NSUserDefaults.standardUserDefaults().objectForKey("dashreq") as! Int
             myRequest = requests
             totalCounter = (cert + approval + requests)
-            self.lblTotalCounts.text = "\(requests + approval + cert)"
+            if (totalCounter > 0) {
+                self.lblTotalCounts.hidden = false
+                self.lblTotalCounts.layer.cornerRadius = 9
+                self.lblTotalCounts.layer.masksToBounds = true
+                self.lblTotalCounts.text = "\(totalCounter)"
+            } else {
+                self.lblTotalCounts.hidden = true
+            }
         })
     }
     

@@ -208,26 +208,38 @@ class MenuViewController: UITableViewController {
         } else if indexPath.row == 2 {
             cell.lblTitle.text = "MY CERTIFICATIONS"
             cell.viewImage.image = UIImage(named: "menuicon-mycertifications")
-            cell.lblNotification.hidden = false;
-            cell.lblNotification.text = myCertificates.description
-            cell.lblNotification.layer.cornerRadius = 10;
-            cell.lblNotification.layer.masksToBounds = true;
-
+            if (myCertificates > 0) {
+                cell.lblNotification.hidden = false;
+                cell.lblNotification.text = myCertificates.description
+                cell.lblNotification.layer.cornerRadius = 10;
+                cell.lblNotification.layer.masksToBounds = true;
+            } else {
+                // do nothing
+            }
+            
         } else if indexPath.row == 3 {
             cell.lblTitle.text = "MY APPROVALS"
             cell.viewImage.image = UIImage(named: "menuicon-myapprovals")
-            cell.lblNotification.hidden = false;
-            cell.lblNotification.text = myApprovals.description
-            cell.lblNotification.layer.cornerRadius = 10;
-            cell.lblNotification.layer.masksToBounds = true;
+            if (myApprovals > 0) {
+                cell.lblNotification.hidden = false;
+                cell.lblNotification.text = myApprovals.description
+                cell.lblNotification.layer.cornerRadius = 10;
+                cell.lblNotification.layer.masksToBounds = true;
+            } else {
+                // do nothing
+            }
             
         } else if indexPath.row == 4 {
             cell.lblTitle.text = "MY REQUESTS"
             cell.viewImage.image = UIImage(named: "menuicon-myrequests")
-            cell.lblNotification.hidden = false;
-            cell.lblNotification.text = myRequest.description
-            cell.lblNotification.layer.cornerRadius = 10;
-            cell.lblNotification.layer.masksToBounds = true;
+            if (myRequest > 0){
+                cell.lblNotification.hidden = false;
+                cell.lblNotification.text = myRequest.description
+                cell.lblNotification.layer.cornerRadius = 10;
+                cell.lblNotification.layer.masksToBounds = true;
+            } else {
+                // do nothing
+            }
             
         } else if indexPath.row == 5 {
             cell.lblTitle.text = "MAKE A REQUEST"
@@ -238,7 +250,7 @@ class MenuViewController: UITableViewController {
             cell.viewImage.image = UIImage(named: "menu-icon-apidocs")
             
         }  /*else if indexPath.row == 7 {
-            cell.lblTitle.text = "LOGOUT"
+        cell.lblTitle.text = "LOGOUT"
         }*/
         
         return cell

@@ -31,9 +31,14 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.lblTotalCounter.layer.cornerRadius = 9;
-        lblTotalCounter.layer.masksToBounds = true;
-        self.lblTotalCounter.text = "\(totalCounter)"
+        if (totalCounter > 0) {
+            self.lblTotalCounter.hidden = false
+            self.lblTotalCounter.layer.cornerRadius = 9;
+            lblTotalCounter.layer.masksToBounds = true;
+            self.lblTotalCounter.text = "\(totalCounter)"
+        } else {
+            self.lblTotalCounter.hidden = true
+        }
         
         toolbar.clipsToBounds = true
         labelTitle.text = "My Requests"
