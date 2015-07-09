@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class SignInViewController : UIViewController {
+class SignInViewController : UIViewController, UITextFieldDelegate {
     
     @IBOutlet var titleLabel : UILabel!
     
@@ -42,9 +42,32 @@ class SignInViewController : UIViewController {
         bgImageView.image = UIImage(named: "login-bg")
         bgImageView.contentMode = .ScaleAspectFill
         
-        //titleLabel.text = "Sign In"
-        //titleLabel.font = UIFont(name: MegaTheme.semiBoldFontName, size: 45)
-        //titleLabel.textColor = UIColor.whiteColor()
+        userContainer.backgroundColor = UIColor.clearColor()
+        
+        userLabel.text = "Username"
+        userLabel.font = UIFont(name: MegaTheme.fontName, size: 20)
+        userLabel.textColor = UIColor.whiteColor()
+        
+        userTextField.text = ""
+        userTextField.font = UIFont(name: MegaTheme.fontName, size: 20)
+        userTextField.textColor = UIColor.whiteColor()
+        
+        passwordContainer.backgroundColor = UIColor.clearColor()
+        
+        passwordLabel.text = "Password"
+        passwordLabel.font = UIFont(name: MegaTheme.fontName, size: 20)
+        passwordLabel.textColor = UIColor.whiteColor()
+        
+        passwordTextField.delegate = self
+        passwordTextField.text = ""
+        passwordTextField.font = UIFont(name: MegaTheme.fontName, size: 20)
+        passwordTextField.textColor = UIColor.whiteColor()
+        passwordTextField.secureTextEntry = true
+        
+        forgotPassword.setTitle("Forgot Password?", forState: .Normal)
+        forgotPassword.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        forgotPassword.titleLabel?.font = UIFont(name: MegaTheme.semiBoldFontName, size: 15)
+        forgotPassword.addTarget(self, action: "dismiss", forControlEvents: .TouchUpInside)
         
         signInButton.setTitle("Sign In", forState: .Normal)
         signInButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -54,32 +77,6 @@ class SignInViewController : UIViewController {
         signInButton.layer.cornerRadius = 5
         signInButton.addTarget(self, action: "LoggedIn", forControlEvents: .TouchUpInside)
         
-        forgotPassword.setTitle("Forgot Password?", forState: .Normal)
-        forgotPassword.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        forgotPassword.titleLabel?.font = UIFont(name: MegaTheme.semiBoldFontName, size: 15)
-        forgotPassword.addTarget(self, action: "dismiss", forControlEvents: .TouchUpInside)
-        
-        passwordContainer.backgroundColor = UIColor.clearColor()
-        
-        passwordLabel.text = "Password"
-        passwordLabel.font = UIFont(name: MegaTheme.fontName, size: 20)
-        passwordLabel.textColor = UIColor.whiteColor()
-        
-        passwordTextField.text = "Oracle123"
-        passwordTextField.font = UIFont(name: MegaTheme.fontName, size: 20)
-        passwordTextField.textColor = UIColor.whiteColor()
-        passwordTextField.secureTextEntry = true
-        
-        userContainer.backgroundColor = UIColor.clearColor()
-        
-        userLabel.text = "Username"
-        userLabel.font = UIFont(name: MegaTheme.fontName, size: 20)
-        userLabel.textColor = UIColor.whiteColor()
-        
-        userTextField.text = "dcrane"
-        userTextField.font = UIFont(name: MegaTheme.fontName, size: 20)
-        userTextField.textColor = UIColor.whiteColor()
-        
         var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         view.addGestureRecognizer(tap)
         
@@ -87,6 +84,12 @@ class SignInViewController : UIViewController {
             NSUserDefaults.standardUserDefaults().removeObjectForKey(key.description)
         }
         
+    }
+    
+    func textFieldShouldReturn(userText: UITextField) -> Bool {
+        self.view.endEditing(true)
+        self.LoggedIn()
+        return false
     }
     
     override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {

@@ -15,8 +15,9 @@ class Roles {
     var requestID : String!
     var assignedOn : String!
     var membershipType : String!
-    var roleKey : String!
+    var roleKey : Int!
     var roleName : String!
+    var catalogId : String!
     
     
     init(data : NSDictionary){
@@ -26,8 +27,9 @@ class Roles {
         self.requestID = Utils.getStringFromJSON(data, key: "requestID")
         self.assignedOn = Utils.getStringFromJSON(data, key: "assignedOn")
         self.membershipType = Utils.getStringFromJSON(data, key: "membershipType")
-        self.roleKey = Utils.getStringFromJSON(data, key: "roleKey")
+        self.roleKey = data["roleKey"] as! Int
         self.roleName = Utils.getStringFromJSON(data, key: "roleName")
+        self.catalogId = Utils.getStringFromJSON(data, key: "catalogId")
         
         
         /*

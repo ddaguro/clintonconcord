@@ -21,6 +21,7 @@ class Applications {
     var dataSetName : String!
     var uiFragmentName : String!
     var appInstanceKey : String!
+    var catagoryId : String!
     
     
     /* sample data
@@ -47,6 +48,7 @@ class Applications {
         self.description = Utils.getStringFromJSON(data, key: "description")
         self.displayName = Utils.getStringFromJSON(data, key: "displayName")
         self.applicationInstanceName = Utils.getStringFromJSON(data, key: "applicationInstanceName")
+        self.catagoryId = Utils.getStringFromJSON(data, key: "catagoryId")
         
     }
 }

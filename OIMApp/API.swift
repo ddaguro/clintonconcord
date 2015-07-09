@@ -800,6 +800,43 @@ class API{
         
         task.resume()
     }
+    func loadAllRoles(apiUrl: String, completion: (([Roles]) -> Void)!) {
+        
+        var urlString = apiUrl
+        
+        let session = NSURLSession.sharedSession()
+        let sUrl = NSURL(string: urlString)
+        
+        var task = session.dataTaskWithURL(sUrl!){
+            (data, response, error) -> Void in
+            
+            if error != nil {
+                println(error.localizedDescription)
+            } else {
+                
+                var error : NSError?
+                var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
+                
+                let results: NSArray = jsonData["accounts"]!["roles"] as! NSArray
+                
+                var roles = [Roles]()
+                for role in results{
+                    let role = Roles(data: role as! NSDictionary)
+                    roles.append(role)
+                }
+                
+                let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+                dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        completion(roles)
+                    }
+                }
+                
+            }
+        }
+        
+        task.resume()
+    }
     
     // ok 7/2
     func loadAllApplications(identitiesUrl: String, completion: (([Applications]) -> Void)!) {

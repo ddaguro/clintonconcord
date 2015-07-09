@@ -23,12 +23,15 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
     var refreshControl:UIRefreshControl!
     var isFirstTime = true
     
-    var applications : [Applications]!
+    var roles : [Roles]!
     var entitlements : [Entitlements]!
+    var applications : [Applications]!
     var api : API!
     
     var filteredTableData = [Applications]()
     var resultSearchController = UISearchController()
+    
+    var itemHeading: NSMutableArray! = NSMutableArray()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,8 +51,12 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         menuItem.image = UIImage(named: "menu")
         toolbar.tintColor = UIColor.blackColor()
         
-        self.applications = [Applications]()
+        itemHeading.addObject("Roles")
+        itemHeading.addObject("Entitlements")
+        itemHeading.addObject("Accounts")
+        self.roles = [Roles]()
         self.entitlements = [Entitlements]()
+        self.applications = [Applications]()
         
         self.api = API()
         
@@ -57,8 +64,9 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
         let url = Persistent.endpoint + Persistent.baseroot + "/accounts/all/" + requestorUserId
         
-        //api.loadAllApplications(url, completion : didLoadApplications)
+        api.loadAllRoles(url, completion : didLoadRoles)
         api.loadAllEntitlements(url, completion : didLoadEntitlements)
+        api.loadAllApplications(url, completion : didLoadApplications)
         
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = UIColor.redColor()
@@ -95,9 +103,9 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
         let url = Persistent.endpoint + Persistent.baseroot + "/accounts/all/" + requestorUserId
         
-        //api.loadAllApplications(url, completion : didLoadApplications)
-        //loadAllEntitlements
+        api.loadAllRoles(url, completion : didLoadRoles)
         api.loadAllEntitlements(url, completion : didLoadEntitlements)
+        api.loadAllApplications(url, completion : didLoadApplications)
         SoundPlayer.play("upvote.wav")
     }
     
@@ -109,11 +117,11 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         }
     }
     
-    func didLoadApplications(loadedApplications: [Applications]){
-        self.applications = [Applications]()
+    func didLoadRoles(loadedRoles: [Roles]){
+        self.roles = [Roles]()
         
-        for app in loadedApplications {
-            self.applications.append(app)
+        for role in loadedRoles {
+            self.roles.append(role)
         }
         
         if isFirstTime  {
@@ -138,27 +146,62 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         self.view.hideLoading()
         self.refreshControl?.endRefreshing()
     }
-    
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // 1
-        // Return the number of sections.
-        return 1
+    func didLoadApplications(loadedApplications: [Applications]){
+        self.applications = [Applications]()
+        
+        for app in loadedApplications {
+            self.applications.append(app)
+        }
+        
+        if isFirstTime  {
+            self.view.showLoading()
+        }
+        self.tableView.reloadData()
+        self.view.hideLoading()
+        self.refreshControl?.endRefreshing()
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return entitlements.count
+        
+        switch (section) {
+        case 0: // roles
+            return roles.count
+        case 1: // entitlements
+            return entitlements.count
+        case 2: // accounts
+            return applications.count
+        default:
+            return 0
+        }
+        
+        
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("RequestCell") as! RequestCell
         
-        let dataObject = entitlements[indexPath.row]
+        switch (indexPath.section) {
+        case 0: // roles
+            let dataObject = roles[indexPath.row]
+            cell.titleLabel.text = dataObject.roleName
+            cell.descriptionLabel.text = "n/a"
+            cell.displaynameLabel.text = "Role Key: " + "\(dataObject.roleKey)" + " | Catgory Id: " + dataObject.catalogId
+        case 1: // entitlements
+            let dataObject = entitlements[indexPath.row]
+            cell.titleLabel.text = dataObject.entitlementDisplayName
+            cell.descriptionLabel.text = dataObject.entitlementDescription
+            cell.displaynameLabel.text = "Ent Key: " + "\(dataObject.entitlementKey)" + " | Catgory Id: " + dataObject.catalogId
+        case 2: // accounts
+            let dataObject = applications[indexPath.row]
+            cell.titleLabel.text = dataObject.displayName
+            cell.descriptionLabel.text = dataObject.description
+            cell.displaynameLabel.text = "App Key: " + "\(dataObject.appInstanceKey)" + " | Catgory Id: " + dataObject.catagoryId
+            
+        default:
+            cell.titleLabel.text = "Other"
+        }
         
-        
-        cell.titleLabel.text = dataObject.entitlementDisplayName
-        cell.descriptionLabel.text = dataObject.entitlementDescription
-        cell.displaynameLabel.text = dataObject.entitlementName
         
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
@@ -193,6 +236,24 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
             showViewController(controller, sender: self)
         }
     }
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return itemHeading.count
+    }
+    
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        
+        var view: UIView! = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 40))
+        view.backgroundColor = UIColor(red: 236.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, alpha: 1)
+        var lblHeading : UILabel! = UILabel(frame: CGRectMake(20, 0, 200, 20))
+        lblHeading.font = UIFont.systemFontOfSize(12)
+        lblHeading.textColor = UIColor.darkGrayColor()
+        lblHeading.text = itemHeading.objectAtIndex(section) as! NSString as String
+        view.addSubview(lblHeading)
+        return view
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
