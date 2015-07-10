@@ -26,8 +26,10 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
     var applications : [Applications]!
     var api : API!
     
-    var tableData : NSMutableArray! = NSMutableArray()
-    var filteredTableData = [String]()
+    //var tableData : NSMutableArray! = NSMutableArray()
+    var tableData : [RequestInfo] = []
+    //var filteredTableData = [String]()
+    var filteredTableData = [RequestInfo]()
     var resultSearchController = UISearchController()
     
     var itemHeading: NSMutableArray! = NSMutableArray()
@@ -140,7 +142,9 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         
         for ent in loadedEntitlements {
             self.entitlements.append(ent)
-            self.tableData.addObject(ent.entitlementDisplayName)
+            //self.tableData.addObject(ent.entitlementDisplayName)
+            var data = RequestInfo(key: ent.entitlementKey, categoryId: ent.catalogId, name: ent.entitlementDisplayName)
+            self.tableData.append(data)
         }
         
         if isFirstTime  {
@@ -194,7 +198,9 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         let cell = tableView.dequeueReusableCellWithIdentifier("RequestCell") as! RequestCell
         
         if (self.resultSearchController.active) {
-            cell.titleLabel.text = filteredTableData[indexPath.row]
+            cell.titleLabel.text = filteredTableData[indexPath.row].name
+            cell.descriptionLabel.text = ""
+            cell.displaynameLabel.text = "Ent Key: " + "\(filteredTableData[indexPath.row].key)" + " | Catgory Id: " + filteredTableData[indexPath.row].categoryId
         }
         else {
             
@@ -233,16 +239,24 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        
-        
         if let indexPath = self.tableView.indexPathForSelectedRow() {
-            let info = entitlements[indexPath.row]
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let controller = storyboard.instantiateViewControllerWithIdentifier("MakeRequestActionViewController") as! MakeRequestActionViewController
-            controller.displayName = info.entitlementDisplayName
-            controller.appInstanceKey = info.entitlementKey
-            controller.catalogId = info.catalogId
+            
+            if (self.resultSearchController.active) {
+                let info = filteredTableData[indexPath.row]
+                controller.displayName = info.name
+                controller.appInstanceKey = info.key
+                controller.catalogId = info.categoryId
+            }
+            else {
+                let info = entitlements[indexPath.row]
+                controller.displayName = info.entitlementDisplayName
+                controller.appInstanceKey = info.entitlementKey
+                controller.catalogId = info.catalogId
+            }
+
             controller.navigationController
             
             self.resultSearchController.active = false
@@ -291,18 +305,24 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
     {
         filteredTableData.removeAll(keepCapacity: false)
         
-        let searchPredicate = NSPredicate(format: "SELF CONTAINS[c] %@", searchController.searchBar.text)
+        let searchPredicate = NSPredicate(format: "name CONTAINS[c] %@", searchController.searchBar.text)
         let array = (tableData as NSArray).filteredArrayUsingPredicate(searchPredicate)
-        filteredTableData = array as! [String]
+        filteredTableData = array as! [RequestInfo]
         
         self.tableView.reloadData()
     }
     
 }
 
-struct RequestAccess {
-    var key : Int
-    var catagoryId : String
-    var name : String
+class RequestInfo: NSObject {
+    var key: Int!
+    var categoryId: String!
+    var name: String!
+    
+    init(key: Int, categoryId: String, name: String) {
+        self.key = key
+        self.categoryId = categoryId
+        self.name = name
+        
+    }
 }
-
