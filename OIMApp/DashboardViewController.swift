@@ -53,18 +53,11 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
 
         menuItem.image = UIImage(named: "menu")
         
-        
-        //labelCount.font = UIFont(name: MegaTheme.fontName, size: 35)
-        //labelCertCnt.font = UIFont(name: MegaTheme.fontName, size: 20)
-        //labelRequestCnt.font = UIFont(name: MegaTheme.fontName, size: 20)
-        
-        //toolbar.tintColor = UIColor.blackColor()
-        
         self.users = [Users]()
         self.api = API()
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/identity/" + requestorUserId + "/" + requestorUserId
-        api.loadUser(url, completion : didLoadUsers)
+        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + requestorUserId
+        api.loadUser(requestorUserId, apiUrl: url, completion : didLoadUsers)
         
         getPendingCounts(requestorUserId)
         
@@ -95,8 +88,8 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         
         api = API()
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/idaas/oig/v1/dashboard/users/" + requestorUserId + "/PendingOperationsCount"
-        api.getDashboardCount(url, completion: { (success) -> () in
+        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + requestorUserId + "/pendingoperationscount"
+        api.getDashboardCount(myLoginId, apiUrl: url, completion: { (success) -> () in
             var approval : Int!
             approval = NSUserDefaults.standardUserDefaults().objectForKey("dashapp") as! Int
             myApprovals = approval

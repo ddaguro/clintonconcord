@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CertficationsActionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class CertficationsActionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
     
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var tableView: UITableView!
@@ -47,9 +47,6 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         self.certentitemdetail = [EntitlementItemDetail]()
         self.api = API()
         
-        var requestorUserId : String!
-        requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        //webapp/rest/idaas/oig/v1/certifications/users/dcrane/CertificationLineItemsDetails/22/ApplicationInstance/43
         
         var certdetailid : Int!
         if certType == "ApplicationInstance" {
@@ -58,12 +55,12 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
             certdetailid = entitlementId
         }
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/idaas/oig/v1/certifications/users/" + requestorUserId + "/CertificationLineItemsDetails/" + "\(certId)/" + certType + "/\(certdetailid)"
+        let url = Persistent.endpoint + Persistent.baseroot + "/certifications/certificationlineitemdetails/" + "\(certId)/" + certType + "/\(certdetailid)"
         
         if certType == "ApplicationInstance" {
-            api.loadCertItemDetails(url, completion : didLoadData)
+            api.loadCertItemDetails(myLoginId, apiUrl : url, completion : didLoadData)
         } else if certType == "Entitlement" {
-            api.loadCertEntItemDetails(url, completion : didLoadEntDetailData)
+            api.loadCertEntItemDetails(myLoginId, apiUrl: url, completion : didLoadEntDetailData)
         }
         
         refreshControl = UIRefreshControl()
@@ -71,30 +68,8 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         refreshControl.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
         tableView.addSubview(refreshControl)
         
+        self.navigationController?.interactivePopGestureRecognizer.delegate = self;
         
-        //---> Adding Swipe Gesture
-        //------------right  swipe gestures in view--------------//
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: Selector("rightSwiped"))
-        swipeRight.direction = UISwipeGestureRecognizerDirection.Right
-        self.view.addGestureRecognizer(swipeRight)
-        
-        //-----------left swipe gestures in view--------------//
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: Selector("leftSwiped"))
-        swipeLeft.direction = UISwipeGestureRecognizerDirection.Left
-        self.view.addGestureRecognizer(swipeLeft)
-        
-    }
-    
-    // MARK: swipe gestures
-    func rightSwiped()
-    {
-        println("right swiped ")
-        self.navigationController?.popViewControllerAnimated(true)
-    }
-    
-    func leftSwiped()
-    {
-        println("left swiped ")
     }
     
     func didLoadData(loadedData: [CertItemDetail]){
@@ -109,6 +84,7 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         self.view.hideLoading()
         self.refreshControl?.endRefreshing()
     }
+    
     func didLoadEntDetailData(loadedData: [EntitlementItemDetail]){
         self.certentitemdetail = [EntitlementItemDetail]()
         for data in loadedData {
@@ -143,12 +119,12 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         } else if certType == "Entitlement" {
             certdetailid = entitlementId
         }
-        let url = Persistent.endpoint + Persistent.baseroot + "/idaas/oig/v1/certifications/users/" + myRequestorId + "/CertificationLineItemsDetails/" + "\(certId)/" + certType + "/\(certdetailid)"
+        let url = Persistent.endpoint + Persistent.baseroot + "/certifications/certificationlineitemdetails/" + "\(certId)/" + certType + "/\(certdetailid)"
         
         if certType == "ApplicationInstance" {
-            api.loadCertItemDetails(url, completion : didLoadData)
+            api.loadCertItemDetails(myLoginId, apiUrl : url, completion : didLoadData)
         } else if certType == "Entitlement" {
-            api.loadCertEntItemDetails(url, completion : didLoadEntDetailData)
+            api.loadCertEntItemDetails(myLoginId, apiUrl: url, completion : didLoadEntDetailData)
         }
         
         SoundPlayer.play("upvote.wav")
@@ -263,9 +239,6 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         var btnsendtag:UIButton = sender
         let action = sender.currentTitle
         
-        var requestorUserId : String!
-        requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        
         let cert = self.certitemdetail[btnsendtag.tag]
         
         let cid = certId //cert.certificationId as Int!
@@ -330,7 +303,7 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
             let certifyAction = DOAlertAction(title: "OK", style: .Default) { action in
                 let textField = doalert.textFields![0] as! UITextField
                 //PERFORM APPROVAL THRU API
-                let url = Persistent.endpoint + Persistent.baseroot + "/idaas/oig/v1/certifications/PerformCertificationAction"
+                let url = Persistent.endpoint + Persistent.baseroot + "/certifications"
                 
                 var jsonstring = "{\"identityCertifications\": {\"certificationId\": " + "\(cid)"
                 jsonstring += ",\"entityId\": " +  "\(self.applicationInstanceId)"
@@ -338,14 +311,14 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
                 jsonstring += "\",\"rowEntityId\": \"" + rowentityid
                 jsonstring += "\",\"targetAccountUserLogin\": \"" + targetuser
                 jsonstring += "\",\"entitlements\": []}],"
-                jsonstring += "\"requesterId\": \"" + requestorUserId
+                jsonstring += "\"requesterId\": \"" + myLoginId
                 jsonstring += "\",\"certificationType\": \"" + ctype
                 jsonstring += "\",\"certificationComments\": \"" + textField.text
                 jsonstring += "\",\"certificationDecision\": \"" + "CERTIFY"
                 jsonstring += "\",\"identityPassword\": \"" + "Oracle123"
                 jsonstring += "\"}}"
                 
-                self.api.RequestCertificationsAction(jsonstring, url : url) { (succeeded: Bool, msg: String) -> () in
+                self.api.RequestCertificationsAction(myLoginId, params : jsonstring, url : url) { (succeeded: Bool, msg: String) -> () in
                     var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
                     if(succeeded) {
                         alert.title = "Success!"

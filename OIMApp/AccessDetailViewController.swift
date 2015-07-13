@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AccessDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
+class AccessDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
     
     @IBOutlet var tableView: UITableView!
     @IBOutlet var btnBack: UIBarButtonItem!
@@ -20,7 +20,6 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
     
     @IBAction func goBack(sender: UIBarButtonItem) {
         self.navigationController?.popViewControllerAnimated(true)
-        // self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     var isFirstTime = true
@@ -51,19 +50,17 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
         
         self.api = API()
         
-        var requestorUserId : String!
-        requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        let url = Persistent.endpoint + Persistent.baseroot + "/useraccounts/all/" + requestorUserId + "/" + requestorUserId
+        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/accounts/"
         
         if catalog == "Applications"{
             labelTitle2.text = "Applications"
-            api.loadApplications(url, completion : didLoadApplications)
+            api.loadApplications(myLoginId, apiUrl: url, completion: didLoadApplications)
         } else if catalog == "Entitlements" {
             labelTitle2.text = "Entitlements"
-            api.loadEntitlements(url, completion: didLoadEntitlements)
+            api.loadEntitlements(myLoginId, apiUrl: url, completion: didLoadEntitlements)
         } else if catalog == "Roles" {
             labelTitle2.text = "Roles"
-            api.loadRoles(url, completion : didLoadRoles)
+            api.loadRoles(myLoginId, apiUrl: url, completion : didLoadRoles)
         }
         
         refreshControl = UIRefreshControl()
@@ -71,31 +68,10 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
         refreshControl.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
         tableView.addSubview(refreshControl)
         
-        //---> Adding Swipe Gesture
-        //------------right  swipe gestures in view--------------//
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: Selector("rightSwiped"))
-        swipeRight.direction = UISwipeGestureRecognizerDirection.Right
-        self.view.addGestureRecognizer(swipeRight)
         
-        //-----------left swipe gestures in view--------------//
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: Selector("leftSwiped"))
-        swipeLeft.direction = UISwipeGestureRecognizerDirection.Left
-        self.view.addGestureRecognizer(swipeLeft)
+        self.navigationController?.interactivePopGestureRecognizer.delegate = self;
 
     }
-    
-    // MARK: swipe gestures
-    func rightSwiped()
-    {
-        println("right swiped ")
-        self.navigationController?.popViewControllerAnimated(true)
-    }
-    
-    func leftSwiped()
-    {
-        println("left swiped ")
-    }
-    
     
     func refresh(){
         var requestorUserId : String!
@@ -104,13 +80,13 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
         
         if catalog == "Applications"{
             labelTitle2.text = "Applications"
-            api.loadApplications(url, completion : didLoadApplications)
+            api.loadApplications(myLoginId, apiUrl: url, completion : didLoadApplications)
         } else if catalog == "Entitlements" {
             labelTitle2.text = "Entitlements"
-            api.loadEntitlements(url, completion: didLoadEntitlements)
+            api.loadEntitlements(myLoginId, apiUrl: url, completion: didLoadEntitlements)
         } else if catalog == "Roles" {
             labelTitle2.text = "Roles"
-            api.loadRoles(url, completion : didLoadRoles)
+            api.loadRoles(myLoginId, apiUrl: url, completion : didLoadRoles)
         }
         
         SoundPlayer.play("upvote.wav")

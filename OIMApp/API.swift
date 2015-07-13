@@ -106,61 +106,65 @@ class API{
         task.resume()
     }
     
-    func loadApplications(identitiesUrl: String, completion: (([Applications]) -> Void)!) {
+    // 0713 - point to idaas
+    func loadApplications(loginId: String, apiUrl: String, completion: (([Applications]) -> Void)!) {
+        var request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
+        var session = NSURLSession.sharedSession()
+        request.HTTPMethod = "GET"
         
-        var urlString = identitiesUrl
+        var err: NSError?
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(loginId, forHTTPHeaderField: "loginId")
         
-        let session = NSURLSession.sharedSession()
-        let identitiesUrl = NSURL(string: urlString)
-        
-        var task = session.dataTaskWithURL(identitiesUrl!){
-            (data, response, error) -> Void in
+        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            var err: NSError?
             
-            if error != nil {
-                println(error.localizedDescription)
-            } else {
-                
+            if(err != nil) {
+                println(err!.localizedDescription)
+            }
+            else {
                 var error : NSError?
-                var identitiesData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
+                var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
                 
-                let results: NSArray = identitiesData["userAccounts"]!["userAppInstances"] as! NSArray
+                let results: NSArray = jsonData["userAccounts"]!["userAppInstances"] as! NSArray
                 
-                var identities = [Applications]()
-                for identity in results{
-                    let identity = Applications(data: identity as! NSDictionary)
-                    identities.append(identity)
+                var apps = [Applications]()
+                for app in results{
+                    let app = Applications(data: app as! NSDictionary)
+                    apps.append(app)
                 }
-                
                 
                 let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
                 dispatch_async(dispatch_get_global_queue(priority, 0)) {
                     dispatch_async(dispatch_get_main_queue()) {
-                        completion(identities)
+                        completion(apps)
                     }
                 }
-                
             }
-        }
+        })
         
         task.resume()
     }
     
-    
-    // ok
-    func loadEntitlements(apiUrl: String, completion: (([Entitlements]) -> Void)!) {
+    // 0713 - point to idaas
+    func loadEntitlements(loginId: String, apiUrl: String, completion: (([Entitlements]) -> Void)!) {
+        var request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
+        var session = NSURLSession.sharedSession()
+        request.HTTPMethod = "GET"
         
-        var urlString = apiUrl
+        var err: NSError?
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(loginId, forHTTPHeaderField: "loginId")
         
-        let session = NSURLSession.sharedSession()
-        let entitleUrl = NSURL(string: urlString)
-        
-        var task = session.dataTaskWithURL(entitleUrl!){
-            (data, response, error) -> Void in
+        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            var err: NSError?
             
-            if error != nil {
-                println(error.localizedDescription)
-            } else {
-                
+            if(err != nil) {
+                println(err!.localizedDescription)
+            }
+            else {
                 var error : NSError?
                 var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
                 
@@ -172,7 +176,6 @@ class API{
                     entitles.append(entitle)
                 }
                 
-                
                 let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
                 dispatch_async(dispatch_get_global_queue(priority, 0)) {
                     dispatch_async(dispatch_get_main_queue()) {
@@ -180,26 +183,29 @@ class API{
                     }
                 }
             }
-        }
+        })
         
         task.resume()
     }
     
-    // ok
-    func loadRoles(apiUrl: String, completion: (([Roles]) -> Void)!) {
+    // 0713 - point to idaas
+    func loadRoles(loginId: String, apiUrl: String, completion: (([Roles]) -> Void)!) {
+        var request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
+        var session = NSURLSession.sharedSession()
+        request.HTTPMethod = "GET"
         
-        var urlString = apiUrl
+        var err: NSError?
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(loginId, forHTTPHeaderField: "loginId")
         
-        let session = NSURLSession.sharedSession()
-        let roleUrl = NSURL(string: urlString)
-        
-        var task = session.dataTaskWithURL(roleUrl!){
-            (data, response, error) -> Void in
+        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            var err: NSError?
             
-            if error != nil {
-                println(error.localizedDescription)
-            } else {
-                
+            if(err != nil) {
+                println(err!.localizedDescription)
+            }
+            else {
                 var error : NSError?
                 var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
                 
@@ -211,7 +217,6 @@ class API{
                     roles.append(role)
                 }
                 
-                
                 let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
                 dispatch_async(dispatch_get_global_queue(priority, 0)) {
                     dispatch_async(dispatch_get_main_queue()) {
@@ -219,7 +224,7 @@ class API{
                     }
                 }
             }
-        }
+        })
         
         task.resume()
     }
@@ -284,14 +289,14 @@ class API{
     }
     
     //ok
-    func LogOut(url : String, postCompleted : (succeeded: Bool, msg: String) -> ()) {
+    func LogOut(loginId: String, url : String, postCompleted : (succeeded: Bool, msg: String) -> ()) {
         var request = NSMutableURLRequest(URL: NSURL(string: url)!)
         var session = NSURLSession.sharedSession()
         request.HTTPMethod = "POST"
         
         var err: NSError?
         
-        //request.HTTPBody = params.dataUsingEncoding(NSUTF8StringEncoding);
+        request.addValue(loginId, forHTTPHeaderField: "loginId")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         
@@ -341,20 +346,24 @@ class API{
         task.resume()
     }
     
-    //ok
-    func loadUser(apiUrl: String, completion: (([Users]) -> Void)!) {
-        var urlString = apiUrl
+    // 0713 point to idaas
+    func loadUser(loginId: String, apiUrl: String, completion: (([Users]) -> Void)!) {
+        var request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
+        var session = NSURLSession.sharedSession()
+        request.HTTPMethod = "GET"
         
-        let session = NSURLSession.sharedSession()
-        let userUrl = NSURL(string: urlString)
+        var err: NSError?
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(loginId, forHTTPHeaderField: "loginId")
         
-        var task = session.dataTaskWithURL(userUrl!){
-            (data, response, error) -> Void in
+        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            var err: NSError?
             
-            if error != nil {
-                println(error.localizedDescription)
-            } else {
-                
+            if(err != nil) {
+                println(err!.localizedDescription)
+            }
+            else {
                 var error : NSError?
                 var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
                 
@@ -373,49 +382,29 @@ class API{
                     }
                 }
             }
-        }
+        })
         
         task.resume()
     }
     
-    // 05/26
-    
-    //ok
-    func loadPendingApprovals(apiUrl: String, completion: (([Tasks]) -> Void)!) {
+    // 0713 point to idaas
+    func loadPendingApprovals(loginId: String, apiUrl: String, completion: (([Tasks]) -> Void)!) {
+        var request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
+        var session = NSURLSession.sharedSession()
+        request.HTTPMethod = "GET"
         
-        var urlString = apiUrl
+        var err: NSError?
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(loginId, forHTTPHeaderField: "loginId")
         
-        let session = NSURLSession.sharedSession()
-        let sUrl = NSURL(string: urlString)
-        
-        var task = session.dataTaskWithURL(sUrl!){
-            (data, response, error) -> Void in
+        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            var err: NSError?
             
-            if error != nil {
-                println(error.localizedDescription)
-            } else {
-                
-                /*
-                if data.length > 0 && error == nil{
-                let html = NSString(data: data, encoding: NSUTF8StringEncoding)
-                println("html = \(html)")
-                
-                var newArrayofDicts : NSMutableArray = NSMutableArray()
-                var arrayOfDicts : NSMutableArray? = NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.MutableContainers, error:nil) as? NSMutableArray
-                if arrayOfDicts != nil {
-                for item in arrayOfDicts! {
-                if var dict  = item as? NSMutableDictionary{
-                var newDict : NSMutableDictionary = NSMutableDictionary()
-                if dict["taskId"] != nil && dict["taskId"] != nil{
-                newDict["taskTitle"] = dict["taskTitle"]
-                newArrayofDicts.addObject(newDict)
-                }
-                }
-                }
-                }
-                }
-                */
-                
+            if(err != nil) {
+                println(err!.localizedDescription)
+            }
+            else {
                 var error : NSError?
                 var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
                 
@@ -427,35 +416,36 @@ class API{
                     tasks.append(task)
                 }
                 
-                
                 let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
                 dispatch_async(dispatch_get_global_queue(priority, 0)) {
                     dispatch_async(dispatch_get_main_queue()) {
                         completion(tasks)
                     }
                 }
-                
             }
-        }
+        })
         
         task.resume()
     }
     
-    //ok
-    func loadRequests(apiUrl: String, completion: (([Requests]) -> Void)!) {
+    // 0713 point to idaas
+    func loadRequests(loginId: String, apiUrl: String, completion: (([Requests]) -> Void)!) {
+        var request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
+        var session = NSURLSession.sharedSession()
+        request.HTTPMethod = "GET"
         
-        var urlString = apiUrl
+        var err: NSError?
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(loginId, forHTTPHeaderField: "loginId")
         
-        let session = NSURLSession.sharedSession()
-        let sUrl = NSURL(string: urlString)
-        
-        var task = session.dataTaskWithURL(sUrl!){
-            (data, response, error) -> Void in
+        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            var err: NSError?
             
-            if error != nil {
-                println(error.localizedDescription)
-            } else {
-                
+            if(err != nil) {
+                println(err!.localizedDescription)
+            }
+            else {
                 var error : NSError?
                 var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
                 
@@ -467,7 +457,6 @@ class API{
                     reqs.append(req)
                 }
                 
-                
                 let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
                 dispatch_async(dispatch_get_global_queue(priority, 0)) {
                     dispatch_async(dispatch_get_main_queue()) {
@@ -475,12 +464,12 @@ class API{
                     }
                 }
             }
-        }
+        })
         
         task.resume()
     }
     
-    func RequestApprovalAction(params : String, url : String, postCompleted : (succeeded: Bool, msg: String) -> ()) {
+    func RequestApprovalAction(loginId : String, params : String, url : String, postCompleted : (succeeded: Bool, msg: String) -> ()) {
         var request = NSMutableURLRequest(URL: NSURL(string: url)!)
         var session = NSURLSession.sharedSession()
         request.HTTPMethod = "POST"
@@ -490,6 +479,7 @@ class API{
         request.HTTPBody = params.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true);
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(loginId, forHTTPHeaderField: "loginId")
         
         
         var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
@@ -552,21 +542,24 @@ class API{
         task.resume()
     }
     
-    // ok 06/18
-    func loadPendingCerts(apiUrl: String, completion: (([Certs]) -> Void)!) {
+    // 0713 point to idaas
+    func loadPendingCerts(loginId: String, apiUrl: String, completion: (([Certs]) -> Void)!) {
+        var request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
+        var session = NSURLSession.sharedSession()
+        request.HTTPMethod = "GET"
         
-        var urlString = apiUrl
+        var err: NSError?
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(loginId, forHTTPHeaderField: "loginId")
         
-        let session = NSURLSession.sharedSession()
-        let sUrl = NSURL(string: urlString)
-        
-        var task = session.dataTaskWithURL(sUrl!){
-            (data, response, error) -> Void in
+        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            var err: NSError?
             
-            if error != nil {
-                println(error.localizedDescription)
-            } else {
-                
+            if(err != nil) {
+                println(err!.localizedDescription)
+            }
+            else {
                 var error : NSError?
                 var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
                 
@@ -588,26 +581,29 @@ class API{
                     }
                 }
             }
-        }
+        })
         
         task.resume()
     }
     
-    // ok 06/18
-    func loadCertItem(apiUrl: String, completion: (([CertItem]) -> Void)!) {
+    // 0713 point to idaas
+    func loadCertItem(loginId: String, apiUrl: String, completion: (([CertItem]) -> Void)!) {
+        var request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
+        var session = NSURLSession.sharedSession()
+        request.HTTPMethod = "GET"
         
-        var urlString = apiUrl
+        var err: NSError?
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(loginId, forHTTPHeaderField: "loginId")
         
-        let session = NSURLSession.sharedSession()
-        let sUrl = NSURL(string: urlString)
-        
-        var task = session.dataTaskWithURL(sUrl!){
-            (data, response, error) -> Void in
+        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            var err: NSError?
             
-            if error != nil {
-                println(error.localizedDescription)
-            } else {
-                
+            if(err != nil) {
+                println(err!.localizedDescription)
+            }
+            else {
                 var error : NSError?
                 var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
                 
@@ -619,35 +615,36 @@ class API{
                     certs.append(cert)
                 }
                 
-                
                 let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
                 dispatch_async(dispatch_get_global_queue(priority, 0)) {
                     dispatch_async(dispatch_get_main_queue()) {
                         completion(certs)
                     }
                 }
-                
             }
-        }
+        })
         
         task.resume()
     }
     
-    // ok 06/19
-    func loadCertItemDetails(apiUrl: String, completion: (([CertItemDetail]) -> Void)!) {
+    // 0713 point to idaas
+    func loadCertItemDetails(loginId: String, apiUrl: String, completion: (([CertItemDetail]) -> Void)!) {
+        var request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
+        var session = NSURLSession.sharedSession()
+        request.HTTPMethod = "GET"
         
-        var urlString = apiUrl
+        var err: NSError?
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(loginId, forHTTPHeaderField: "loginId")
         
-        let session = NSURLSession.sharedSession()
-        let sUrl = NSURL(string: urlString)
-        
-        var task = session.dataTaskWithURL(sUrl!){
-            (data, response, error) -> Void in
+        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            var err: NSError?
             
-            if error != nil {
-                println(error.localizedDescription)
-            } else {
-                
+            if(err != nil) {
+                println(err!.localizedDescription)
+            }
+            else {
                 var error : NSError?
                 var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
                 
@@ -659,21 +656,102 @@ class API{
                     certs.append(cert)
                 }
                 
-                
                 let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
                 dispatch_async(dispatch_get_global_queue(priority, 0)) {
                     dispatch_async(dispatch_get_main_queue()) {
                         completion(certs)
                     }
                 }
-                
             }
-        }
+        })
         
         task.resume()
     }
     
-    func RequestCertificationsAction(params : String, url : String, postCompleted : (succeeded: Bool, msg: String) -> ()) {
+    // 0713 point to idaas
+    func loadEntItem(loginId: String, apiUrl: String, completion: (([EntitlementItem]) -> Void)!) {
+        var request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
+        var session = NSURLSession.sharedSession()
+        request.HTTPMethod = "GET"
+        
+        var err: NSError?
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(loginId, forHTTPHeaderField: "loginId")
+        
+        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            var err: NSError?
+            
+            if(err != nil) {
+                println(err!.localizedDescription)
+            }
+            else {
+                var error : NSError?
+                var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
+                
+                let results: NSArray = jsonData["identityCertifications"]!["entitlementCertificationLineItems"] as! NSArray
+                
+                var ents = [EntitlementItem]()
+                for ent in results{
+                    let ent = EntitlementItem(data: ent as! NSDictionary)
+                    ents.append(ent)
+                }
+                
+                let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+                dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        completion(ents)
+                    }
+                }
+            }
+        })
+        
+        task.resume()
+    }
+    
+    // 0713 point to idaas
+    func loadCertEntItemDetails(loginId: String, apiUrl: String, completion: (([EntitlementItemDetail]) -> Void)!) {
+        var request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
+        var session = NSURLSession.sharedSession()
+        request.HTTPMethod = "GET"
+        
+        var err: NSError?
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(loginId, forHTTPHeaderField: "loginId")
+        
+        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            var err: NSError?
+            
+            if(err != nil) {
+                println(err!.localizedDescription)
+            }
+            else {
+                var error : NSError?
+                var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
+                
+                let results: NSArray = jsonData["identityCertifications"]!["entitlementCertLineItemDetails"]  as! NSArray
+                
+                
+                var ents = [EntitlementItemDetail]()
+                for ent in results{
+                    let ent = EntitlementItemDetail(data: ent as! NSDictionary)
+                    ents.append(ent)
+                }
+                
+                let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+                dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        completion(ents)
+                    }
+                }
+            }
+        })
+        
+        task.resume()
+    }
+    
+    func RequestCertificationsAction(loginId : String, params : String, url : String, postCompleted : (succeeded: Bool, msg: String) -> ()) {
         var request = NSMutableURLRequest(URL: NSURL(string: url)!)
         var session = NSURLSession.sharedSession()
         request.HTTPMethod = "POST"
@@ -683,6 +761,7 @@ class API{
         request.HTTPBody = params.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true);
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(loginId, forHTTPHeaderField: "loginId")
         
         
         var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
@@ -720,86 +799,7 @@ class API{
         
         task.resume()
     }
-    // ok 07/01
-    func loadEntItem(apiUrl: String, completion: (([EntitlementItem]) -> Void)!) {
-        
-        var urlString = apiUrl
-        
-        let session = NSURLSession.sharedSession()
-        let sUrl = NSURL(string: urlString)
-        
-        var task = session.dataTaskWithURL(sUrl!){
-            (data, response, error) -> Void in
-            
-            if error != nil {
-                println(error.localizedDescription)
-            } else {
-                
-                var error : NSError?
-                var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
-                
-                let results: NSArray = jsonData["identityCertifications"]!["entitlementCertificationLineItems"] as! NSArray
-                
-                var ents = [EntitlementItem]()
-                for ent in results{
-                    let ent = EntitlementItem(data: ent as! NSDictionary)
-                    ents.append(ent)
-                }
-                
-                
-                let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
-                dispatch_async(dispatch_get_global_queue(priority, 0)) {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        completion(ents)
-                    }
-                }
-                
-            }
-        }
-        
-        task.resume()
-    }
     
-    // ok 07/01
-    func loadCertEntItemDetails(apiUrl: String, completion: (([EntitlementItemDetail]) -> Void)!) {
-        
-        var urlString = apiUrl
-        
-        let session = NSURLSession.sharedSession()
-        let sUrl = NSURL(string: urlString)
-        
-        var task = session.dataTaskWithURL(sUrl!){
-            (data, response, error) -> Void in
-            
-            if error != nil {
-                println(error.localizedDescription)
-            } else {
-                
-                var error : NSError?
-                var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
-                
-                let results: NSArray = jsonData["identityCertifications"]!["entitlementCertLineItemDetails"]  as! NSArray
-                
-                
-                var ents = [EntitlementItemDetail]()
-                for ent in results{
-                    let ent = EntitlementItemDetail(data: ent as! NSDictionary)
-                    ents.append(ent)
-                }
-                
-                
-                let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
-                dispatch_async(dispatch_get_global_queue(priority, 0)) {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        completion(ents)
-                    }
-                }
-                
-            }
-        }
-        
-        task.resume()
-    }
     func loadAllRoles(apiUrl: String, completion: (([Roles]) -> Void)!) {
         
         var urlString = apiUrl
@@ -915,7 +915,48 @@ class API{
         task.resume()
     }
     
-    func RequestAction(params : String, url : String, postCompleted : (succeeded: Bool, msg: String) -> ()) {
+    // 0713 point to idaas
+    func loadAllEntitlements(loginId: String, apiUrl: String, completion: (([Entitlements]) -> Void)!) {
+        var request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
+        var session = NSURLSession.sharedSession()
+        request.HTTPMethod = "GET"
+        
+        var err: NSError?
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(loginId, forHTTPHeaderField: "loginId")
+        
+        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            var err: NSError?
+            
+            if(err != nil) {
+                println(err!.localizedDescription)
+            }
+            else {
+                var error : NSError?
+                var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
+                
+                let results: NSArray = jsonData["accounts"]!["entitlements"] as! NSArray
+                
+                var ents = [Entitlements]()
+                for ent in results{
+                    let ent = Entitlements(data: ent as! NSDictionary)
+                    ents.append(ent)
+                }
+                
+                let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+                dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        completion(ents)
+                    }
+                }
+            }
+        })
+        
+        task.resume()
+    }
+    
+    func RequestAction(loginId : String, params : String, url : String, postCompleted : (succeeded: Bool, msg: String) -> ()) {
         var request = NSMutableURLRequest(URL: NSURL(string: url)!)
         var session = NSURLSession.sharedSession()
         request.HTTPMethod = "POST"
@@ -925,6 +966,7 @@ class API{
         request.HTTPBody = params.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true);
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(loginId, forHTTPHeaderField: "loginId")
         
         
         var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
@@ -963,20 +1005,24 @@ class API{
         task.resume()
     }
     
-    func getDashboardCount(apiUrl: String, completion: ((success: Int) -> Void)!) {
-        var urlString = apiUrl
-        var count : Int
+    // 7/13 upadated to idaas
+    func getDashboardCount(loginId: String, apiUrl: String, completion: ((success: Int) -> Void)!) {
+        var request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
+        var session = NSURLSession.sharedSession()
+        request.HTTPMethod = "GET"
         
-        let session = NSURLSession.sharedSession()
-        let sUrl = NSURL(string: urlString)
-        let results: Int = 0
+        var err: NSError?
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(loginId, forHTTPHeaderField: "loginId")
         
-        var task = session.dataTaskWithURL(sUrl!){
-            (data, response, error) -> Void in
+        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            var err: NSError?
             
-            if error != nil {
-                println(error.localizedDescription)
-            } else {
+            if(err != nil) {
+                println(err!.localizedDescription)
+            }
+            else {
                 var error : NSError?
                 var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
                 
@@ -990,7 +1036,6 @@ class API{
                 NSUserDefaults.standardUserDefaults().synchronize()
                 let results = 1
                 
-                
                 let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
                 dispatch_async(dispatch_get_global_queue(priority, 0)) {
                     dispatch_async(dispatch_get_main_queue()) {
@@ -998,13 +1043,36 @@ class API{
                     }
                 }
             }
-        }
+        })
+        
         task.resume()
     }
     
-    func getDataFromUrl(urL:NSURL, completion: ((data: NSData?) -> Void)) {
-        NSURLSession.sharedSession().dataTaskWithURL(urL) { (data, response, error) in
-            completion(data: data)
-            }.resume()
+    func getDataFromUrl(apiUrl: String, completion: ((data: NSData?) -> Void)) {
+        var request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
+        var session = NSURLSession.sharedSession()
+        request.HTTPMethod = "GET"
+        
+        var err: NSError?
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(myLoginId, forHTTPHeaderField: "loginId")
+        
+        //NSURLSession.sharedSession().dataTaskWithURL(urL) { (data, response, error) in
+        //    completion(data: data)
+        //    }.resume()
+        
+        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            var err: NSError?
+            
+            if(err != nil) {
+                println(err!.localizedDescription)
+            }
+            else {
+                completion(data: data)
+            }
+        })
+        
+        task.resume()
     }
 }

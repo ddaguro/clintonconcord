@@ -56,10 +56,8 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
         self.certs = [Certs]()
         self.api = API()
         
-        var requestorUserId : String!
-        requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        let url = Persistent.endpoint + Persistent.baseroot + "/idaas/oig/v1/certifications/users/" + requestorUserId + "/MyPendingCertifications"
-        api.loadPendingCerts(url, completion : didLoadData)
+        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/certifications"
+        api.loadPendingCerts(myLoginId, apiUrl: url, completion : didLoadData)
         
         
         refreshControl = UIRefreshControl()
@@ -111,10 +109,8 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
     
     func refresh(){
         
-        var requestorUserId : String!
-        requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        let url = Persistent.endpoint + Persistent.baseroot + "/idaas/oig/v1/certifications/users/" + requestorUserId + "/MyPendingCertifications"
-        api.loadPendingCerts(url, completion : didLoadData)
+        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/certifications"
+        api.loadPendingCerts(myLoginId, apiUrl: url, completion : didLoadData)
         
         SoundPlayer.play("upvote.wav")
     }

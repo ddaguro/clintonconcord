@@ -53,16 +53,13 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         menuItem.image = UIImage(named: "menu")
         toolbar.tintColor = UIColor.blackColor()
         
-        
         itemHeading.addObject("Approvals")
         
         self.tasks = [Tasks]()
         self.api = API()
         
-        var requestorUserId : String!
-        requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        let url = Persistent.endpoint + Persistent.baseroot + "/approvals/pendingapprovals/" + requestorUserId + "?cursor=1&limit=10"
-        api.loadPendingApprovals(url, completion : didLoadData)
+        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/approvals/"
+        api.loadPendingApprovals(myLoginId, apiUrl: url, completion : didLoadData)
         
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = UIColor.redColor()
@@ -83,12 +80,8 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
 
     
     func refresh(){
-        var requestorUserId : String!
-        requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        let url = Persistent.endpoint + Persistent.baseroot + "/approvals/pendingapprovals/" + requestorUserId + "?cursor=1&limit=10"
-        api.loadPendingApprovals(url, completion : didLoadData)
-        
-        //view.showLoading()
+        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/approvals/"
+        api.loadPendingApprovals(myLoginId, apiUrl: url, completion : didLoadData)
         
         SoundPlayer.play("upvote.wav")
     }
@@ -155,8 +148,8 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
             username = "dcrane"
         }
         
-        let url = NSURL(string: Persistent.endpoint + Persistent.baseroot + "/avatar/" + myRequestorId + "/" + username)
-        self.api.getDataFromUrl(url!) { data in
+        let url = Persistent.endpoint + Persistent.baseroot + "/avatar/" + myRequestorId + "/" + username
+        self.api.getDataFromUrl(url) { data in
             dispatch_async(dispatch_get_main_queue()) {
                 if let postCell = tableView.cellForRowAtIndexPath(indexPath) as? TasksCell {
                     postCell.typeImageView.image = UIImage(data: data!)
@@ -222,11 +215,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         var btnsendtag:UIButton = sender
         let action = sender.currentTitle
         
-        var requestorUserId : String!
-        requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        
         let task = self.tasks[btnsendtag.tag]
-        
         let requestid = task.requestId as String!
         let taskid = task.taskId as String!
         let tasknumber = task.taskNumber as String!
@@ -273,10 +262,10 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
             let approveAction = DOAlertAction(title: "OK", style: .Default) { action in
                 let textField = doalert.textFields![0] as! UITextField
                 //PERFORM APPROVAL THRU API
-                let url = Persistent.endpoint + Persistent.baseroot + "/approvals/performApprovalAction"
+                let url = Persistent.endpoint + Persistent.baseroot + "/approvals"
                 
                 var paramstring = "{\"requester\": {\"User Login\": \""
-                paramstring += requestorUserId + "\"},\"task\": [{\"requestId\": \""
+                paramstring += myLoginId + "\"},\"task\": [{\"requestId\": \""
                 paramstring += requestid + "\",\"taskId\": \""
                 paramstring += taskid + "\", \"taskNumber\": \""
                 paramstring += tasknumber + "\",\"taskPriority\": \""
@@ -286,7 +275,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
                 paramstring += textField.text + "\",\"taskAction\": \""
                 paramstring += taskaction + "\"}]}"
                 
-                self.api.RequestApprovalAction(paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
+                self.api.RequestApprovalAction(myLoginId, params : paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
                     var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
                     if(succeeded) {
                         alert.title = "Success!"

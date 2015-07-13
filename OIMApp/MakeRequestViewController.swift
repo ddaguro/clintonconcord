@@ -66,12 +66,10 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         self.applications = [Applications]()
         self.api = API()
         
-        var requestorUserId : String!
-        requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        let url = Persistent.endpoint + Persistent.baseroot + "/accounts/all/" + requestorUserId
+        let url = Persistent.endpoint + Persistent.baseroot + "/cartitems"
         
         //api.loadAllRoles(url, completion : didLoadRoles)
-        api.loadAllEntitlements(url, completion : didLoadEntitlements)
+        api.loadAllEntitlements(myLoginId, apiUrl : url, completion : didLoadEntitlements)
         //api.loadAllApplications(url, completion : didLoadApplications)
         
         refreshControl = UIRefreshControl()
@@ -103,13 +101,13 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func refresh(){
-        var requestorUserId : String!
-        requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        let url = Persistent.endpoint + Persistent.baseroot + "/accounts/all/" + requestorUserId
+        
+        let url = Persistent.endpoint + Persistent.baseroot + "/cartitems"
         
         //api.loadAllRoles(url, completion : didLoadRoles)
-        api.loadAllEntitlements(url, completion : didLoadEntitlements)
+        api.loadAllEntitlements(myLoginId, apiUrl : url, completion : didLoadEntitlements)
         //api.loadAllApplications(url, completion : didLoadApplications)
+        
         SoundPlayer.play("upvote.wav")
     }
     

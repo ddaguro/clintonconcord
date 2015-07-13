@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CertficationsDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class CertficationsDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
     
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var tableView: UITableView!
@@ -42,16 +42,12 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
         self.entitem = [EntitlementItem]()
         self.api = API()
         
-        var requestorUserId : String!
-        requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        //idaas/oig/v1/certifications/users/dcrane/CertificationLineItems/49/ApplicationInstance
-        //idaas/oig/v1/certifications/users/dcrane/CertificationLineItems/122/Entitlement
-        let url = Persistent.endpoint + Persistent.baseroot + "/idaas/oig/v1/certifications/users/" + requestorUserId + "/CertificationLineItems/" + "\(certId)/" + certType
+        let url = Persistent.endpoint + Persistent.baseroot + "/certifications/certificationlineitems/" + "\(certId)/" + certType
         
         if certType == "ApplicationInstance" {
-            api.loadCertItem(url, completion : didLoadData)
+            api.loadCertItem(myLoginId, apiUrl : url, completion : didLoadData)
         } else if certType == "Entitlement" {
-            api.loadEntItem(url, completion : didLoadEntitlementData)
+            api.loadEntItem(myLoginId, apiUrl : url, completion : didLoadEntitlementData)
         }
         
         refreshControl = UIRefreshControl()
@@ -59,32 +55,10 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
         refreshControl.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
         tableView.addSubview(refreshControl)
         
-        
-        //---> Adding Swipe Gesture
-        //------------right  swipe gestures in view--------------//
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: Selector("rightSwiped"))
-        swipeRight.direction = UISwipeGestureRecognizerDirection.Right
-        self.view.addGestureRecognizer(swipeRight)
-        
-        //-----------left swipe gestures in view--------------//
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: Selector("leftSwiped"))
-        swipeLeft.direction = UISwipeGestureRecognizerDirection.Left
-        self.view.addGestureRecognizer(swipeLeft)
+        self.navigationController?.interactivePopGestureRecognizer.delegate = self;
         
     }
-    
-    // MARK: swipe gestures
-    func rightSwiped()
-    {
-        println("right swiped ")
-        self.navigationController?.popViewControllerAnimated(true)
-    }
-    
-    func leftSwiped()
-    {
-        println("left swiped ")
-    }
-    
+
     func didLoadData(loadedData: [CertItem]){
         self.certitem = [CertItem]()
         for data in loadedData {
@@ -131,12 +105,12 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
     
     func refresh(){
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/idaas/oig/v1/certifications/users/" + myRequestorId + "/CertificationLineItems/" + "\(certId)/" + certType
+        let url = Persistent.endpoint + Persistent.baseroot + "/certifications/certificationlineitems/" + "\(certId)/" + certType
         
         if certType == "ApplicationInstance" {
-            api.loadCertItem(url, completion : didLoadData)
+            api.loadCertItem(myLoginId, apiUrl : url, completion : didLoadData)
         } else if certType == "Entitlement" {
-            api.loadEntItem(url, completion : didLoadEntitlementData)
+            api.loadEntItem(myLoginId, apiUrl : url, completion : didLoadEntitlementData)
         }
         
         SoundPlayer.play("upvote.wav")

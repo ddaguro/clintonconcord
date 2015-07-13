@@ -106,9 +106,9 @@ class MenuViewController: UITableViewController {
         lblName.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleRightMargin
         
         //imageView.autoresizingMask.contentMode = UIViewContentMode.ScaleAspectFit
-        if let checkedUrl = NSURL(string: Persistent.endpoint + Persistent.baseroot + "/avatar/" + myRequestorId + "/" + myRequestorId) {
-            downloadImage(checkedUrl)
-        }
+        let checkedUrl = Persistent.endpoint + Persistent.baseroot + "/users/" + myRequestorId + "/avatar"
+        downloadImage(checkedUrl)
+
         /*
         if let url = NSURL(string: Persistent.endpoint + Persistent.baseroot + "/avatar/" + myRequestorId + "/" + myRequestorId) {
             if let data = NSData(contentsOfURL: url){
@@ -136,22 +136,17 @@ class MenuViewController: UITableViewController {
         
         self.api = API()
         
-        var requestorUserId : String!
-        requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        let url = Persistent.endpoint + Persistent.baseroot + "/identity/logout/" + requestorUserId
+        let url = Persistent.endpoint + Persistent.baseroot + "/users/logout"
         
-        api.LogOut(url) { (succeeded: Bool, msg: String) -> () in
+        api.LogOut(myLoginId, url: url) { (succeeded: Bool, msg: String) -> () in
             var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay.")
             if(succeeded) {
                 alert.title = "Success!"
                 alert.message = msg
                 
-                
                 for key in NSUserDefaults.standardUserDefaults().dictionaryRepresentation().keys {
                     NSUserDefaults.standardUserDefaults().removeObjectForKey(key.description)
                 }
-                
-
                 
             }
             else {
@@ -403,7 +398,7 @@ class MenuViewController: UITableViewController {
         }
     }
     
-    func downloadImage(url:NSURL){
+    func downloadImage(url: String){
         //println("Started downloading \"\(url.lastPathComponent!.stringByDeletingPathExtension)\".")
         self.api.getDataFromUrl(url) { data in
             dispatch_async(dispatch_get_main_queue()) {

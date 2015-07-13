@@ -84,10 +84,7 @@ class AccessViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let controller = storyboard.instantiateViewControllerWithIdentifier("AccessDetailViewController") as! AccessDetailViewController
             controller.catalog = info.title
-            controller.navigationController
-            showViewController(controller, sender: self)
-            
-            
+            self.navigationController?.pushViewController(controller, animated: true)
         }
     }
     

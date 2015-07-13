@@ -149,52 +149,9 @@ class NavigationViewController : UIViewController, UITableViewDelegate, UITableV
         toViewController.transitioningDelegate = self.transitionOperator
         
     }
-
-    func LoggedOut2(){
-        //dismissViewControllerAnimated(true, completion: nil)
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let controller = storyboard.instantiateViewControllerWithIdentifier("SignInViewController") as! SignInViewController
-        showViewController(controller, sender: self)
-    }
     
     func LoggedOut(){
         
-        self.api = API()
-        
-        var requestorUserId : String!
-        requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        let url = Persistent.endpoint + Persistent.baseroot + "/identity/logout/" + requestorUserId
-        
-        api.LogOut(url) { (succeeded: Bool, msg: String) -> () in
-            var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay.")
-            if(succeeded) {
-                alert.title = "Success!"
-                alert.message = msg
-                
-                for key in NSUserDefaults.standardUserDefaults().dictionaryRepresentation().keys {
-                    NSUserDefaults.standardUserDefaults().removeObjectForKey(key.description)
-                }
-            }
-            else {
-                alert.title = "Failed : ("
-                alert.message = msg
-            }
-            
-            // Move to the UI thread
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                // Show the alert
-                
-                if(succeeded)
-                {
-                    //self.performSegueWithIdentifier("dashboardNav", sender: self)
-                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    let controller = storyboard.instantiateViewControllerWithIdentifier("SignInViewController") as! SignInViewController
-                    self.showViewController(controller, sender: self)
-                } else {
-                    alert.show()
-                }
-            })
-        }
     }
     
     func didLoadUsers(loadedUsers: [Users]){

@@ -115,7 +115,7 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
         
         self.api = API()
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/identity/login"
+        let url = Persistent.endpoint + Persistent.baseroot + "/users/login"
         
         let username = userTextField.text
         let password = passwordTextField.text
@@ -131,11 +131,11 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
                     //load user object
                     self.users = [Users]()
                     
-                    let url = Persistent.endpoint + Persistent.baseroot + "/identity/" + username + "/" + username
-                    self.api.loadUser(url, completion : self.didLoadUsers)
+                    let url = Persistent.endpoint + Persistent.baseroot + "/users/" + username 
+                    self.api.loadUser(username, apiUrl: url, completion : self.didLoadUsers)
                     
+                    myLoginId = username
                     NSUserDefaults.standardUserDefaults().setObject(username, forKey: "requestorUserId")
-                    NSUserDefaults.standardUserDefaults().setObject(username, forKey: "searchUserId")
                     NSUserDefaults.standardUserDefaults().synchronize()
                 }
                 else {

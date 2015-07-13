@@ -56,10 +56,8 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         self.reqs = [Requests]()
         self.api = API()
         
-        var requestorUserId : String!
-        requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        let url = Persistent.endpoint + Persistent.baseroot + "/requests/" + requestorUserId + "/requestsRaisedByMe?cursor=1&limit=10"
-        api.loadRequests(url, completion : didLoadData)
+        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/requests"
+        api.loadRequests(myLoginId, apiUrl: url, completion : didLoadData)
         
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = UIColor.redColor()
@@ -80,10 +78,9 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
 
     
     func refresh(){
-        var requestorUserId : String!
-        requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        let url = Persistent.endpoint + Persistent.baseroot + "/requests/" + requestorUserId + "/requestsRaisedByMe?cursor=1&limit=10"
-        api.loadRequests(url, completion : didLoadData)
+        
+        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/requests"
+        api.loadRequests(myLoginId, apiUrl: url, completion : didLoadData)
         
         SoundPlayer.play("upvote.wav")
     }

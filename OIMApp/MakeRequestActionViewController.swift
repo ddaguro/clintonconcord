@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MakeRequestActionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class MakeRequestActionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var tableView: UITableView!
     
@@ -35,30 +35,10 @@ class MakeRequestActionViewController: UIViewController, UITableViewDelegate, UI
         
         self.api = API()
         
-        //---> Adding Swipe Gesture
-        //------------right  swipe gestures in view--------------//
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: Selector("rightSwiped"))
-        swipeRight.direction = UISwipeGestureRecognizerDirection.Right
-        self.view.addGestureRecognizer(swipeRight)
-        
-        //-----------left swipe gestures in view--------------//
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: Selector("leftSwiped"))
-        swipeLeft.direction = UISwipeGestureRecognizerDirection.Left
-        self.view.addGestureRecognizer(swipeLeft)
+        self.navigationController?.interactivePopGestureRecognizer.delegate = self;
 
     }
-    
-    // MARK: swipe gestures
-    func rightSwiped()
-    {
-        println("right swiped ")
-        self.navigationController?.popViewControllerAnimated(true)
-    }
-    
-    func leftSwiped()
-    {
-        println("left swiped ")
-    }
+
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -130,14 +110,12 @@ class MakeRequestActionViewController: UIViewController, UITableViewDelegate, UI
                 let textField = doalert.textFields![0] as! UITextField
                 //PERFORM APPROVAL THRU API
                 
-                var requestorUserId : String!
-                requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-                let url = Persistent.endpoint + Persistent.baseroot + "/requests/makeRequest"
+                let url = Persistent.endpoint + Persistent.baseroot + "/requests"
                 
-                var jsonstring = "{\"requester\":{\"User Login\":\"" + requestorUserId + "\"},\"targetUsers\":[{\"User Login\":\"" + requestorUserId
+                var jsonstring = "{\"requester\":{\"User Login\":\"" + myLoginId + "\"},\"targetUsers\":[{\"User Login\":\"" + myLoginId
                 jsonstring += "\"}],\"accounts\":[{\"entitlements\":[{\"entitlementKey\":\"" + "\(self.appInstanceKey)"  + "\",\"catalogId\":\"" + self.catalogId + "\"}]}]}"
                 
-                self.api.RequestAction(jsonstring, url : url) { (succeeded: Bool, msg: String) -> () in
+                self.api.RequestAction(myLoginId, params : jsonstring, url : url) { (succeeded: Bool, msg: String) -> () in
                     var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
                     if(succeeded) {
                         alert.title = "Success!"
