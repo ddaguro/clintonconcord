@@ -256,7 +256,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
             // Add the text field for text entry.
             doalert.addTextFieldWithConfigurationHandler { textField in
                 // If you need to customize the text field, you can do so here.
-                textField.placeholder = "Enter Comments"
+                textField.placeholder = " Enter Comments"
             }
             
             let approveAction = DOAlertAction(title: "OK", style: .Default) { action in

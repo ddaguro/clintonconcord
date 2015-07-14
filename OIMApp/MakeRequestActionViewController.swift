@@ -103,7 +103,7 @@ class MakeRequestActionViewController: UIViewController, UITableViewDelegate, UI
             doalert = DOAlertController(title: alerttitle, message: alertmsg, preferredStyle: .Alert)
             
             doalert.addTextFieldWithConfigurationHandler { textField in
-                
+                textField.placeholder = " Enter Comments"
             }
             
             let certifyAction = DOAlertAction(title: "OK", style: .Default) { action in
@@ -113,7 +113,8 @@ class MakeRequestActionViewController: UIViewController, UITableViewDelegate, UI
                 let url = Persistent.endpoint + Persistent.baseroot + "/requests"
                 
                 var jsonstring = "{\"requester\":{\"User Login\":\"" + myLoginId + "\"},\"targetUsers\":[{\"User Login\":\"" + myLoginId
-                jsonstring += "\"}],\"accounts\":[{\"entitlements\":[{\"entitlementKey\":\"" + "\(self.appInstanceKey)"  + "\",\"catalogId\":\"" + self.catalogId + "\"}]}]}"
+                jsonstring += "\"}],\"accounts\":[{\"entitlements\":[{\"entitlementKey\":\"" + "\(self.appInstanceKey)"
+                jsonstring += "\",\"catalogId\":\"" + self.catalogId + "\",\"comments\":\"" + textField.text + "\"}]}]}"
                 
                 self.api.RequestAction(myLoginId, params : jsonstring, url : url) { (succeeded: Bool, msg: String) -> () in
                     var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
