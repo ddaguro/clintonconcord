@@ -32,7 +32,7 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
     var filteredTableData = [RequestInfo]()
     var resultSearchController = UISearchController()
     
-    var itemHeading: NSMutableArray! = NSMutableArray()
+    //var itemHeading: NSMutableArray! = NSMutableArray()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,9 +57,9 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         menuItem.image = UIImage(named: "menu")
         toolbar.tintColor = UIColor.blackColor()
         
-        itemHeading.addObject("Roles")
-        itemHeading.addObject("Entitlements")
-        itemHeading.addObject("Accounts")
+        //itemHeading.addObject("Roles")
+        //itemHeading.addObject("Entitlements")
+        //itemHeading.addObject("Accounts")
         
         self.roles = [Roles]()
         self.entitlements = [Entitlements]()
@@ -68,9 +68,9 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         
         let url = Persistent.endpoint + Persistent.baseroot + "/cartitems"
         
-        //api.loadAllRoles(url, completion : didLoadRoles)
+        //api.loadAllRoles(myLoginId, apiUrl : url, completion : didLoadRoles)
         api.loadAllEntitlements(myLoginId, apiUrl : url, completion : didLoadEntitlements)
-        //api.loadAllApplications(url, completion : didLoadApplications)
+        //api.loadAllApplications(myLoginId, apiUrl : url, completion : didLoadApplications)
         
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = UIColor.redColor()
@@ -104,9 +104,9 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         
         let url = Persistent.endpoint + Persistent.baseroot + "/cartitems"
         
-        //api.loadAllRoles(url, completion : didLoadRoles)
+        //api.loadAllRoles(myLoginId, apiUrl : url, completion : didLoadRoles)
         api.loadAllEntitlements(myLoginId, apiUrl : url, completion : didLoadEntitlements)
-        //api.loadAllApplications(url, completion : didLoadApplications)
+        //api.loadAllApplications(myLoginId, apiUrl : url, completion : didLoadApplications)
         
         SoundPlayer.play("upvote.wav")
     }
@@ -124,7 +124,8 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         
         for role in loadedRoles {
             self.roles.append(role)
-            //self.tableData.addObject(role.roleName)
+            var data = RequestInfo(key: role.roleKey, categoryId: role.catalogId, name: role.roleName)
+            self.tableData.append(data)
         }
         
         if isFirstTime  {
@@ -140,7 +141,6 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         
         for ent in loadedEntitlements {
             self.entitlements.append(ent)
-            //self.tableData.addObject(ent.entitlementDisplayName)
             var data = RequestInfo(key: ent.entitlementKey, categoryId: ent.catalogId, name: ent.entitlementDisplayName)
             self.tableData.append(data)
         }
@@ -158,7 +158,8 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         
         for app in loadedApplications {
             self.applications.append(app)
-            //self.tableData.addObject(app.displayName)
+            var data = RequestInfo(key: app.appInstanceKey, categoryId: app.catagoryId, name: app.displayName)
+            self.tableData.append(data)
         }
         
         if isFirstTime  {
@@ -178,16 +179,17 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
             /*
             switch (section) {
             case 0: // roles
-            return roles.count
+                return roles.count
             case 1: // entitlements
-            return entitlements.count
+                return entitlements.count
             case 2: // accounts
-            return applications.count
+                return applications.count
             default:
-            return 0
+                return 0
             }
             */
-            return entitlements.count
+            //return entitlements.count + roles.count + applications.count
+            return tableData.count
         }
     }
     
@@ -201,33 +203,33 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
             cell.displaynameLabel.text = "Ent Key: " + "\(filteredTableData[indexPath.row].key)" + " | Catgory Id: " + filteredTableData[indexPath.row].categoryId
         }
         else {
-            
             /*
             switch (indexPath.section) {
             case 0: // roles
-            let dataObject = roles[indexPath.row]
-            cell.titleLabel.text = dataObject.roleName
-            cell.descriptionLabel.text = "n/a"
-            cell.displaynameLabel.text = "Role Key: " + "\(dataObject.roleKey)" + " | Catgory Id: " + dataObject.catalogId
+                let dataObject = roles[indexPath.row]
+                cell.titleLabel.text = dataObject.roleName
+                cell.descriptionLabel.text = "n/a"
+                cell.displaynameLabel.text = "Role Key: " + "\(dataObject.roleKey)" + " | Catgory Id: " + dataObject.catalogId
             case 1: // entitlements
-            let dataObject = entitlements[indexPath.row]
-            cell.titleLabel.text = dataObject.entitlementDisplayName
-            cell.descriptionLabel.text = dataObject.entitlementDescription
-            cell.displaynameLabel.text = "Ent Key: " + "\(dataObject.entitlementKey)" + " | Catgory Id: " + dataObject.catalogId
-            case 2: // accounts
-            let dataObject = applications[indexPath.row]
-            cell.titleLabel.text = dataObject.displayName
-            cell.descriptionLabel.text = dataObject.description
-            cell.displaynameLabel.text = "App Key: " + "\(dataObject.appInstanceKey)" + " | Catgory Id: " + dataObject.catagoryId
+                let dataObject = entitlements[indexPath.row]
+                cell.titleLabel.text = dataObject.entitlementDisplayName
+                cell.descriptionLabel.text = dataObject.entitlementDescription
+                cell.displaynameLabel.text = "Ent Key: " + "\(dataObject.entitlementKey)" + " | Catgory Id: " + dataObject.catalogId
+            //case 2: // accounts
+            //let dataObject = applications[indexPath.row]
+            //cell.titleLabel.text = dataObject.displayName
+            //cell.descriptionLabel.text = dataObject.description
+            //cell.displaynameLabel.text = "App Key: " + "\(dataObject.appInstanceKey)" + " | Catgory Id: " + dataObject.catagoryId
             
             default:
-            cell.titleLabel.text = "Other"
+                cell.titleLabel.text = "Other"
             }
             */
-            let dataObject = entitlements[indexPath.row]
-            cell.titleLabel.text = dataObject.entitlementDisplayName
-            cell.descriptionLabel.text = dataObject.entitlementDescription
-            cell.displaynameLabel.text = "Ent Key: " + "\(dataObject.entitlementKey)" + " | Catgory Id: " + dataObject.catalogId
+            
+            let dataObject = tableData[indexPath.row]
+            cell.titleLabel.text = dataObject.name
+            cell.descriptionLabel.text = dataObject.name
+            cell.displaynameLabel.text = "Key: " + "\(dataObject.key)" + " | Catgory Id: " + dataObject.categoryId
         }
         
         cell.selectionStyle = UITableViewCellSelectionStyle.None
@@ -249,10 +251,10 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
                 controller.catalogId = info.categoryId
             }
             else {
-                let info = entitlements[indexPath.row]
-                controller.displayName = info.entitlementDisplayName
-                controller.appInstanceKey = info.entitlementKey
-                controller.catalogId = info.catalogId
+                let info = tableData[indexPath.row]
+                controller.displayName = info.name
+                controller.appInstanceKey = info.key
+                controller.catalogId = info.categoryId
             }
 
             controller.navigationController
@@ -262,20 +264,21 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         }
     }
     /*
+    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-    return itemHeading.count
+        return itemHeading.count
     }
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
     
-    var view: UIView! = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 40))
-    view.backgroundColor = UIColor(red: 236.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, alpha: 1)
-    var lblHeading : UILabel! = UILabel(frame: CGRectMake(20, 0, 200, 20))
-    lblHeading.font = UIFont.systemFontOfSize(12)
-    lblHeading.textColor = UIColor.darkGrayColor()
-    lblHeading.text = itemHeading.objectAtIndex(section) as! NSString as String
-    view.addSubview(lblHeading)
-    return view
+        var view: UIView! = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 40))
+        view.backgroundColor = UIColor(red: 236.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, alpha: 1)
+        var lblHeading : UILabel! = UILabel(frame: CGRectMake(20, 0, 200, 20))
+        lblHeading.font = UIFont.systemFontOfSize(12)
+        lblHeading.textColor = UIColor.darkGrayColor()
+        lblHeading.text = itemHeading.objectAtIndex(section) as! NSString as String
+        view.addSubview(lblHeading)
+        return view
     }
     */
     override func didReceiveMemoryWarning() {

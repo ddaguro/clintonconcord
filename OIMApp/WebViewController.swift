@@ -28,7 +28,7 @@ class WebViewController: UIViewController, UIWebViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let targetURL = NSURL(string: "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9080/swaggerv2/v2/dist")
+        let targetURL = NSURL(string: "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9080/idaas-swagger/v1/dist/")
         let request = NSURLRequest(URL: targetURL!)
         webView.loadRequest(request)
         

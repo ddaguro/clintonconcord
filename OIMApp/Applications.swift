@@ -20,7 +20,7 @@ class Applications {
     var applicationInstanceName : String!
     var dataSetName : String!
     var uiFragmentName : String!
-    var appInstanceKey : String!
+    var appInstanceKey : Int!
     var catagoryId : String!
     
     
@@ -48,7 +48,8 @@ class Applications {
         self.description = Utils.getStringFromJSON(data, key: "description")
         self.displayName = Utils.getStringFromJSON(data, key: "displayName")
         self.applicationInstanceName = Utils.getStringFromJSON(data, key: "applicationInstanceName")
-        self.catagoryId = Utils.getStringFromJSON(data, key: "catagoryId")
+        self.catagoryId = Utils.getStringFromJSON(data, key: "catalogId")
+        self.appInstanceKey = data["appInstanceKey"] as! Int
         
     }
 }

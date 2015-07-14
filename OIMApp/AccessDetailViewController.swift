@@ -74,13 +74,12 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     func refresh(){
-        var requestorUserId : String!
-        requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        let url = Persistent.endpoint + Persistent.baseroot + "/useraccounts/all/" + requestorUserId + "/" + requestorUserId
+        
+        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/accounts/"
         
         if catalog == "Applications"{
             labelTitle2.text = "Applications"
-            api.loadApplications(myLoginId, apiUrl: url, completion : didLoadApplications)
+            api.loadApplications(myLoginId, apiUrl: url, completion: didLoadApplications)
         } else if catalog == "Entitlements" {
             labelTitle2.text = "Entitlements"
             api.loadEntitlements(myLoginId, apiUrl: url, completion: didLoadEntitlements)

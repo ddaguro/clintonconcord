@@ -148,7 +148,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
             username = "dcrane"
         }
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/avatar/" + myRequestorId + "/" + username
+        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + username + "/avatar"
         self.api.getDataFromUrl(url) { data in
             dispatch_async(dispatch_get_main_queue()) {
                 if let postCell = tableView.cellForRowAtIndexPath(indexPath) as? TasksCell {
