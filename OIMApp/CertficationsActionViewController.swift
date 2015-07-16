@@ -298,7 +298,7 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
             // Add the text field for text entry.
             doalert.addTextFieldWithConfigurationHandler { textField in
                 // If you need to customize the text field, you can do so here.
-                textField.placeholder = "Enter Comments"
+                textField.placeholder = " Enter Comments"
             }
             let certifyAction = DOAlertAction(title: "OK", style: .Default) { action in
                 let textField = doalert.textFields![0] as! UITextField

@@ -82,8 +82,8 @@ class MakeRequestActionViewController: UIViewController, UITableViewDelegate, UI
         
         if action == "Add" {
             
-            alerttitle = "Certify Confirmation"
-            alertmsg = "Please confirm approval for "
+            alerttitle = "Request Confirmation"
+            alertmsg = "Please confirm request for " + displayName
             
         } else if action == "Cancel" {
             

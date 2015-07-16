@@ -11,11 +11,6 @@ import UIKit
 
 class SignInViewController : UIViewController, UITextFieldDelegate {
     
-    @IBOutlet var titleLabel : UILabel!
-    
-    @IBOutlet var facebookButton : UIButton!
-    @IBOutlet var twitterButton : UIButton!
-    
     @IBOutlet var bgImageView : UIImageView!
     
     @IBOutlet var signInButton : UIButton!
@@ -38,7 +33,7 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        println("----->>> SignInViewController")
+        //println("----->>> SignInViewController")
         bgImageView.image = UIImage(named: "login-bg")
         bgImageView.contentMode = .ScaleAspectFill
         
@@ -91,11 +86,6 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
         self.view.endEditing(true)
         self.LoggedIn()
         return false
-    }
-    
-    override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        
-        titleLabel.hidden = newCollection.verticalSizeClass == UIUserInterfaceSizeClass.Compact
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
