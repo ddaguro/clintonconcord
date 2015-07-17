@@ -127,9 +127,7 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
                     myLoginId = username
                     NSUserDefaults.standardUserDefaults().setObject(username, forKey: "requestorUserId")
                     NSUserDefaults.standardUserDefaults().synchronize()
-                    
-                    self.getPendingCounts(myLoginId)
-                }
+                                    }
                 else {
                     alert.title = "Failed : ("
                     alert.message = msg
@@ -157,25 +155,6 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
         for usr in loadedUsers {
             users.append(usr)
         }
-    }
-    
-    
-    func getPendingCounts(requestorUserId: String) {
-        api = API()
-        
-        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + requestorUserId + "/pendingoperationscount"
-        api.getDashboardCount(myLoginId, apiUrl: url, completion: { (success) -> () in
-            var approval : Int!
-            approval = NSUserDefaults.standardUserDefaults().objectForKey("dashapp") as! Int
-            myApprovals = approval
-            var cert : Int!
-            cert = NSUserDefaults.standardUserDefaults().objectForKey("dashcert") as! Int
-            myCertificates = cert
-            var requests : Int!
-            requests = NSUserDefaults.standardUserDefaults().objectForKey("dashreq") as! Int
-            myRequest = requests
-            totalCounter = (cert + approval + requests)
-        })
     }
     
     func DismissKeyboard(){

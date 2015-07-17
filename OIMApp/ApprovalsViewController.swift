@@ -142,12 +142,17 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         var username : String
         if task.beneficiearyUser == "Kevin Clark" {
             username = "kclark"
+            cell.typeImageView.image = UIImage(named: "kclark")
         } else if task.beneficiearyUser == "Grace Davis" {
             username = "gdavis"
-        } else {
+            cell.typeImageView.image = UIImage(named: "gdavis")
+        } else if task.beneficiearyUser == "Grace Davis" {
             username = "dcrane"
+            cell.typeImageView.image = UIImage(named: "dcrane")
+        } else {
+            cell.typeImageView.image = UIImage(named: "profileBlankPic")
         }
-        
+        /*
         let url = Persistent.endpoint + Persistent.baseroot + "/users/" + username + "/avatar"
         self.api.getDataFromUrl(url) { data in
             dispatch_async(dispatch_get_main_queue()) {
@@ -156,8 +161,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
                 }
             }
         }
-        
-        //cell.typeImageView.image = UIImage(named: "Clock-1")
+        */
         cell.nameLabel.text = task.requestEntityName
         cell.postLabel?.text = task.requestType
         cell.beneficiaryLabel.text = "Beneficiaries"

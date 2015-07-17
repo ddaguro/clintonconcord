@@ -433,11 +433,13 @@ class API{
         var request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
         var session = NSURLSession.sharedSession()
         request.HTTPMethod = "GET"
-        
+
         var err: NSError?
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
+        
+        
         
         var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             var err: NSError?

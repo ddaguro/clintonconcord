@@ -19,7 +19,7 @@ class MenuViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.api = API()
-        println("----->>> MenuViewController")
+        //println("----->>> MenuViewController")
         
         //---> Adding UIButton in UITableView Footer
         var viewFooter = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 60))
@@ -106,9 +106,18 @@ class MenuViewController: UITableViewController {
         lblName.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleRightMargin
         
         //imageView.autoresizingMask.contentMode = UIViewContentMode.ScaleAspectFit
-        let checkedUrl = Persistent.endpoint + Persistent.baseroot + "/users/" + myRequestorId + "/avatar"
-        downloadImage(checkedUrl)
-
+        //let checkedUrl = Persistent.endpoint + Persistent.baseroot + "/users/" + myRequestorId + "/avatar"
+        //downloadImage(checkedUrl)
+        
+        if myLoginId == "kclark" {
+            imageView.image = UIImage(named: "kclark")
+        } else if myLoginId == "gdavis" {
+            imageView.image = UIImage(named: "gdavis")
+        } else if myLoginId == "dcrane" {
+            imageView.image = UIImage(named: "dcrane")
+        } else {
+            imageView.image = UIImage(named: "profileBlankPic")
+        }
         /*
         if let url = NSURL(string: Persistent.endpoint + Persistent.baseroot + "/avatar/" + myRequestorId + "/" + myRequestorId) {
             if let data = NSData(contentsOfURL: url){

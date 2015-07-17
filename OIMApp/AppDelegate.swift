@@ -15,6 +15,7 @@ var totalCounter: Int = 0
 var myRequestorId : String = ""
 var myLoginId : String = ""
 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -22,6 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        //let URLCache = NSURLCache(memoryCapacity: 4 * 1024 * 1024, diskCapacity: 20 * 1024 * 1024, diskPath: nil)
+        //NSURLCache.setSharedURLCache(URLCache)
         
         var navAppearance = UINavigationBar.appearance()
         //48A0DC
@@ -112,4 +115,3 @@ struct Persistent {
     static let endpoint = "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9080/"
     static let baseroot = "idaas/oig/v1"
 }
-
