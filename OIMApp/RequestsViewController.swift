@@ -56,7 +56,15 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         self.reqs = [Requests]()
         self.api = API()
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/requests"
+        var uuid : String
+        if myLoginId == "dcrane" {
+            uuid = "lnguyen"
+        } else {
+            uuid = myLoginId
+        }
+        
+        
+        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + uuid + "/requests"
         api.loadRequests(myLoginId, apiUrl: url, completion : didLoadData)
         
         refreshControl = UIRefreshControl()
