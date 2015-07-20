@@ -132,7 +132,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         let cell = tableView.dequeueReusableCellWithIdentifier("DashboardCell") as! DashboardCell
         
         let info = users[indexPath.row]
-        cell.bgImage.image = UIImage(named: "MyDashboard-headerless-1")
+        //cell.bgImage.image = UIImage(named: "MyDashboard-headerless-1")
         cell.approvalsLabel.text = "\(myApprovals)"
         cell.requestsLabel.text = "\(myRequest)"
         cell.certsLabel.text = "\(myCertificates)"
