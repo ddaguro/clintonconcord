@@ -149,6 +149,9 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         } else if task.beneficiearyUser == "Grace Davis" {
             username = "dcrane"
             cell.typeImageView.image = UIImage(named: "dcrane")
+        } else if task.beneficiearyUser == "Billie Rojero" {
+            username = "dcrane"
+            cell.typeImageView.image = UIImage(named: "brojero")
         } else {
             cell.typeImageView.image = UIImage(named: "profileBlankPic")
         }

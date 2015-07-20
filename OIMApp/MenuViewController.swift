@@ -115,7 +115,9 @@ class MenuViewController: UITableViewController {
             imageView.image = UIImage(named: "gdavis")
         } else if myLoginId == "dcrane" {
             imageView.image = UIImage(named: "dcrane")
-        } else {
+        } else if myLoginId == "b415713" {
+            imageView.image = UIImage(named: "brojero")
+        }else {
             imageView.image = UIImage(named: "profileBlankPic")
         }
         /*
