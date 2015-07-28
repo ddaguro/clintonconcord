@@ -222,6 +222,12 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="bs8-B8-K3h"/>
+                                    <barButtonItem title="Edit" id="uGF-ob-xFX">
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <action selector="btnEdit:" destination="YZM-gJ-8Q6" id="Ua0-te-HTO"/>
+                                        </connections>
+                                    </barButtonItem>
                                 </items>
                                 <color key="barTintColor" red="0.23921568627450981" green="0.55686274509803924" blue="0.83137254901960789" alpha="1" colorSpace="calibratedRGB"/>
                             </toolbar>
@@ -421,11 +427,14 @@
                             <constraint firstAttribute="trailing" secondItem="JJx-JU-9O7" secondAttribute="trailing" id="wMA-Zt-OyA"/>
                         </constraints>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" id="Gx9-0I-Wq4">
                         <barButtonItem key="leftBarButtonItem" title="Show" id="xqZ-7v-yTU"/>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
+                        <outlet property="btnEditLabel" destination="uGF-ob-xFX" id="Nem-lD-AYz"/>
                         <outlet property="labelTitle" destination="UBS-bo-cOu" id="KR4-HR-B9H"/>
                         <outlet property="lblTotalCounter" destination="DEN-en-7XX" id="ASz-Eq-7mr"/>
                         <outlet property="menuItem" destination="BsB-oS-q0n" id="fh3-2e-IJs"/>
@@ -435,7 +444,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tby-aT-cb7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2080.5" y="1251.5"/>
+            <point key="canvasLocation" x="1997.5" y="1258.5"/>
         </scene>
         <!--Dashboard View Controller-->
         <scene sceneID="kS9-U7-8eW">
@@ -446,7 +455,7 @@
                         <viewControllerLayoutGuide type="bottom" id="NDO-zn-uRC"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="eM9-tf-S2Z">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0eV-S0-Afm">
@@ -472,12 +481,6 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Lju-cR-kbl" id="bWC-Wu-lwK">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IuN-Kn-1iW">
-                                                    <rect key="frame" x="-105" y="27" width="584" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S9H-zc-VZC">
                                                     <rect key="frame" x="-105" y="45" width="584" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -485,13 +488,13 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="16" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E97-JH-J5I">
-                                                    <rect key="frame" x="165" y="183" width="44" height="36"/>
+                                                    <rect key="frame" x="154" y="183" width="44" height="36"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                                     <color key="textColor" red="0.29803922772407532" green="0.29803922772407532" blue="0.29803922772407532" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="12" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GTl-Cu-pna">
-                                                    <rect key="frame" x="84" y="411" width="25" height="21"/>
+                                                    <rect key="frame" x="68" y="411" width="25" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -517,7 +520,7 @@
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="14" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mMf-zw-mg7">
-                                                    <rect key="frame" x="266" y="411" width="25" height="21"/>
+                                                    <rect key="frame" x="252" y="411" width="25" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -533,17 +536,23 @@
                                                     </connections>
                                                 </button>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="chart-pendingrequests" translatesAutoresizingMaskIntoConstraints="NO" id="cuF-bd-17g">
-                                                    <rect key="frame" x="46" y="369" width="100" height="141"/>
+                                                    <rect key="frame" x="34" y="369" width="100" height="141"/>
                                                 </imageView>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="chart-pendingcertifications" translatesAutoresizingMaskIntoConstraints="NO" id="DjI-0V-Ngk">
-                                                    <rect key="frame" x="228" y="369" width="100" height="141"/>
+                                                    <rect key="frame" x="215" y="369" width="100" height="141"/>
                                                 </imageView>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="chart-pendingapprovals" translatesAutoresizingMaskIntoConstraints="NO" id="UES-AF-JnF">
-                                                    <rect key="frame" x="87" y="116" width="200" height="200"/>
+                                                    <rect key="frame" x="77" y="116" width="200" height="200"/>
                                                 </imageView>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="recentactivity" translatesAutoresizingMaskIntoConstraints="NO" id="Lpm-vq-avq">
                                                     <rect key="frame" x="0.0" y="528" width="414" height="1231"/>
                                                 </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IuN-Kn-1iW">
+                                                    <rect key="frame" x="-105" y="27" width="584" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
@@ -580,7 +589,7 @@
                     <navigationItem key="navigationItem" id="CHm-mM-sN5">
                         <barButtonItem key="rightBarButtonItem" title="Show" id="p9c-gL-EpS"/>
                     </navigationItem>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="labelTitle" destination="Nkm-xZ-DeC" id="q6p-YJ-nAT"/>
                         <outlet property="lblTotalCounts" destination="QIu-Lw-vAI" id="eWa-hy-Dvx"/>
@@ -594,7 +603,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ASa-SU-ZPd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2084" y="390"/>
+            <point key="canvasLocation" x="1997.5" y="359.5"/>
         </scene>
         <!--Access Detail View Controller-->
         <scene sceneID="gzK-hk-TDw">

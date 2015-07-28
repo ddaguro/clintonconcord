@@ -15,6 +15,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet var toolbar : UIToolbar!
     @IBOutlet var labelTitle: UILabel!
     
+    @IBOutlet var btnEditLabel: UIBarButtonItem!
     @IBOutlet var lblTotalCounter: UILabel!
     var imageAsync : UIImage!
     var isFirstTime = true
@@ -27,8 +28,22 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     let transitionOperator = TransitionOperator()
     
     var tasks : [Tasks]!
+    var selectedtasks : [Tasks] = []
     var api : API!
 
+    
+    @IBAction func btnEdit(sender: AnyObject) {
+        //self.editing = !self.editing
+        
+        if tableView.editing {
+            self.tableView.setEditing(false, animated: true)
+            btnEditLabel.title = "Edit"
+            
+        } else {
+            self.tableView.setEditing(true, animated: true)
+            btnEditLabel.title = "Cancel"
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,7 +64,9 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.dataSource = self
         tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
         tableView.separatorColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
-
+        
+        tableView.allowsMultipleSelectionDuringEditing = true
+        
         menuItem.image = UIImage(named: "menu")
         toolbar.tintColor = UIColor.blackColor()
         
@@ -155,33 +172,76 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         } else {
             cell.typeImageView.image = UIImage(named: "profileBlankPic")
         }
-        /*
-        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + username + "/avatar"
-        self.api.getDataFromUrl(url) { data in
-            dispatch_async(dispatch_get_main_queue()) {
-                if let postCell = tableView.cellForRowAtIndexPath(indexPath) as? TasksCell {
-                    postCell.typeImageView.image = UIImage(data: data!)
-                }
-            }
-        }
-        */
+
         cell.nameLabel.text = task.requestEntityName
         cell.postLabel?.text = task.requestType
         cell.beneficiaryLabel.text = "Beneficiaries"
         cell.beneiciaryUserLabel.text = task.beneficiearyUser
         cell.justificationLabel.text = task.requestJustification
         cell.dateLabel.text = task.requestedDate + "      |      Request " + task.requestId
+        
+        cell.selectionStyle = UITableViewCellSelectionStyle.Gray
+        
         return cell
         
     }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        //if let list = tableView.indexPathsForSelectedRows() as? [NSIndexPath] {
+        //    println(list.count)
+        //}
+
+        
+        
+        if let indexPath = self.tableView.indexPathsForSelectedRows() as? [NSIndexPath]{
+            self.selectedtasks.removeAll(keepCapacity: true)
+            for idx in indexPath {
+                let info = tasks[idx.item]
+                self.selectedtasks.append(info)
+            }
+            /*
+            let info = tasks[indexPath.]
+            let selectedcell = tableView.cellForRowAtIndexPath(indexPath)
+            
+            if (selectedcell!.accessoryType == UITableViewCellAccessoryType.None) {
+                selectedcell!.accessoryType = UITableViewCellAccessoryType.Checkmark
+                
+                //self.selectedtasks.append(info)
+                //self.selectedtasks.sort({ $0.requestId < $1.requestId })
+            }else{
+                selectedcell!.accessoryType = UITableViewCellAccessoryType.None
+                
+                //if let index = contains(selectedtasks, info) {
+                //    selectedtasks.removeAtIndex(index)
+                //}
+                
+
+                //self.selectedtasks.removeAtIndex(indexPath.row)
+                //self.selectedtasks.filter() { $0.requestId != info.requestId }
+                //self.selectedtasks.sort({ $0.requestId < $1.requestId })
+            }*/
+
+            /*
+            let info = certs[indexPath.row]
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let controller = storyboard.instantiateViewControllerWithIdentifier("CertficationsDetailViewController") as! CertficationsDetailViewController
+            controller.certId = info.certificationId
+            controller.certTitle = info.title
+            controller.certType = info.certificationType
+            controller.navigationController
+            showViewController(controller, sender: self)
+            */
+        }
+    }
+    
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return itemHeading.count
     }
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
-        
         var view: UIView! = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 40))
         view.backgroundColor = UIColor(red: 236.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, alpha: 1)
         var lblHeading : UILabel! = UILabel(frame: CGRectMake(20, 0, 200, 20))
@@ -192,16 +252,59 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         return view
     }
     
+    func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        var footerView : UIView?
+        footerView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 40))
+        footerView?.backgroundColor = UIColor(red: 236.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, alpha: 1)
+        
+        let dunamicButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
+        dunamicButton.backgroundColor = UIColor(red: 236.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, alpha: 1)
+        dunamicButton.setTitle("BULK ACTION", forState: UIControlState.Normal)
+        dunamicButton.setTitleColor(UIColor.darkGrayColor(), forState: UIControlState.Normal)
+        dunamicButton.frame = CGRectMake(0, 0, self.view.frame.size.width, 40)
+        dunamicButton.addTarget(self, action: "buttonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        footerView?.addSubview(dunamicButton)
+        
+        return footerView
+    }
+    
+    func buttonTouched(sender:UIButton!){
+        let optionMenu = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        
+        let deleteAction = UIAlertAction(title: "Approve", style: .Default, handler: {
+            (alert: UIAlertAction!) -> Void in
+            //println("APPROVE")
+        })
+        let saveAction = UIAlertAction(title: "Decline", style: .Default, handler: {
+            (alert: UIAlertAction!) -> Void in
+            //println("DECLINE")
+        })
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
+            (alert: UIAlertAction!) -> Void in
+            //println("CANCEL")
+        })
+        
+        optionMenu.addAction(deleteAction)
+        optionMenu.addAction(saveAction)
+        optionMenu.addAction(cancelAction)
+        
+        self.presentViewController(optionMenu, animated: true, completion: nil)
+    }
+    
+    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 60.0
+    }
+    
+    
     @IBAction func presentNavigation(sender: AnyObject?){
         
-        // Dismiss keyboard (optional)
         self.view.endEditing(true)
         self.frostedViewController.view.endEditing(true)
         
-        // Present the view controller
         self.frostedViewController.presentMenuViewController()
         
-        // self.performSegueWithIdentifier("presentTableNavigation", sender: self)
         
     }
     
@@ -335,5 +438,5 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         
     }
-    
 }
+

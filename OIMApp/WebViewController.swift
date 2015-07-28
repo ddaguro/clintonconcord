@@ -23,6 +23,7 @@ class WebViewController: UIViewController, UIWebViewDelegate {
         showViewController(controller, sender: self)
         
         UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: UIStatusBarAnimation.Fade)
+        
     }
     
     override func viewDidLoad() {
