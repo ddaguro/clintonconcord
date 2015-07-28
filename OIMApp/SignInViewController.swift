@@ -11,6 +11,15 @@ import UIKit
 
 class SignInViewController : UIViewController, UITextFieldDelegate {
     
+    
+    @IBOutlet var titleLabel : UILabel!
+    
+    @IBOutlet var facebookButton : UIButton!
+    @IBOutlet var twitterButton : UIButton!
+    
+    
+    @IBOutlet var noAccountButton : UIButton!
+    
     @IBOutlet var bgImageView : UIImageView!
     
     @IBOutlet var signInButton : UIButton!
@@ -33,6 +42,21 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //hide
+        facebookButton.hidden = true
+        twitterButton.hidden = true
+        titleLabel.hidden = true
+        
+        //let attributedText = NSMutableAttributedString(string: "Don't have an account? Sign up")
+        //attributedText.addAttribute(NSUnderlineStyleAttributeName, value: NSUnderlineStyle.StyleSingle.rawValue, range: NSMakeRange(23, 7))
+        //attributedText.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSMakeRange(0, attributedText.length))
+        let attributedText = NSMutableAttributedString(string: " ")
+        noAccountButton.setAttributedTitle(attributedText, forState: .Normal)
+        noAccountButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        noAccountButton.titleLabel?.font = UIFont(name: MegaTheme.semiBoldFontName, size:14)
+        noAccountButton.addTarget(self, action: "dismiss", forControlEvents: .TouchUpInside)
+        
         //println("----->>> SignInViewController")
         bgImageView.image = UIImage(named: "login-bg")
         bgImageView.contentMode = .ScaleAspectFill
