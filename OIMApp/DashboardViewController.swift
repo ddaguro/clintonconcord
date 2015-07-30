@@ -140,7 +140,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             var applabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
             applabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) , CGFloat(self.screenSize.height/2) - CGFloat(120.0))
             applabel.textAlignment = NSTextAlignment.Center
-            applabel.font = UIFont(name: MegaTheme.fontName, size: 15)
+            applabel.font = UIFont(name: MegaTheme.fontName, size: 12)
             applabel.textColor = self.UIColorFromHex(0xa6afaa, alpha: 1.0)
             applabel.numberOfLines = 2
             applabel.text = "PENDING\nAPPROVALS"
@@ -172,7 +172,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             var reqlabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
             reqlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) - CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) + CGFloat(120.0))
             reqlabel.textAlignment = NSTextAlignment.Center
-            reqlabel.font = UIFont(name: MegaTheme.fontName, size: 15)
+            reqlabel.font = UIFont(name: MegaTheme.fontName, size: 12)
             reqlabel.textColor = self.UIColorFromHex(0xa6afaa, alpha: 1.0)
             reqlabel.numberOfLines = 2
             reqlabel.text = "PENDING\nREQUESTS"
@@ -205,7 +205,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             var certlabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
             certlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) + CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) + CGFloat(120.0))
             certlabel.textAlignment = NSTextAlignment.Center
-            certlabel.font = UIFont(name: MegaTheme.fontName, size: 15)
+            certlabel.font = UIFont(name: MegaTheme.fontName, size: 12)
             certlabel.textColor = self.UIColorFromHex(0xa6afaa, alpha: 1.0)
             certlabel.numberOfLines = 2
             certlabel.text = "PENDING\nCERTIFICATIONS"
@@ -317,7 +317,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         
         arc.fillColor = UIColor.whiteColor().CGColor
         arc.strokeColor = color
-        arc.lineWidth = 20
+        arc.lineWidth = 14
         arc.strokeEnd = CGFloat(2.5 * M_PI)
         
         self.tableView.layer.addSublayer(arc)
@@ -334,7 +334,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         arc.strokeColor = color
         arc.lineCap = kCALineCapRound
         
-        arc.lineWidth = 20
+        arc.lineWidth = 14
         
         var originalStrokeEnd = 0
         
@@ -363,7 +363,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             
             finalArc.fillColor = UIColor.clearColor().CGColor
             finalArc.strokeColor = color
-            finalArc.lineWidth = 20
+            finalArc.lineWidth = 14
             
             var originalStrokeEnd = 0
             

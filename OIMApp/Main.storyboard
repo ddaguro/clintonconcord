@@ -273,7 +273,6 @@
                     <navigationItem key="navigationItem" id="Gx9-0I-Wq4">
                         <barButtonItem key="leftBarButtonItem" title="Show" id="xqZ-7v-yTU"/>
                     </navigationItem>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="btnEditLabel" destination="uGF-ob-xFX" id="Nem-lD-AYz"/>

@@ -64,7 +64,6 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.dataSource = self
         tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
         tableView.separatorColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
-        
         tableView.allowsMultipleSelectionDuringEditing = true
         
         menuItem.image = UIImage(named: "menu")
@@ -180,7 +179,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.justificationLabel.text = task.requestJustification
         cell.dateLabel.text = task.requestedDate + "      |      Request " + task.requestId
         
-        cell.selectionStyle = UITableViewCellSelectionStyle.Gray
+        cell.selectionStyle = UITableViewCellSelectionStyle.Default
         
         return cell
         
@@ -253,50 +252,103 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        var footerView : UIView?
-        footerView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 40))
-        footerView?.backgroundColor = UIColor(red: 236.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, alpha: 1)
         
-        let dunamicButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
-        dunamicButton.backgroundColor = UIColor(red: 236.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, alpha: 1)
-        dunamicButton.setTitle("BULK ACTION", forState: UIControlState.Normal)
-        dunamicButton.setTitleColor(UIColor.darkGrayColor(), forState: UIControlState.Normal)
-        dunamicButton.frame = CGRectMake(0, 0, self.view.frame.size.width, 40)
-        dunamicButton.addTarget(self, action: "buttonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+        var footerView: UIView! = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 40))
+        footerView.backgroundColor = UIColor(red: 236.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, alpha: 1)
         
-        footerView?.addSubview(dunamicButton)
+        let bulkButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
+        bulkButton.backgroundColor = UIColor(red: 236.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, alpha: 1)
+        bulkButton.setTitle("BULK ACTION", forState: UIControlState.Normal)
+        bulkButton.setTitleColor(UIColor.darkGrayColor(), forState: UIControlState.Normal)
+        bulkButton.frame = CGRectMake(0, 0, self.view.frame.size.width, 40)
+        bulkButton.addTarget(self, action: "buttonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        footerView.addSubview(bulkButton)
         
         return footerView
     }
     
     func buttonTouched(sender:UIButton!){
-        let optionMenu = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
-        
-        let deleteAction = UIAlertAction(title: "Approve", style: .Default, handler: {
-            (alert: UIAlertAction!) -> Void in
+        if self.tableView.editing {
             //println("APPROVE")
-        })
-        let saveAction = UIAlertAction(title: "Decline", style: .Default, handler: {
-            (alert: UIAlertAction!) -> Void in
-            //println("DECLINE")
-        })
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
-            (alert: UIAlertAction!) -> Void in
-            //println("CANCEL")
-        })
-        
-        optionMenu.addAction(deleteAction)
-        optionMenu.addAction(saveAction)
-        optionMenu.addAction(cancelAction)
-        
-        self.presentViewController(optionMenu, animated: true, completion: nil)
+            var doalert : DOAlertController
+            doalert = DOAlertController(title: "Approval Confirmation", message: "Bulk Action", preferredStyle: .Alert)
+            
+            // Add the text field for text entry.
+            doalert.addTextFieldWithConfigurationHandler { textField in
+                // If you need to customize the text field, you can do so here.
+                textField.placeholder = " Enter Comments"
+            }
+            
+            let approveAction = DOAlertAction(title: "OK", style: .Default) { action in
+                
+                let textField = doalert.textFields![0] as! UITextField
+                
+                let url = Persistent.endpoint + Persistent.baseroot + "/approvals"
+  
+                var taskaction = "APPROVE" as String!
+  
+                var paramstring = "{\"requester\": {\"User Login\": \"" + myLoginId + "\"},\"task\": ["
+                
+                for var i = 0; i < self.selectedtasks.count; ++i {
+                    let task = self.selectedtasks[i]
+                    paramstring += "{\"requestId\": \""
+                    paramstring += task.requestId + "\",\"taskId\": \""
+                    paramstring += task.taskId + "\", \"taskNumber\": \""
+                    paramstring += task.taskNumber + "\",\"taskPriority\": \""
+                    paramstring += task.taskPriority + "\",\"taskState\": \""
+                    paramstring += task.taskState + "\",\"taskTitle\": \""
+                    paramstring += task.taskTitle + "\" ,\"taskActionComments\": \""
+                    paramstring += textField.text + "\",\"taskAction\": \""
+                    paramstring += taskaction + "\"},"
+                }
+                paramstring += "]}"
+                
+                
+                var idx = advance(paramstring.endIndex, -3)
+                
+                var substring1 = paramstring.substringToIndex(idx)
+                substring1 += "]}"
+                //println(substring1)
+                
+                self.api.RequestApprovalAction(myLoginId, params : substring1, url : url) { (succeeded: Bool, msg: String) -> () in
+                var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
+                if(succeeded) {
+                    alert.title = "Success!"
+                    alert.message = msg
+                
+                }
+                else {
+                    alert.title = "Failed : ("
+                    alert.message = msg
+                }
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.view.showLoading()
+                    self.refresh()
+                    
+                    self.tableView.setEditing(true, animated: true)
+                    self.btnEditLabel.title = "Cancel"
+                
+                    })
+                }
+            }
+            let cancelAction = DOAlertAction(title: "Cancel", style: .Cancel) { action in
+            }
+            doalert.addAction(cancelAction)
+            doalert.addAction(approveAction)
+            
+            presentViewController(doalert, animated: true, completion: nil)
+        } else {
+            var alert = UIAlertView(title: "Error : (", message: "You must select at least one", delegate: nil, cancelButtonTitle: "Okay")
+            alert.show()
+        }
     }
     
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 60.0
     }
-    
+
     
     @IBAction func presentNavigation(sender: AnyObject?){
         
@@ -436,7 +488,6 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
             presentViewController(doalert, animated: true, completion: nil)
             
         }
-        
     }
 }
 
