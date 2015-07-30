@@ -1000,6 +1000,10 @@ class API{
                 let cntcert: Int = jsonData["count"]!["certifications"] as! Int
                 let cntreq: Int = jsonData["count"]!["requests"] as! Int
                 
+                myApprovals = cntapp
+                myRequest = cntreq
+                myCertificates = cntcert
+                
                 NSUserDefaults.standardUserDefaults().setObject(cntapp, forKey: "dashapp")
                 NSUserDefaults.standardUserDefaults().setObject(cntcert, forKey: "dashcert")
                 NSUserDefaults.standardUserDefaults().setObject(cntreq, forKey: "dashreq")

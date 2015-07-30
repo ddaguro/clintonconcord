@@ -113,5 +113,5 @@ struct Persistent {
     // http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9080/
     // http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9080/webappv2/rest/
     static let endpoint = "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9080/"
-    static let baseroot = "idaasv2/oig/v1"
+    static let baseroot = "idaas/oig/v1"
 }
