@@ -15,6 +15,87 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet var toolbar : UIToolbar!
     @IBOutlet var labelTitle: UILabel!
     
+
+    @IBOutlet var btnEdit: UIBarButtonItem!
+    
+    @IBAction func btnEditAction(sender: AnyObject) {
+        //println("Bulk Action")
+        if self.tableView.editing {
+            //println("APPROVE")
+            var doalert : DOAlertController
+            doalert = DOAlertController(title: "Approval Confirmation", message: "Bulk Action", preferredStyle: .Alert)
+            
+            // Add the text field for text entry.
+            doalert.addTextFieldWithConfigurationHandler { textField in
+                // If you need to customize the text field, you can do so here.
+                textField.placeholder = " Enter Comments"
+            }
+            
+            let approveAction = DOAlertAction(title: "OK", style: .Default) { action in
+                
+                let textField = doalert.textFields![0] as! UITextField
+                
+                let url = Persistent.endpoint + Persistent.baseroot + "/approvals"
+                
+                var taskaction = "APPROVE" as String!
+                
+                var paramstring = "{\"requester\": {\"User Login\": \"" + myLoginId + "\"},\"task\": ["
+                
+                for var i = 0; i < self.selectedtasks.count; ++i {
+                    let task = self.selectedtasks[i]
+                    paramstring += "{\"requestId\": \""
+                    paramstring += task.requestId + "\",\"taskId\": \""
+                    paramstring += task.taskId + "\", \"taskNumber\": \""
+                    paramstring += task.taskNumber + "\",\"taskPriority\": \""
+                    paramstring += task.taskPriority + "\",\"taskState\": \""
+                    paramstring += task.taskState + "\",\"taskTitle\": \""
+                    paramstring += task.taskTitle + "\" ,\"taskActionComments\": \""
+                    paramstring += textField.text + "\",\"taskAction\": \""
+                    paramstring += taskaction + "\"},"
+                }
+                paramstring += "]}"
+                
+                
+                var idx = advance(paramstring.endIndex, -3)
+                
+                var substring1 = paramstring.substringToIndex(idx)
+                substring1 += "]}"
+                //println(substring1)
+                
+                self.api.RequestApprovalAction(myLoginId, params : substring1, url : url) { (succeeded: Bool, msg: String) -> () in
+                    var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
+                    if(succeeded) {
+                        alert.title = "Success!"
+                        alert.message = msg
+                        
+                    }
+                    else {
+                        alert.title = "Failed : ("
+                        alert.message = msg
+                    }
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.view.showLoading()
+                        self.refresh()
+                        
+                        self.tableView.setEditing(true, animated: true)
+                        self.btnEditLabel.title = "Cancel"
+                        
+                    })
+                }
+            }
+            let cancelAction = DOAlertAction(title: "Cancel", style: .Cancel) { action in
+            }
+            doalert.addAction(cancelAction)
+            doalert.addAction(approveAction)
+            
+            presentViewController(doalert, animated: true, completion: nil)
+        } else {
+            var alert = UIAlertView(title: "Error : (", message: "You must select at least one", delegate: nil, cancelButtonTitle: "Okay")
+            alert.show()
+        }
+    }
+    
     @IBOutlet var btnEditLabel: UIBarButtonItem!
     @IBOutlet var lblTotalCounter: UILabel!
     var imageAsync : UIImage!
@@ -38,10 +119,12 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         if tableView.editing {
             self.tableView.setEditing(false, animated: true)
             btnEditLabel.title = "Edit"
+            btnEdit.title = ""
             
         } else {
             self.tableView.setEditing(true, animated: true)
             btnEditLabel.title = "Cancel"
+            btnEdit.title = "Bulk Action"
         }
     }
     
@@ -251,6 +334,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         return view
     }
     
+    /*
     func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         
         var footerView: UIView! = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 40))
@@ -348,15 +432,13 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 60.0
     }
-
+    */
     
     @IBAction func presentNavigation(sender: AnyObject?){
         
         self.view.endEditing(true)
         self.frostedViewController.view.endEditing(true)
-        
         self.frostedViewController.presentMenuViewController()
-        
         
     }
     

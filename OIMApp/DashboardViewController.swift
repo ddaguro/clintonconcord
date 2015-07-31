@@ -102,7 +102,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         
         arcSize = degreesToRadians(360)
         var arcStart = 3/4 * M_PI
-        var arcEnd = M_PI/1.5
+        var arcEnd = 3 * M_PI
         
         api = API()
         
