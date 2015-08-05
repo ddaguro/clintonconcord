@@ -14,6 +14,8 @@ var myRequest: Int = 0
 var totalCounter: Int = 0
 var myRequestorId : String = ""
 var myLoginId : String = ""
+var myRequests : [Requests]!
+var myApplications : [Applications]!
 
 
 @UIApplicationMain
@@ -25,7 +27,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         //let URLCache = NSURLCache(memoryCapacity: 4 * 1024 * 1024, diskCapacity: 20 * 1024 * 1024, diskPath: nil)
         //NSURLCache.setSharedURLCache(URLCache)
-        
+        myRequests = [Requests]()
+        myApplications = [Applications]()
         var navAppearance = UINavigationBar.appearance()
         //48A0DC
         //navAppearance.tintColor = uicolorFromHex(0xf48A0DC)

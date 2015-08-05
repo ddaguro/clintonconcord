@@ -50,17 +50,18 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         menuItem.image = UIImage(named: "menu")
         toolbar.tintColor = UIColor.blackColor()
         
-        
         itemHeading.addObject("Requests")
         
         self.reqs = [Requests]()
         self.api = API()
         
-        
-        
         let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/requests?limit=10"
-        api.loadRequests(myLoginId, apiUrl: url, completion : didLoadData)
-        
+        if myRequests.count == 0 {
+            println("load from api")
+            api.loadRequests(myLoginId, apiUrl: url, completion : didLoadData)
+        } else {
+            println("load from storage")
+        }
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = UIColor.redColor()
         refreshControl.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
@@ -81,7 +82,7 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func refresh(){
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/requests"
+        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/requests?limit=10"
         api.loadRequests(myLoginId, apiUrl: url, completion : didLoadData)
         
         SoundPlayer.play("upvote.wav")
@@ -89,11 +90,15 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func didLoadData(loadedData: [Requests]){
         self.reqs = [Requests]()
+        myRequests = [Requests]()
         
         for data in loadedData {
             self.reqs.append(data)
+            myRequests.append(data)
         }
         
+        //self.reqs.sort({ $0.reqId > $1.reqId })
+        //myRequests.sort({ $0.reqCreatedOn < $1.reqCreatedOn })
         if isFirstTime  {
             self.view.showLoading()
         }
@@ -106,18 +111,25 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         super.viewDidAppear(animated)
         
         if isFirstTime {
-            view.showLoading()
+            if myRequests.count == 0 {
+                view.showLoading()
+            } else {
+                view.hideLoading()
+            }
             isFirstTime = false
         }
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return reqs.count
+        if myRequests.count == 0 {
+            return reqs.count
+        } else {
+            return myRequests.count
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let dataObject = reqs[indexPath.row]
+        let dataObject = myRequests.count ==  0  ? reqs[indexPath.row] : myRequests[indexPath.row]
         
         let cell = tableView.dequeueReusableCellWithIdentifier("TimelineCell") as! TimelineCell
         
@@ -153,7 +165,6 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
-        
         var view: UIView! = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 40))
         view.backgroundColor = UIColor(red: 236.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, alpha: 1)
         var lblHeading : UILabel! = UILabel(frame: CGRectMake(20, 0, 200, 20))
@@ -168,15 +179,10 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         // Dismiss keyboard (optional)
         self.view.endEditing(true)
         self.frostedViewController.view.endEditing(true)
-        
         // Present the view controller
         self.frostedViewController.presentMenuViewController()
-        
-        // self.performSegueWithIdentifier("presentTableNavigation", sender: self)
-        
     }
 
-    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         let toViewController = segue.destinationViewController as! UIViewController

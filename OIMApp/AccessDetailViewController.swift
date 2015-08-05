@@ -55,6 +55,16 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
         if catalog == "Applications"{
             labelTitle2.text = "Applications"
             api.loadApplications(myLoginId, apiUrl: url, completion: didLoadApplications)
+            /*
+            if myApplications.count == 0 {
+                println("load from api")
+                api.loadApplications(myLoginId, apiUrl: url, completion: didLoadApplications)
+            } else {
+                println("load from storage")
+                self.tableView.reloadData()
+                self.view.hideLoading()
+            }
+            */
         } else if catalog == "Entitlements" {
             labelTitle2.text = "Entitlements"
             api.loadEntitlements(myLoginId, apiUrl: url, completion: didLoadEntitlements)
@@ -103,6 +113,12 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
         var count : Int!
         
         if catalog == "Applications" {
+            /*
+            if myApplications.count == 0 {
+                count = applications.count
+            } else {
+                count = myApplications.count
+            }*/
             count = applications.count
         } else if catalog == "Entitlements" {
             count = entitlements.count
@@ -156,6 +172,7 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
         
         for app in loadedApplications {
             self.applications.append(app)
+            //myApplications.append(app)
         }
         
         if isFirstTime  {
