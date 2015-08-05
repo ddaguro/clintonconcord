@@ -14,21 +14,41 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet var menuItem : UIBarButtonItem!
     @IBOutlet var toolbar : UIToolbar!
     @IBOutlet var labelTitle: UILabel!
+    @IBOutlet var lblTotalCounter: UILabel!
     
-
     @IBOutlet var btnEdit: UIBarButtonItem!
+    @IBOutlet var btnEditDecline: UIBarButtonItem!
+    @IBOutlet var btnEditLabel: UIBarButtonItem!
+    
+    var imageAsync : UIImage!
+    var isFirstTime = true
+    var refreshControl:UIRefreshControl!
+    var itemHeading: NSMutableArray! = NSMutableArray()
+    var nagivationStyleToPresent : String?
+    
+    let transitionOperator = TransitionOperator()
+    var tasks : [Tasks]!
+    var selectedtasks : [Tasks] = []
+    var api : API!
+    
+    @IBAction func btnEditCeclineAction(sender: AnyObject) {
+        
+        var alert = UIAlertView(title: "Decline Confirmation", message: "Bulk Decline", delegate: nil, cancelButtonTitle: "Okay")
+        alert.show()
+    }
     
     @IBAction func btnEditAction(sender: AnyObject) {
         //println("Bulk Action")
-        if self.tableView.editing {
+        //if self.tableView.editing {
+        if self.selectedtasks.count > 0 {
             //println("APPROVE")
             var doalert : DOAlertController
-            doalert = DOAlertController(title: "Approval Confirmation", message: "Bulk Action", preferredStyle: .Alert)
+            doalert = DOAlertController(title: "Approval Confirmation", message: "Please confirm approval for the selected request(s)", preferredStyle: .Alert)
             
             // Add the text field for text entry.
             doalert.addTextFieldWithConfigurationHandler { textField in
                 // If you need to customize the text field, you can do so here.
-                textField.placeholder = " Enter Comments"
+                textField.placeholder = " Enter Comments "
             }
             
             let approveAction = DOAlertAction(title: "OK", style: .Default) { action in
@@ -78,9 +98,11 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
                         self.view.showLoading()
                         self.refresh()
                         
-                        self.tableView.setEditing(true, animated: true)
-                        self.btnEditLabel.title = "Cancel"
-                        
+                        self.tableView.setEditing(false, animated: true)
+                        self.btnEditLabel.title = "Edit"
+                        self.btnEdit.image = UIImage()
+                        self.btnEdit.enabled = false
+                        self.tableView.reloadData()
                     })
                 }
             }
@@ -96,23 +118,6 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
     
-    @IBOutlet var btnEditLabel: UIBarButtonItem!
-    @IBOutlet var lblTotalCounter: UILabel!
-    var imageAsync : UIImage!
-    var isFirstTime = true
-    var refreshControl:UIRefreshControl!
-    
-    var itemHeading: NSMutableArray! = NSMutableArray()
-    
-    var nagivationStyleToPresent : String?
-    
-    let transitionOperator = TransitionOperator()
-    
-    var tasks : [Tasks]!
-    var selectedtasks : [Tasks] = []
-    var api : API!
-
-    
     @IBAction func btnEdit(sender: AnyObject) {
         //self.editing = !self.editing
         
@@ -120,12 +125,20 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
             self.tableView.setEditing(false, animated: true)
             btnEditLabel.title = "Edit"
             btnEdit.title = ""
+            btnEditDecline.title = ""
+            btnEdit.image = UIImage()
+            btnEdit.enabled = false
+            btnEditDecline.enabled = false
             
         } else {
             self.tableView.setEditing(true, animated: true)
             btnEditLabel.title = "Cancel"
-            btnEdit.title = "Bulk Action"
+            btnEdit.image = UIImage(named:"toolbar-approve")
+            btnEditDecline.title = ""
+            btnEdit.enabled = true
+            btnEditDecline.enabled = false
         }
+        self.tableView.reloadData()
     }
     
     override func viewDidLoad() {
@@ -148,9 +161,13 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
         tableView.separatorColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
         tableView.allowsMultipleSelectionDuringEditing = true
-        
+        tableView.allowsSelection = false
+        tableView.allowsSelectionDuringEditing = true
         menuItem.image = UIImage(named: "menu")
         toolbar.tintColor = UIColor.blackColor()
+        
+        btnEdit.enabled = false
+        btnEditDecline.enabled = false
         
         itemHeading.addObject("Approvals")
         
@@ -177,7 +194,6 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         self.frostedViewController.panGestureRecognized(sender)
     }
 
-    
     func refresh(){
         let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/approvals/"
         api.loadPendingApprovals(myLoginId, apiUrl: url, completion : didLoadData)
@@ -229,7 +245,6 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.approveBtn.setBackgroundImage(UIImage(named:"btn-approve"), forState: .Normal)
         cell.approveBtn.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
         
-        
         cell.declineBtn.tag = indexPath.row
         cell.declineBtn.setBackgroundImage(UIImage(named:"btn-decline"), forState: .Normal)
         cell.declineBtn.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
@@ -264,17 +279,23 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         
         cell.selectionStyle = UITableViewCellSelectionStyle.Default
         
+        if self.tableView.editing {
+            cell.approveBtn.enabled = false
+            cell.declineBtn.enabled = false
+            cell.moreBtn.enabled = false
+            cell.moreBtn.hidden = true
+        } else {
+            cell.approveBtn.enabled = true
+            cell.declineBtn.enabled = true
+            cell.moreBtn.enabled = true
+            cell.moreBtn.hidden = false
+        }
+
         return cell
         
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
-        //if let list = tableView.indexPathsForSelectedRows() as? [NSIndexPath] {
-        //    println(list.count)
-        //}
-
-        
         
         if let indexPath = self.tableView.indexPathsForSelectedRows() as? [NSIndexPath]{
             self.selectedtasks.removeAll(keepCapacity: true)
@@ -283,7 +304,6 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
                 self.selectedtasks.append(info)
             }
             /*
-            let info = tasks[indexPath.]
             let selectedcell = tableView.cellForRowAtIndexPath(indexPath)
             
             if (selectedcell!.accessoryType == UITableViewCellAccessoryType.None) {
@@ -293,31 +313,13 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
                 //self.selectedtasks.sort({ $0.requestId < $1.requestId })
             }else{
                 selectedcell!.accessoryType = UITableViewCellAccessoryType.None
-                
-                //if let index = contains(selectedtasks, info) {
-                //    selectedtasks.removeAtIndex(index)
-                //}
-                
 
                 //self.selectedtasks.removeAtIndex(indexPath.row)
                 //self.selectedtasks.filter() { $0.requestId != info.requestId }
                 //self.selectedtasks.sort({ $0.requestId < $1.requestId })
             }*/
-
-            /*
-            let info = certs[indexPath.row]
-            
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let controller = storyboard.instantiateViewControllerWithIdentifier("CertficationsDetailViewController") as! CertficationsDetailViewController
-            controller.certId = info.certificationId
-            controller.certTitle = info.title
-            controller.certType = info.certificationType
-            controller.navigationController
-            showViewController(controller, sender: self)
-            */
         }
     }
-    
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return itemHeading.count
@@ -434,6 +436,10 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     */
     
+    //func tableView(tableView: UITableView, shouldIndentWhileEditingRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    //    return false
+    //}
+    
     @IBAction func presentNavigation(sender: AnyObject?){
         
         self.view.endEditing(true)
@@ -453,7 +459,6 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         dismissViewControllerAnimated(true, completion: nil)
     }
 
-    
     func buttonAction(sender:UIButton!)
     {
         var btnsendtag:UIButton = sender
@@ -500,12 +505,12 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
             // Add the text field for text entry.
             doalert.addTextFieldWithConfigurationHandler { textField in
                 // If you need to customize the text field, you can do so here.
-                textField.placeholder = " Enter Comments"
+                textField.placeholder = " Enter Comments "
             }
             
             let approveAction = DOAlertAction(title: "OK", style: .Default) { action in
                 let textField = doalert.textFields![0] as! UITextField
-                //PERFORM APPROVAL THRU API
+                
                 let url = Persistent.endpoint + Persistent.baseroot + "/approvals"
                 
                 var paramstring = "{\"requester\": {\"User Login\": \""

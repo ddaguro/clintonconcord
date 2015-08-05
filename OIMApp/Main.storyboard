@@ -74,7 +74,7 @@
                                 <color key="barTintColor" red="0.23921568627450981" green="0.55686274509803924" blue="0.83137254901960789" alpha="1" colorSpace="calibratedRGB"/>
                             </toolbar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="180" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="ebY-af-VTD">
-                                <rect key="frame" x="0.0" y="64" width="375" height="623"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="559"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" restorationIdentifier="TasksCell" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TasksCell" rowHeight="180" id="Zl7-z1-5XU" customClass="TasksCell" customModule="OIMApp" customModuleProvider="target">
@@ -219,7 +219,7 @@
                                         </tableViewCellContentView>
                                         <inset key="separatorInset" minX="50" minY="0.0" maxX="10" maxY="0.0"/>
                                         <connections>
-                                            <outlet property="approveBtn" destination="u4J-AO-psd" id="k6u-dv-TCW"/>
+                                            <outlet property="approveBtn" destination="u4J-AO-psd" id="omE-5d-pTJ"/>
                                             <outlet property="beneficiaryLabel" destination="BRI-za-MXW" id="dOY-0b-J0l"/>
                                             <outlet property="beneiciaryUserLabel" destination="ASg-KA-XaR" id="qNB-Dz-ePH"/>
                                             <outlet property="dateImageView" destination="ogK-1d-9wC" id="DKX-e9-Kr6"/>
@@ -250,7 +250,7 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B0x-N5-fwx">
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B0x-N5-fwx">
                                 <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                                 <items>
                                     <barButtonItem id="Fgq-Qp-gDg">
@@ -258,24 +258,33 @@
                                             <action selector="btnEditAction:" destination="YZM-gJ-8Q6" id="aML-6Q-kce"/>
                                         </connections>
                                     </barButtonItem>
+                                    <barButtonItem id="hW9-dx-MmC">
+                                        <connections>
+                                            <action selector="btnEditCeclineAction:" destination="YZM-gJ-8Q6" id="ITX-E4-5po"/>
+                                        </connections>
+                                    </barButtonItem>
                                 </items>
+                                <color key="barTintColor" red="0.93333333330000001" green="0.93333333330000001" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
                             </toolbar>
                         </subviews>
                         <color key="backgroundColor" red="0.23921568630000001" green="0.5568627451" blue="0.83137254900000002" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="tintColor" red="0.23921568630000001" green="0.5568627451" blue="0.83137254900000002" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstAttribute="bottomMargin" secondItem="ebY-af-VTD" secondAttribute="bottom" constant="-20" id="01p-nj-GxM"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="ebY-af-VTD" secondAttribute="bottom" constant="44" id="01p-nj-GxM"/>
                             <constraint firstItem="ebY-af-VTD" firstAttribute="top" secondItem="JJx-JU-9O7" secondAttribute="bottom" id="BiX-OD-SCE"/>
                             <constraint firstItem="ebY-af-VTD" firstAttribute="trailing" secondItem="JJx-JU-9O7" secondAttribute="trailing" id="H4z-mA-MYr"/>
                             <constraint firstItem="JJx-JU-9O7" firstAttribute="leading" secondItem="aBS-x8-ht0" secondAttribute="leading" id="IQA-kD-rhP"/>
                             <constraint firstItem="JJx-JU-9O7" firstAttribute="top" secondItem="DEN-en-7XX" secondAttribute="top" id="IbY-i8-COD"/>
+                            <constraint firstItem="B0x-N5-fwx" firstAttribute="top" secondItem="ebY-af-VTD" secondAttribute="bottom" id="MrO-UP-RU5"/>
                             <constraint firstItem="UBS-bo-cOu" firstAttribute="top" secondItem="FB4-n2-1LH" secondAttribute="bottom" constant="11" id="Wdp-xW-EGT"/>
                             <constraint firstItem="ebY-af-VTD" firstAttribute="top" secondItem="DEN-en-7XX" secondAttribute="bottom" constant="24" id="anw-Yt-aHS"/>
                             <constraint firstItem="JJx-JU-9O7" firstAttribute="top" secondItem="FB4-n2-1LH" secondAttribute="bottom" id="hNJ-qR-QNI"/>
+                            <constraint firstItem="B0x-N5-fwx" firstAttribute="trailing" secondItem="ebY-af-VTD" secondAttribute="trailing" id="j5Z-Cr-J1S"/>
                             <constraint firstItem="DEN-en-7XX" firstAttribute="leading" secondItem="aBS-x8-ht0" secondAttribute="leadingMargin" constant="12" id="jUG-8E-Cra"/>
                             <constraint firstItem="JJx-JU-9O7" firstAttribute="centerX" secondItem="UBS-bo-cOu" secondAttribute="centerX" id="kCe-Qy-yk1"/>
                             <constraint firstItem="UBS-bo-cOu" firstAttribute="leading" secondItem="aBS-x8-ht0" secondAttribute="leadingMargin" id="n5e-fh-9Bx"/>
                             <constraint firstItem="JJx-JU-9O7" firstAttribute="leading" secondItem="ebY-af-VTD" secondAttribute="leading" id="pFS-26-0xB"/>
+                            <constraint firstItem="B0x-N5-fwx" firstAttribute="leading" secondItem="ebY-af-VTD" secondAttribute="leading" id="vLZ-37-8Ej"/>
                             <constraint firstAttribute="trailing" secondItem="JJx-JU-9O7" secondAttribute="trailing" id="wMA-Zt-OyA"/>
                         </constraints>
                     </view>
@@ -286,6 +295,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="btnEdit" destination="Fgq-Qp-gDg" id="xrq-1k-6Kq"/>
+                        <outlet property="btnEditDecline" destination="hW9-dx-MmC" id="EI4-Lv-fHd"/>
                         <outlet property="btnEditLabel" destination="uGF-ob-xFX" id="Nem-lD-AYz"/>
                         <outlet property="labelTitle" destination="UBS-bo-cOu" id="KR4-HR-B9H"/>
                         <outlet property="lblTotalCounter" destination="DEN-en-7XX" id="ASz-Eq-7mr"/>
@@ -296,7 +306,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tby-aT-cb7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1997.5" y="1258.5"/>
+            <point key="canvasLocation" x="1931.5" y="1258.5"/>
         </scene>
         <!--Access Detail View Controller-->
         <scene sceneID="gzK-hk-TDw">
@@ -1257,11 +1267,17 @@
                                                 <action selector="goBack:" destination="3R5-ue-jel" id="5Zm-gt-nv1"/>
                                             </connections>
                                         </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" title="Edit" id="5Kn-UQ-ARC">
+                                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <connections>
+                                                <action selector="btnEditAction:" destination="3R5-ue-jel" id="eft-ts-FBT"/>
+                                            </connections>
+                                        </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="173" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="5Kb-UD-J1W">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="559"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="CertsActionCell" rowHeight="173" id="EOL-Qe-8gY" customClass="CertsActionCell" customModule="OIMApp" customModuleProvider="target">
@@ -1375,6 +1391,7 @@
                                             <variation key="default">
                                                 <mask key="constraints">
                                                     <exclude reference="2Rk-hf-GoA"/>
+                                                    <exclude reference="Kts-lx-VI9"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
@@ -1398,24 +1415,46 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="YMb-Y1-YOF">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <items>
+                                    <barButtonItem id="yGV-zE-cFl">
+                                        <connections>
+                                            <action selector="btnEditCertifyAction:" destination="3R5-ue-jel" id="kIh-fe-rhy"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem id="a4u-uL-Rdt">
+                                        <connections>
+                                            <action selector="btnEditRevokeAction:" destination="3R5-ue-jel" id="efM-W0-qCX"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                                <color key="barTintColor" red="0.93333333330000001" green="0.93333333330000001" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" red="0.23921568630000001" green="0.5568627451" blue="0.83137254900000002" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="5Kb-UD-J1W" secondAttribute="trailing" id="0OS-pc-dno"/>
                             <constraint firstItem="jMY-55-wBG" firstAttribute="centerX" secondItem="dfd-sr-hzF" secondAttribute="centerX" id="2vc-Jv-cCq"/>
+                            <constraint firstItem="YMb-Y1-YOF" firstAttribute="bottom" secondItem="v9R-Sj-Rpe" secondAttribute="top" id="IZ1-Js-myn"/>
                             <constraint firstItem="dfd-sr-hzF" firstAttribute="leading" secondItem="Ydx-9T-2QF" secondAttribute="leadingMargin" id="IZw-Ym-SUf"/>
                             <constraint firstItem="jMY-55-wBG" firstAttribute="leading" secondItem="5Kb-UD-J1W" secondAttribute="leading" id="J7v-hR-xsY"/>
                             <constraint firstItem="5Kb-UD-J1W" firstAttribute="top" secondItem="jMY-55-wBG" secondAttribute="bottom" id="OR4-J2-42Y"/>
-                            <constraint firstItem="5Kb-UD-J1W" firstAttribute="bottom" secondItem="v9R-Sj-Rpe" secondAttribute="top" id="cgk-rO-gjk"/>
+                            <constraint firstItem="YMb-Y1-YOF" firstAttribute="trailing" secondItem="5Kb-UD-J1W" secondAttribute="trailing" id="Odc-JR-P1Z"/>
+                            <constraint firstItem="5Kb-UD-J1W" firstAttribute="bottom" secondItem="v9R-Sj-Rpe" secondAttribute="top" constant="-44" id="cgk-rO-gjk"/>
                             <constraint firstItem="dfd-sr-hzF" firstAttribute="top" secondItem="13O-KG-qM9" secondAttribute="bottom" constant="11" id="oIB-et-mcZ"/>
                             <constraint firstItem="5Kb-UD-J1W" firstAttribute="leading" secondItem="Ydx-9T-2QF" secondAttribute="leading" id="qmN-Xc-MHz"/>
                             <constraint firstItem="jMY-55-wBG" firstAttribute="trailing" secondItem="5Kb-UD-J1W" secondAttribute="trailing" id="s5Z-NH-wsb"/>
+                            <constraint firstItem="YMb-Y1-YOF" firstAttribute="leading" secondItem="5Kb-UD-J1W" secondAttribute="leading" id="y6o-JP-E03"/>
                             <constraint firstItem="jMY-55-wBG" firstAttribute="top" secondItem="13O-KG-qM9" secondAttribute="bottom" id="yXe-au-MGV"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="C10-uD-8WU"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
+                        <outlet property="btnEdit" destination="5Kn-UQ-ARC" id="r0w-dJ-9vz"/>
+                        <outlet property="btnEditRevoke" destination="a4u-uL-Rdt" id="C0L-Qs-Qqg"/>
+                        <outlet property="btnSelectedEdit" destination="yGV-zE-cFl" id="qh4-fj-CP7"/>
                         <outlet property="navigationBar" destination="jMY-55-wBG" id="UeK-hM-daq"/>
                         <outlet property="tableView" destination="5Kb-UD-J1W" id="4Ba-5d-wfr"/>
                         <outlet property="titleLabel" destination="dfd-sr-hzF" id="z0w-J0-A5a"/>

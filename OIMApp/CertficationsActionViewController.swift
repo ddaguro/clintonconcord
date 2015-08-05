@@ -14,9 +14,9 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
     @IBOutlet var tableView: UITableView!
     @IBOutlet var navigationBar: UINavigationBar!
     
-    @IBAction func goBack(sender: UIBarButtonItem) {
-        self.navigationController?.popViewControllerAnimated(true)
-    }
+    @IBOutlet var btnEdit: UIBarButtonItem!
+    @IBOutlet var btnSelectedEdit: UIBarButtonItem!
+    @IBOutlet var btnEditRevoke: UIBarButtonItem!
     
     var isFirstTime = true
     var refreshControl:UIRefreshControl!
@@ -29,8 +29,144 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
     
     var certitemdetail : [CertItemDetail]!
     var certentitemdetail : [EntitlementItemDetail]!
+    var selectedcertitem : [CertItemDetail] = []
+    var selectedcertentitem : [EntitlementItemDetail] = []
     var api : API!
     
+    @IBAction func btnEditAction(sender: AnyObject) {
+        if tableView.editing {
+            self.tableView.setEditing(false, animated: true)
+            btnEdit.title = "Edit"
+            btnSelectedEdit.image = UIImage()
+            btnSelectedEdit.enabled = false
+            btnEditRevoke.title = ""
+            btnEditRevoke.enabled = false
+        } else {
+            self.tableView.setEditing(true, animated: true)
+            btnEdit.title = "Cancel"
+            btnSelectedEdit.image = UIImage(named:"toolbar-certify")
+            btnSelectedEdit.enabled = true
+            btnEditRevoke.title = ""
+            btnEditRevoke.enabled = false
+        }
+        self.tableView.reloadData()
+    }
+    
+    @IBAction func btnEditCertifyAction(sender: AnyObject) {
+        if certType == "ApplicationInstance" {
+            if self.selectedcertitem.count > 0 {
+                var doalert : DOAlertController
+                doalert = DOAlertController(title: "Certification Confirmation", message: "Please confirm certifications for the selected record(s)", preferredStyle: .Alert)
+                
+                doalert.addTextFieldWithConfigurationHandler { textField in
+                    textField.placeholder = " Enter Comments "
+                }
+                
+                let approveAction = DOAlertAction(title: "OK", style: .Default) { action in
+                    
+                    let textField = doalert.textFields![0] as! UITextField
+                    
+                    var certaction = "CERTIFY" as String!
+                    let url = Persistent.endpoint + Persistent.baseroot + "/certifications"
+                    
+                    var jsonstring = "{\"identityCertifications\": {\"certificationId\": " + "\(self.certId)"
+                    jsonstring += ",\"entityId\": " +  "\(self.applicationInstanceId)"
+                    jsonstring += ",\"requesterId\": \"" + myLoginId
+                    jsonstring += "\",\"certificationType\": \"" + self.certType
+                    jsonstring += "\",\"certificationComments\": \"" + textField.text
+                    jsonstring += "\",\"certificationDecision\": \"" + "CERTIFY"
+                    jsonstring += "\",\"identityPassword\": \"" + "Oracle123" + "\""
+                    jsonstring += ",\"accounts\": ["
+                    
+                    for var i = 0; i < self.selectedcertitem.count; ++i {
+                        let cert = self.selectedcertitem[i]
+                        jsonstring += "{\"displayName\": \"" + cert.displayName
+                        jsonstring += "\",\"rowEntityId\": \"" + cert.rowEntityId
+                        jsonstring += "\",\"targetAccountUserLogin\": \"" + cert.targetAccountUserLogin
+                        jsonstring += "\",\"entitlements\": []},"
+                    }
+                    jsonstring += "]}"
+                    
+                    var idx = advance(jsonstring.endIndex, -3)
+                    
+                    var substring1 = jsonstring.substringToIndex(idx)
+                    substring1 += "]}}"
+                    //println(substring1)
+                    
+                    self.api.RequestCertificationsAction(myLoginId, params : substring1, url : url) { (succeeded: Bool, msg: String) -> () in
+                        var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
+                        if(succeeded) {
+                            alert.title = "Success!"
+                            alert.message = msg
+                            
+                        }
+                        else {
+                            alert.title = "Failed : ("
+                            alert.message = msg
+                        }
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            self.view.showLoading()
+                            self.refresh()
+                            
+                            self.tableView.setEditing(false, animated: true)
+                            self.btnEdit.title = "Edit"
+                            self.btnSelectedEdit.image = UIImage()
+                            self.btnSelectedEdit.enabled = false
+                            self.tableView.reloadData()
+                            
+                        })
+                    }
+                }
+                let cancelAction = DOAlertAction(title: "Cancel", style: .Cancel) { action in
+                }
+                doalert.addAction(cancelAction)
+                doalert.addAction(approveAction)
+                
+                presentViewController(doalert, animated: true, completion: nil)
+            } else {
+                var alert = UIAlertView(title: "Error : (", message: "You must select at least one", delegate: nil, cancelButtonTitle: "Okay")
+                alert.show()
+            }
+        } else if certType == "Entitlement" {
+            if self.selectedcertentitem.count > 0 {
+                var doalert : DOAlertController
+
+                doalert = DOAlertController(title: "Certification Confirmation", message: "Please confirm certifications for the selected record(s)", preferredStyle: .Alert)
+                
+                doalert.addTextFieldWithConfigurationHandler { textField in
+                    textField.placeholder = " Enter Comments "
+                }
+                let certifyAction = DOAlertAction(title: "OK", style: .Default) { action in
+                    let textField = doalert.textFields![0] as! UITextField
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.navigationController?.popViewControllerAnimated(true)
+                        
+                    })
+                }
+                let cancelAction = DOAlertAction(title: "Cancel", style: .Cancel) { action in
+                }
+                doalert.addAction(cancelAction)
+                doalert.addAction(certifyAction)
+                
+                presentViewController(doalert, animated: true, completion: nil)
+            } else {
+                var alert = UIAlertView(title: "Error : (", message: "You must select at least one", delegate: nil, cancelButtonTitle: "Okay")
+                alert.show()
+            }
+
+        }
+    }
+    
+    @IBAction func btnEditRevokeAction(sender: AnyObject) {
+        var alert = UIAlertView(title: "Alert", message: "Revoke", delegate: nil, cancelButtonTitle: "Okay")
+        alert.show()
+    }
+    
+    @IBAction func goBack(sender: UIBarButtonItem) {
+        self.navigationController?.popViewControllerAnimated(true)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,11 +178,16 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         tableView.dataSource = self
         tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
         tableView.separatorColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
+        tableView.allowsMultipleSelectionDuringEditing = true
+        tableView.allowsSelection = false
+        tableView.allowsSelectionDuringEditing = true
+        
+        btnSelectedEdit.enabled = false
+        btnEditRevoke.enabled = false
         
         self.certitemdetail = [CertItemDetail]()
         self.certentitemdetail = [EntitlementItemDetail]()
         self.api = API()
-        
         
         var certdetailid : Int!
         if certType == "ApplicationInstance" {
@@ -80,6 +221,8 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         if isFirstTime  {
             self.view.showLoading()
         }
+        
+        self.certitemdetail.sort({ $0.lastCertificationActionDetails < $1.lastCertificationActionDetails })
         self.tableView.reloadData()
         self.view.hideLoading()
         self.refreshControl?.endRefreshing()
@@ -146,14 +289,17 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         
         let cell = tableView.dequeueReusableCellWithIdentifier("CertsActionCell") as! CertsActionCell
         
-        
         if certType == "ApplicationInstance" {
             let info = certitemdetail[indexPath.row]
-            
             if (info.lastCertificationActionDetails != "") {
                 cell.certifyButton.setBackgroundImage(UIImage(named:"btn-certified"), forState: .Normal)
                 cell.revokeButton.hidden = true
                 cell.moreButton.hidden = true
+                if self.tableView.editing {
+                    cell.selectionStyle = UITableViewCellSelectionStyle.None
+                } else {
+                    cell.selectionStyle = UITableViewCellSelectionStyle.Default
+                }
             } else {
                 cell.certifyButton.tag = indexPath.row
                 cell.certifyButton.setBackgroundImage(UIImage(named:"btn-certify"), forState: .Normal)
@@ -168,6 +314,7 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
                 cell.moreButton.setBackgroundImage(UIImage(named:"btn-more"), forState: .Normal)
                 cell.moreButton.hidden = false
                 cell.moreButton.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
+                cell.selectionStyle = UITableViewCellSelectionStyle.Default
             }
             
             cell.titleLabel.text = info.displayName
@@ -193,7 +340,6 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
                     text += " , \(ent.entitlementDisplayName)"
                 }
             }
-            
             
             cell.descriptionLabel.text = "Entitlements: " + text
         } else if certType == "Entitlement" {
@@ -228,10 +374,40 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
             cell.descriptionLabel.text = info.accountName
         }
         
-
-        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        if self.tableView.editing {
+            cell.certifyButton.enabled = false
+            cell.revokeButton.enabled = false
+            cell.moreButton.enabled = false
+            cell.moreButton.hidden = true
+        } else {
+            cell.certifyButton.enabled = true
+            cell.revokeButton.enabled = true
+            cell.moreButton.enabled = true
+        }
         
         return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if let indexPath = self.tableView.indexPathsForSelectedRows() as? [NSIndexPath]{
+            
+            if certType == "ApplicationInstance" {
+                self.selectedcertitem.removeAll(keepCapacity: true)
+                for idx in indexPath {
+                    let info = certitemdetail[idx.item]
+                    self.selectedcertitem.append(info)
+                }
+            } else if certType == "Entitlement" {
+                self.selectedcertentitem.removeAll(keepCapacity: true)
+                for idx in indexPath {
+                    let info = certentitemdetail[idx.item]
+                    self.selectedcertentitem.append(info)
+                }
+            }
+            
+
+        }
     }
     
     func buttonAction(sender:UIButton!)
@@ -298,7 +474,7 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
             // Add the text field for text entry.
             doalert.addTextFieldWithConfigurationHandler { textField in
                 // If you need to customize the text field, you can do so here.
-                textField.placeholder = " Enter Comments"
+                textField.placeholder = " Enter Comments "
             }
             let certifyAction = DOAlertAction(title: "OK", style: .Default) { action in
                 let textField = doalert.textFields![0] as! UITextField
@@ -430,7 +606,7 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
             doalert = DOAlertController(title: alerttitle, message: alertmsg, preferredStyle: .Alert)
             
             doalert.addTextFieldWithConfigurationHandler { textField in
-                textField.placeholder = "Enter Comments"
+                textField.placeholder = " Enter Comments "
             }
             let certifyAction = DOAlertAction(title: "OK", style: .Default) { action in
                 let textField = doalert.textFields![0] as! UITextField
