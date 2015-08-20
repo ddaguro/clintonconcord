@@ -43,4 +43,5 @@ class Utils {
         formatter.dateFormat = "MMM dd, yyyy"
         return formatter.stringFromDate(date!)
     }
+    
 }

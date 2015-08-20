@@ -7,12 +7,14 @@
 //
 
 import UIKit
+import LocalAuthentication
 
 class DashboardViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     var colorValues : [UIColor]?
     var arcSize : Double?
     
+    @IBOutlet var dashView: UIView!
     var nagivationStyleToPresent : String?
     
     @IBOutlet weak var lblTotalCounts: UILabel!
@@ -21,7 +23,9 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet var menuItem: UIBarButtonItem!
     @IBOutlet var toolbar: UIToolbar!
     
+    @IBOutlet var recentActivityLabel: UILabel!
     var users : [Users]!
+    var activities : [Activities]!
     var api : API!
     
     let transitionOperator = TransitionOperator()
@@ -30,33 +34,107 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         super.viewDidLoad()
         //println("----->>> DashboardViewController")
         
+        if myFIDO == false {
+            showAlert()
+        }
+        
+        menuItem.image = UIImage(named: "menu")
+        toolbar.clipsToBounds = true
+        labelTitle.text = "My Dashboard"
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.addSubview(dashView)
+        
         getPendingCounts(myLoginId)
 
         var requestorUserId : String!
         requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-        
         myRequestorId = requestorUserId
-        
-        toolbar.clipsToBounds = true
 
-        labelTitle.text = "My Dashboard"
-        tableView.delegate = self
-        tableView.dataSource = self
-        
-        //tableView.separatorStyle = UITableViewCellSeparatorStyle.None
-
-        menuItem.image = UIImage(named: "menu")
-        
         self.users = [Users]()
+        self.activities = [Activities]()
         self.api = API()
         
         let url = Persistent.endpoint + Persistent.baseroot + "/users/" + requestorUserId
         api.loadUser(requestorUserId, apiUrl: url, completion : didLoadUsers)
         
+        
+        let url2 = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/recentactivity?limit=10"
+        api.loadActivities(myLoginId, apiUrl: url2, completion : didLoadActivities)
+        /*
+        if myActivities.count == 0 {
+            println("load from api")
+            api.loadActivities(myLoginId, apiUrl: url2, completion : didLoadActivities)
+        } else {
+            println("load from storage")
+        }
+        */
         //---> PanGestureRecognizer
         let recognizer = UIPanGestureRecognizer(target: self, action: "panGestureRecognized:")
         self.view.addGestureRecognizer(recognizer)
         
+    }
+    
+    func showAlert(){
+        var createAccountErrorAlert: UIAlertView = UIAlertView()
+        
+        createAccountErrorAlert.delegate = self
+        
+        createAccountErrorAlert.title = ""
+        createAccountErrorAlert.message = "Would you like to register for FIDO biometric authentication?"
+        createAccountErrorAlert.addButtonWithTitle("Cancel")
+        createAccountErrorAlert.addButtonWithTitle("OK")
+        
+        createAccountErrorAlert.show()
+    }
+    
+    func alertView(View: UIAlertView!, clickedButtonAtIndex buttonIndex: Int){
+        
+        switch buttonIndex{
+            
+        case 0:
+            //NSLog("Cancel");
+            break;
+        case 1:
+            //NSLog("OK");
+            let context = LAContext()
+            var error: NSError?
+            
+            // check if Touch ID is available
+            if context.canEvaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, error: &error) {
+                let reason = "Authenticate with Touch ID"
+                context.evaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, localizedReason: reason, reply:
+                    {(succes: Bool, error: NSError!) in
+                        dispatch_async(dispatch_get_main_queue(), {
+                            
+                        if succes {
+                            myFIDO = true
+                            var alert = UIAlertView(title: "Success \u{1F44D}", message: "FIDO UAF Authentication Succeeded", delegate: nil, cancelButtonTitle: "Okay")
+                            alert.show()
+                        }
+                        else {
+                            self.showAlertController("Touch ID Authentication Failed")
+                        }
+                    })
+                })
+            }
+                
+            else {
+                self.showAlertController("Touch ID Not Available")
+            }
+            
+            
+            break;
+        default:
+            NSLog("Default");
+            break;
+        }
+    }
+    
+    func showAlertController(message: String) {
+        let alertController = UIAlertController(title: nil, message: message, preferredStyle: .Alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+        presentViewController(alertController, animated: true, completion: nil)
     }
     
     func appBtnTouched(sender:UIButton!) {
@@ -87,7 +165,6 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         self.frostedViewController.panGestureRecognized(sender)
     }
 
-    
     func didLoadUsers(loadedUsers: [Users]){
         
         for usr in loadedUsers {
@@ -95,6 +172,17 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         tableView.reloadData()
     }
+    
+    
+    func didLoadActivities(loadedActivities: [Activities]){
+        
+        for act in loadedActivities {
+            self.activities.append(act)
+        }
+        activities.sort({ $0.reqCreatedOn > $1.reqCreatedOn })
+        tableView.reloadData()
+    }
+
     
     func getPendingCounts(requestorUserId: String) {
         self.lblTotalCounts.layer.cornerRadius = 9;
@@ -124,107 +212,116 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             let apptotcnt = myApprovals ==  0  ? 0 : myApprovals + totalCounter/2
             let arcValues = [apptotcnt,0,totalCounter]
             let appradius = 90.0
-            let appCenter = CGPointMake(CGFloat(self.screenSize.width/2.0), CGFloat(self.screenSize.height/2) - CGFloat(160.0))
-            
+            let appCenter = CGPointMake(CGFloat(self.screenSize.width/2.0), CGFloat(self.screenSize.height/2) - CGFloat(230.0))
             self.createArc(appCenter, radius: appradius, startAngle: arcStart, endAngle: arcEnd, color: self.UIColorFromHex(0xeeeeee, alpha: 1.0).CGColor)
             self.animateArcs(arcValues, radius: appradius, center: appCenter, color: self.UIColorFromHex(0x9777a8, alpha: 1.0).CGColor)
             
             var appcntlabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
-            appcntlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) , CGFloat(self.screenSize.height/2) - CGFloat(160.0))
+            appcntlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) , CGFloat(self.screenSize.height/2) - CGFloat(230.0))
             appcntlabel.textAlignment = NSTextAlignment.Center
             appcntlabel.font = UIFont(name: MegaTheme.fontName, size: 40)
             appcntlabel.textColor = self.UIColorFromHex(0xa6afaa, alpha: 1.0)
             appcntlabel.text = "\(myApprovals)"
-            self.tableView.addSubview(appcntlabel)
+            self.dashView.addSubview(appcntlabel)
             
             var applabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
-            applabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) , CGFloat(self.screenSize.height/2) - CGFloat(120.0))
+            applabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) , CGFloat(self.screenSize.height/2) - CGFloat(190.0))
             applabel.textAlignment = NSTextAlignment.Center
             applabel.font = UIFont(name: MegaTheme.fontName, size: 12)
             applabel.textColor = self.UIColorFromHex(0xa6afaa, alpha: 1.0)
             applabel.numberOfLines = 2
             applabel.text = "PENDING\nAPPROVALS"
-            self.tableView.addSubview(applabel)
+            self.dashView.addSubview(applabel)
             
             let appButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
             appButton.frame = CGRectMake(0, 0, 200, 200)
-            appButton.center = CGPointMake(CGFloat(self.screenSize.width/2.0) , CGFloat(self.screenSize.height/2) - CGFloat(160.0))
+            appButton.center = CGPointMake(CGFloat(self.screenSize.width/2.0) , CGFloat(self.screenSize.height/2) - CGFloat(230.0))
             appButton.addTarget(self, action: "appBtnTouched:", forControlEvents: UIControlEvents.TouchUpInside)
             appButton.tag = 1
-            self.tableView.addSubview(appButton)
+            self.dashView.addSubview(appButton)
             
             // --> Chart Pending Requests
             let reqtotcnt = myRequest ==  0  ? 0 : myRequest + totalCounter/2
             let arcValues2 = [reqtotcnt,10,totalCounter]
             let reqradius = 50.0
-            let reqCenter = CGPointMake(CGFloat(self.screenSize.width/2.0) - CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) + CGFloat(30.0))
+            let reqCenter = CGPointMake(CGFloat(self.screenSize.width/2.0) - CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) - CGFloat(50.0))
             self.createArc(reqCenter, radius: reqradius, startAngle: arcStart, endAngle: arcEnd, color: self.UIColorFromHex(0xeeeeee, alpha: 1.0).CGColor)
             self.animateArcs(arcValues2, radius: reqradius, center: reqCenter, color: self.UIColorFromHex(0x4a90e2, alpha: 1.0).CGColor)
             
             var reqcntlabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
-            reqcntlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) - CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) + CGFloat(30.0))
+            reqcntlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) - CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) - CGFloat(50.0))
             reqcntlabel.textAlignment = NSTextAlignment.Center
             reqcntlabel.font = UIFont(name: MegaTheme.fontName, size: 30)
             reqcntlabel.textColor = self.UIColorFromHex(0xa6afaa, alpha: 1.0)
             reqcntlabel.text = "\(myRequest)"
-            self.tableView.addSubview(reqcntlabel)
+            self.dashView.addSubview(reqcntlabel)
             
             var reqlabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
-            reqlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) - CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) + CGFloat(120.0))
+            reqlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) - CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) + CGFloat(40.0))
             reqlabel.textAlignment = NSTextAlignment.Center
             reqlabel.font = UIFont(name: MegaTheme.fontName, size: 12)
             reqlabel.textColor = self.UIColorFromHex(0xa6afaa, alpha: 1.0)
             reqlabel.numberOfLines = 2
             reqlabel.text = "PENDING\nREQUESTS"
-            self.tableView.addSubview(reqlabel)
+            self.dashView.addSubview(reqlabel)
             
             let reqButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
             reqButton.frame = CGRectMake(0, 0, 100, 100)
-            reqButton.center = CGPointMake(CGFloat(self.screenSize.width/2.0) - CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) + CGFloat(30.0))
+            reqButton.center = CGPointMake(CGFloat(self.screenSize.width/2.0) - CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) - CGFloat(50.0))
             reqButton.addTarget(self, action: "reqBtnTouched:", forControlEvents: UIControlEvents.TouchUpInside)
             reqButton.tag = 2
             self.tableView.addSubview(reqButton)
             
             // --> Chart Pending Certfications
-            
             let certtotcnt = myCertificates ==  0  ? 0 : myCertificates + totalCounter/2
             let arcValues3 = [certtotcnt,10,totalCounter]
             let certradius = 50.0
-            let certCenter = CGPointMake(CGFloat(self.screenSize.width/2.0) + CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) + CGFloat(30.0))
+            let certCenter = CGPointMake(CGFloat(self.screenSize.width/2.0) + CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) - CGFloat(50.0))
             self.createArc(certCenter, radius: certradius, startAngle: arcStart, endAngle: arcEnd, color: self.UIColorFromHex(0xeeeeee, alpha: 1.0).CGColor)
             self.animateArcs(arcValues3, radius: certradius, center: certCenter,color: self.UIColorFromHex(0x88c057, alpha: 1.0).CGColor)
         
             var certcntlabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
-            certcntlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) + CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) + CGFloat(30.0))
+            certcntlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) + CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) - CGFloat(50.0))
             certcntlabel.textAlignment = NSTextAlignment.Center
             certcntlabel.font = UIFont(name: MegaTheme.fontName, size: 30)
             certcntlabel.textColor = self.UIColorFromHex(0xa6afaa, alpha: 1.0)
             certcntlabel.text = "\(myCertificates)"
-            self.tableView.addSubview(certcntlabel)
+            self.dashView.addSubview(certcntlabel)
             
             var certlabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
-            certlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) + CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) + CGFloat(120.0))
+            certlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) + CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) + CGFloat(40.0))
             certlabel.textAlignment = NSTextAlignment.Center
             certlabel.font = UIFont(name: MegaTheme.fontName, size: 12)
             certlabel.textColor = self.UIColorFromHex(0xa6afaa, alpha: 1.0)
             certlabel.numberOfLines = 2
             certlabel.text = "PENDING\nCERTIFICATIONS"
-            self.tableView.addSubview(certlabel)
+            self.dashView.addSubview(certlabel)
             
             let certButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
             certButton.frame = CGRectMake(0, 0, 100, 100)
-            certButton.center = CGPointMake(CGFloat(self.screenSize.width/2.0) + CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) + CGFloat(30.0))
+            certButton.center = CGPointMake(CGFloat(self.screenSize.width/2.0) + CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) - CGFloat(50.0))
             certButton.addTarget(self, action: "certBtnTouched:", forControlEvents: UIControlEvents.TouchUpInside)
             certButton.tag = 3
-            self.tableView.addSubview(certButton)
+            self.dashView.addSubview(certButton)
+            
+            var lblHeading : UILabel! = UILabel(frame: CGRectMake(0, 395, self.view.frame.size.width, 30))
+            lblHeading.backgroundColor = UIColor(red: 236.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, alpha: 1)
+            //lblHeading.layer.borderWidth = 1
+            //lblHeading.layer.borderColor = UIColor.lightGrayColor().CGColor
+            lblHeading.font = UIFont.systemFontOfSize(12)
+            lblHeading.textColor = UIColor.darkGrayColor()
+            lblHeading.text = "   Recent Activity"
+            
+            self.dashView.addSubview(lblHeading)
             
             // --> Recent Activity
+            /*
             let recentimage = UIImage(named: "recentactivity")
             let recentimageView = UIImageView(image: recentimage!)
             recentimageView.frame = CGRect(x: 0, y: CGFloat(self.screenSize.height/2.0) + CGFloat(380.0), width: self.screenSize.width, height: self.screenSize.height)
             recentimageView.contentMode = UIViewContentMode.ScaleAspectFill
             self.tableView.addSubview(recentimageView)
-            
+            */
 
         })
     }
@@ -235,19 +332,102 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return users.count;
+        //return users.count;
+        return activities.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("DashboardCell") as! DashboardCell
+
+        let info = activities[indexPath.row]
         
-        let info = users[indexPath.row]
-        cell.titleLabel.text = info.DisplayName
-        cell.subtitleLabel.text = info.Email
         
-        NSUserDefaults.standardUserDefaults().setObject(info.DisplayName, forKey: "DisplayName")
-        NSUserDefaults.standardUserDefaults().setObject(info.Title, forKey: "Title")
-        NSUserDefaults.standardUserDefaults().synchronize()
+
+        if info.requester == "kclark" {
+            cell.profileImage.image = UIImage(named: "kclark")
+        } else if info.requester == "gdavis" {
+            cell.profileImage.image = UIImage(named: "gdavis")
+        } else if info.requester == "dcrane" {
+            cell.profileImage.image = UIImage(named: "dcrane")
+        } else {
+            cell.profileImage.image = UIImage(named: "profileBlankPic")
+        }
+        
+        //cell.profileImage.image = UIImage(named: "dcrane")
+        
+        var titleText = ""
+        for ent in info.reqTargetEntities {
+            if titleText.isEmpty {
+                titleText = ent.entity
+            } else {
+                titleText += " , \(ent.entity)"
+            }
+        }
+        cell.titleLabel.text = titleText
+        cell.titleLabel.adjustsFontSizeToFitWidth = true
+        //cell.statusImage.image = info.reqStatus == "Request Completed" ? UIImage(named: "badge-new") : UIImage(named: "Badge-Assigned")
+        cell.statusLabel.text = "  " + info.reqStatus.stringByReplacingOccurrencesOfString("Request ", withString: "") + "  "
+        
+        var statuscolor : UIColor
+        
+        switch info.reqStatus {
+            
+        case "Request Rejected":
+            statuscolor = self.UIColorFromHex(0xed7161, alpha: 1.0)
+            break;
+        case "Request Awaiting Approval":
+            statuscolor = self.UIColorFromHex(0xeeaf4b, alpha: 1.0)
+            break;
+        case "Request Completed":
+            statuscolor = self.UIColorFromHex(0x88c057, alpha: 1.0)
+            break;
+        case "Request Awaiting Child Requests Completion":
+            statuscolor = self.UIColorFromHex(0x47a0db, alpha: 1.0)
+            break;
+        case "Request Approved Fulfillment Pending":
+            statuscolor = self.UIColorFromHex(0x9777a8, alpha: 1.0)
+            break;
+        case "Request Awaiting Dependent Request Completion":
+            statuscolor = self.UIColorFromHex(0x47a0db, alpha: 1.0)
+            break;
+        default:
+            statuscolor = self.UIColorFromHex(0x546979, alpha: 1.0)
+            break;
+        }
+        cell.statusLabel.backgroundColor = statuscolor
+        
+        
+        //cell.statusLabel.adjustsFontSizeToFitWidth = true
+        //cell.subtitleLabel.text = "Request ID " + info.reqId
+        cell.assigneeHeadingLabel.text = "Assignees"
+        
+        var assigneeText = ""
+        for assign in info.reqBeneficiaryList {
+            if assigneeText.isEmpty {
+                assigneeText = assign.beneficiary
+            } else {
+                assigneeText += " , \(assign.beneficiary)"
+            }
+        }
+        
+        cell.assigneeLabel.text = assigneeText
+        cell.dateLabel.text = info.reqCreatedOn
+        /*
+        var approverText = ""
+        for approve in info.currentApprovers {
+            if approverText.isEmpty {
+                approverText = approve.approvers
+            }
+        }
+        */
+        cell.descriptionLabel.text = " ID: " + info.reqId + " | Type: " + info.reqType
+        
+        //let info = users[indexPath.row]
+        //cell.titleLabel.text = info.DisplayName
+        //cell.subtitleLabel.text = info.Email
+        //NSUserDefaults.standardUserDefaults().setObject(info.DisplayName, forKey: "DisplayName")
+        //NSUserDefaults.standardUserDefaults().setObject(info.Title, forKey: "Title")
+        //NSUserDefaults.standardUserDefaults().synchronize()
         
         return cell;
     }
@@ -255,8 +435,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBAction func presentNavigation(sender: AnyObject) {
         self.view.endEditing(true)
         self.frostedViewController.view.endEditing(true)
-         self.frostedViewController.presentMenuViewController()
-        
+        self.frostedViewController.presentMenuViewController()
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -320,7 +499,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         arc.lineWidth = 14
         arc.strokeEnd = CGFloat(2.5 * M_PI)
         
-        self.tableView.layer.addSublayer(arc)
+        self.dashView.layer.addSublayer(arc)
     }
     
     func createAnimatedArc(center: CGPoint, radius: Double, startAngle : Double, endAngle : Double, color : CGColor, duration: Double, beginTime: Double, z: CGFloat) {
@@ -350,7 +529,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         arcAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
         
         arc.addAnimation(arcAnimation, forKey: "drawCircleAnimation")
-        self.tableView.layer.addSublayer(arc)
+        self.dashView.layer.addSublayer(arc)
         
         let delay = (duration + beginTime - 0.07) * Double(NSEC_PER_SEC)
         let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
@@ -369,7 +548,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             
             finalArc.strokeStart = 0
             finalArc.strokeEnd = 1
-            self.tableView.layer.addSublayer(finalArc)
+            self.dashView.layer.addSublayer(finalArc)
         })
     }
     

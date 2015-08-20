@@ -260,11 +260,11 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         } else if task.beneficiearyUser == "Grace Davis" {
             username = "gdavis"
             cell.typeImageView.image = UIImage(named: "gdavis")
-        } else if task.beneficiearyUser == "Grace Davis" {
+        } else if task.beneficiearyUser == "Danny Crane" {
             username = "dcrane"
             cell.typeImageView.image = UIImage(named: "dcrane")
         } else if task.beneficiearyUser == "Billie Rojero" {
-            username = "dcrane"
+            username = "brojero"
             cell.typeImageView.image = UIImage(named: "brojero")
         } else {
             cell.typeImageView.image = UIImage(named: "profileBlankPic")

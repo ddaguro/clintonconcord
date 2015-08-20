@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		010C6DF41B1E17AF00944643 /* MakeRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010C6DF31B1E17AF00944643 /* MakeRequestViewController.swift */; };
+		0113B4391B8383B600A80DFA /* Activities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0113B4381B8383B600A80DFA /* Activities.swift */; };
 		0138FC641AFAA8D700837EAB /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0138FC631AFAA8D700837EAB /* NavigationViewController.swift */; };
 		0138FC671AFAAAD000837EAB /* MegaTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0138FC661AFAAAD000837EAB /* MegaTheme.swift */; };
 		0138FC6A1AFAABC600837EAB /* NavigationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0138FC691AFAABC600837EAB /* NavigationCell.swift */; };
@@ -106,6 +107,7 @@
 
 /* Begin PBXFileReference section */
 		010C6DF31B1E17AF00944643 /* MakeRequestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MakeRequestViewController.swift; sourceTree = "<group>"; };
+		0113B4381B8383B600A80DFA /* Activities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Activities.swift; sourceTree = "<group>"; };
 		0138FC631AFAA8D700837EAB /* NavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		0138FC661AFAAAD000837EAB /* MegaTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MegaTheme.swift; sourceTree = "<group>"; };
 		0138FC691AFAABC600837EAB /* NavigationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationCell.swift; sourceTree = "<group>"; };
@@ -350,6 +352,7 @@
 				01FBA2B91B14EA53006C1915 /* Tasks.swift */,
 				01FBA2BE1B14FBD8006C1915 /* Requests.swift */,
 				01FF7F4F1B3367E70026BE38 /* Certs.swift */,
+				0113B4381B8383B600A80DFA /* Activities.swift */,
 			);
 			name = API;
 			sourceTree = "<group>";
@@ -761,6 +764,7 @@
 				01506FB41B0D11B400F9D605 /* MetaCell.swift in Sources */,
 				B7FA06641B445B8400CB4FF0 /* MenuViewController.swift in Sources */,
 				013AB3A91AFA7CA400160A34 /* AppDelegate.swift in Sources */,
+				0113B4391B8383B600A80DFA /* Activities.swift in Sources */,
 				014FC4971B4B2EE80035CB6A /* MakeRequestActionViewController.swift in Sources */,
 				015C140C1B0BC4F50099B9E7 /* ADVProgressLayer.swift in Sources */,
 				01FBA2BF1B14FBD8006C1915 /* Requests.swift in Sources */,
@@ -917,7 +921,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = OIMApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -934,7 +938,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = OIMApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";

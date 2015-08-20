@@ -1049,4 +1049,44 @@ class API{
         
         task.resume()
     }
+    
+    func loadActivities(loginId: String, apiUrl: String, completion: (([Activities]) -> Void)!) {
+        var request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
+        var session = NSURLSession.sharedSession()
+        request.HTTPMethod = "GET"
+        
+        var err: NSError?
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(loginId, forHTTPHeaderField: "loginId")
+        
+        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            var err: NSError?
+            
+            if(err != nil) {
+                println(err!.localizedDescription)
+            }
+            else {
+                var error : NSError?
+                var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
+                
+                let results: NSArray = jsonData["recentActivity"]!["recentRequests"] as! NSArray
+                
+                var reqs = [Activities]()
+                for req in results{
+                    let req = Activities(data: req as! NSDictionary)
+                    reqs.append(req)
+                }
+                
+                let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+                dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        completion(reqs)
+                    }
+                }
+            }
+        })
+        
+        task.resume()
+    }
 }

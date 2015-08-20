@@ -9,45 +9,44 @@
 import UIKit
 
 class DashboardCell: UITableViewCell {
+    
+    @IBOutlet var profileImage: UIImageView!
     @IBOutlet var titleLabel : UILabel!
-    @IBOutlet var subtitleLabel : UILabel!
+    @IBOutlet var statusLabel: UILabel!
+    @IBOutlet var assigneeHeadingLabel: UILabel!
+    @IBOutlet var assigneeLabel: UILabel!
+    @IBOutlet var clockImage: UIImageView!
+    @IBOutlet var dateLabel: UILabel!
     
-    @IBOutlet var bgImage: UIImageView!
-    @IBOutlet var approvalsLabel: UILabel!
-    @IBOutlet var requestsLabel: UILabel!
-    @IBOutlet var certsLabel: UILabel!
-    
-    
-    @IBOutlet var imgApprovals: UIImageView!
-    @IBOutlet var imgRequests: UIImageView!
-    @IBOutlet var imgCertfications: UIImageView!
-    
-    @IBOutlet var imgRecentActivity: UIImageView!
-    
+    @IBOutlet var descriptionLabel: UILabel!
+    //@IBOutlet var approverLabel: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        titleLabel.font = UIFont(name: MegaTheme.fontName, size: 14)
+        titleLabel.font = UIFont(name: MegaTheme.fontName, size: 16)
         titleLabel.textColor = UIColor.blackColor()
         
-        subtitleLabel.font = UIFont(name: MegaTheme.fontName, size: 12)
-        subtitleLabel.textColor = UIColor(white: 0.6, alpha: 1.0)
-        /*
-        imgApprovals.image = UIImage(named: "chart-pendingapprovals")
-        approvalsLabel.font = UIFont(name: MegaTheme.fontName, size: 35)
-        approvalsLabel.textColor = UIColor(white: 0.6, alpha: 1.0)
+        statusLabel.layer.cornerRadius = 8
+        statusLabel.layer.masksToBounds = true
+        statusLabel.font = UIFont(name: MegaTheme.fontName, size: 10)
+        statusLabel.textColor = UIColor.whiteColor()
         
-        imgRequests.image = UIImage(named: "chart-pendingrequests")
-        requestsLabel.font = UIFont(name: MegaTheme.fontName, size: 20)
-        requestsLabel.textColor = UIColor(white: 0.6, alpha: 1.0)
+        assigneeHeadingLabel.font = UIFont(name: MegaTheme.fontName, size: 10)
+        assigneeHeadingLabel.textColor = MegaTheme.darkColor
         
-        imgCertfications.image = UIImage(named: "chart-pendingcertifications")
-        certsLabel.font = UIFont(name: MegaTheme.fontName, size: 20)
-        certsLabel.textColor = UIColor(white: 0.6, alpha: 1.0)
+        assigneeLabel.font = UIFont(name: MegaTheme.fontName, size: 10)
+        assigneeLabel.textColor = MegaTheme.lightColor
         
-        imgRecentActivity.image = UIImage(named: "recentactivity")
-        */
+        clockImage.image = UIImage(named: "clock")
+        clockImage.alpha = 0.20
+        
+        dateLabel.font = UIFont(name: MegaTheme.fontName, size: 10)
+        dateLabel.textColor = MegaTheme.lightColor
+        
+        descriptionLabel.font = UIFont(name: MegaTheme.fontName, size: 10)
+        descriptionLabel.textColor = MegaTheme.lightColor
+        
+        //approverLabel.font = UIFont(name: MegaTheme.fontName, size: 10)
+        //approverLabel.textColor = MegaTheme.lightColor
     }
-
-
 }

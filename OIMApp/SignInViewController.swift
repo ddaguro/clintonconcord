@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import LocalAuthentication
 
 class SignInViewController : UIViewController, UITextFieldDelegate {
     
@@ -40,6 +41,9 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
     var users : [Users]!
     let transitionOperator = TransitionOperator()
     
+    var FIDOusername : String = ""
+    var FIDOpassword : String = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -48,14 +52,13 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
         twitterButton.hidden = true
         titleLabel.hidden = true
         
-        //let attributedText = NSMutableAttributedString(string: "Don't have an account? Sign up")
-        //attributedText.addAttribute(NSUnderlineStyleAttributeName, value: NSUnderlineStyle.StyleSingle.rawValue, range: NSMakeRange(23, 7))
-        //attributedText.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSMakeRange(0, attributedText.length))
-        let attributedText = NSMutableAttributedString(string: " ")
-        noAccountButton.setAttributedTitle(attributedText, forState: .Normal)
+        noAccountButton.setTitle("Sign In with FIDO", forState: .Normal)
         noAccountButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        noAccountButton.titleLabel?.font = UIFont(name: MegaTheme.semiBoldFontName, size:14)
-        noAccountButton.addTarget(self, action: "dismiss", forControlEvents: .TouchUpInside)
+        noAccountButton.titleLabel?.font = UIFont(name: MegaTheme.semiBoldFontName, size: 22)
+        noAccountButton.layer.borderWidth = 3
+        noAccountButton.layer.borderColor = UIColor.whiteColor().CGColor
+        noAccountButton.layer.cornerRadius = 5
+        noAccountButton.addTarget(self, action: "LoggedInFIDO", forControlEvents: .TouchUpInside)
         
         //println("----->>> SignInViewController")
         bgImageView.image = UIImage(named: "login-bg")
@@ -68,7 +71,7 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
         userLabel.textColor = UIColor.whiteColor()
         
         userTextField.delegate = self
-        userTextField.text = ""
+        userTextField.text = myLoginId
         userTextField.font = UIFont(name: MegaTheme.fontName, size: 20)
         userTextField.textColor = UIColor.whiteColor()
         
@@ -125,6 +128,98 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
         controller.nagivationStyleToPresent = "presentTableNavigation"
     }
     
+    func LoggedInFIDO(){
+        
+        if myLoginId != self.userTextField.text {
+            var alert = UIAlertView(title: "Failed \u{1F44E}", message: "FIDO UAF Authenication Failed", delegate: nil, cancelButtonTitle: "Okay")
+            alert.show()
+            dismissViewControllerAnimated(true, completion: nil)
+        } else {
+        
+        //if myFIDO {
+            let context = LAContext()
+            var error: NSError?
+            
+            // check if Touch ID is available
+            if context.canEvaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, error: &error) {
+                let reason = "Authenticate with Touch ID"
+                context.evaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, localizedReason: reason, reply:
+                    {(succes: Bool, error: NSError!) in
+                        dispatch_async(dispatch_get_main_queue(), {
+                            
+                            if succes {
+                                myFIDO = true
+                                //var alert = UIAlertView(title: "Success \u{1F44D}", message: "FIDO UAF Authenication Succeeded", delegate: nil, cancelButtonTitle: "Okay")
+                                //alert.show()
+                                
+                                self.api = API()
+                                
+                                let url = Persistent.endpoint + Persistent.baseroot + "/users/login"
+
+                                self.ReadLogin()
+                                
+                                //var username = self.userTextField.text
+                                //var password = "Oracle123"
+                                var username = self.FIDOusername
+                                var password = self.FIDOpassword
+                                
+                                let paramstring = "username=" + username + "&password=" + password
+                                
+                                if username != "" {
+                                    self.api.LogIn(paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
+                                        var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay.")
+                                        if(succeeded) {
+                                            alert.title = "Success!"
+                                            alert.message = msg
+                                            
+                                            //load user object
+                                            self.users = [Users]()
+                                            
+                                            let url = Persistent.endpoint + Persistent.baseroot + "/users/" + username
+                                            self.api.loadUser(username, apiUrl: url, completion : self.didLoadUsers)
+                                            
+                                            myLoginId = username
+                                            
+                                            NSUserDefaults.standardUserDefaults().setObject(username, forKey: "requestorUserId")
+                                            NSUserDefaults.standardUserDefaults().synchronize()
+                                        }
+                                        else {
+                                            alert.title = "Failed : ("
+                                            alert.message = msg
+                                        }
+                                        
+                                        // Move to the UI thread
+                                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                            if(succeeded)
+                                            {
+                                                self.performSegueWithIdentifier("SegueDashboard", sender: self)
+                                                
+                                            } else {
+                                                alert.show()
+                                            }
+                                        })
+                                    }
+                                } else {
+                                    var alert = UIAlertView(title: "Failed : (", message: "Incorrect username and password", delegate: nil, cancelButtonTitle: "Okay")
+                                    alert.show()
+                                }
+                            }
+                            else {
+                                //self.showAlertController("Touch ID Authentication Failed")
+                            }
+                        })
+                })
+            }
+                
+            else {
+                //self.showAlertController("Touch ID not available")
+            }
+        //} else {
+        //    dismissViewControllerAnimated(true, completion: nil)
+        //}
+        }
+    }
+    
     func LoggedIn(){
         
         self.api = API()
@@ -132,7 +227,8 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
         let url = Persistent.endpoint + Persistent.baseroot + "/users/login"
         
         let username = userTextField.text
-        let password = passwordTextField.text
+        var password = passwordTextField.text
+        
         let paramstring = "username=" + username + "&password=" + password
         
         if username != "" {
@@ -145,13 +241,22 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
                     //load user object
                     self.users = [Users]()
                     
-                    let url = Persistent.endpoint + Persistent.baseroot + "/users/" + username 
+                    let url = Persistent.endpoint + Persistent.baseroot + "/users/" + username
                     self.api.loadUser(username, apiUrl: url, completion : self.didLoadUsers)
                     
+                    if myLoginId != username {
+                        myFIDO = false
+                    }
+                    
                     myLoginId = username
+                    
                     NSUserDefaults.standardUserDefaults().setObject(username, forKey: "requestorUserId")
                     NSUserDefaults.standardUserDefaults().synchronize()
-                                    }
+                    
+                    self.SaveLogin(username, pwd: password)
+                    
+                    
+                }
                 else {
                     alert.title = "Failed : ("
                     alert.message = msg
@@ -194,6 +299,40 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("NavigationTableCell", forIndexPath: indexPath) as! UITableViewCell
         return cell
+    }
+    
+    func SaveLogin (usr: String, pwd: String) {
+        let file = "userlogin.txt"
+        if let dirs : [String] = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true) as? [String] {
+            let dir = dirs[0] //documents directory
+            let path = dir.stringByAppendingPathComponent(file);
+            let text = usr + "," + pwd
+            
+            //writing
+            text.writeToFile(path, atomically: false, encoding: NSUTF8StringEncoding, error: nil)
+        }
+    }
+    
+    func ReadLogin() {
+        let file = "userlogin.txt"
+        if let dirs : [String] = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true) as? [String] {
+            let dir = dirs[0] //documents directory
+            let path = dir.stringByAppendingPathComponent(file);
+            //reading
+            let text = String(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil)
+            
+            var loginInfo: String = text!
+            let loginInfoArray = loginInfo.componentsSeparatedByString(",")
+            
+            var username: String = loginInfoArray[0]
+            var password: String = loginInfoArray[1]
+            
+            FIDOusername = username
+            FIDOpassword = password
+            
+            println(username)
+            println(password)
+        }
     }
 
 }
