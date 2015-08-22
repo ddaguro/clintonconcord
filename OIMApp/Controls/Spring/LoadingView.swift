@@ -64,6 +64,24 @@ public extension UIView {
             loadingXibView.alpha = 1
         })
     }
+    
+    public func showDashLoading() {
+        
+        if let loadingXibView = self.viewWithTag(LoadingViewConstants.Tag) {
+            // If loading view is already found in current view hierachy, do nothing
+            return
+        }
+        
+        let loadingXibView = LoadingView.designCodeLoadingView()
+        loadingXibView.frame = CGRectMake(0, 550, self.bounds.width, 30)
+        loadingXibView.tag = LoadingViewConstants.Tag
+        self.addSubview(loadingXibView)
+        
+        loadingXibView.alpha = 0
+        spring(0.7, {
+            loadingXibView.alpha = 1
+        })
+    }
 
     public func hideLoading() {
 

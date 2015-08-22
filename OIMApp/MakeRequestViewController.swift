@@ -47,7 +47,7 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         }
         
         toolbar.clipsToBounds = true
-        labelTitle.text = "Make A Request"
+        labelTitle.text = "Request Access"
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -232,7 +232,7 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
             cell.displaynameLabel.text = "Key: " + "\(dataObject.key)" + " | Catgory Id: " + dataObject.categoryId
         }
         
-        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        cell.selectionStyle = UITableViewCellSelectionStyle.Default
         
         return cell;
     }
@@ -261,6 +261,9 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
             
             self.resultSearchController.active = false
             showViewController(controller, sender: self)
+            
+            
+            tableView.deselectRowAtIndexPath(indexPath, animated: false)
         }
     }
     /*

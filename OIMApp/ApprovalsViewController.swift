@@ -155,7 +155,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         
         toolbar.clipsToBounds = true
         
-        labelTitle.text = "My Approvals"
+        labelTitle.text = "Pending Approvals"
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine

@@ -24,6 +24,7 @@ class CertsCell: UITableViewCell {
     @IBOutlet var progressImage: UIImageView!
     @IBOutlet var percentLabel: UILabel!
     
+    @IBOutlet var statusLabel: UILabel!
     override func awakeFromNib() {
         
         titleLabel.font = UIFont(name: MegaTheme.fontName, size: 14)
@@ -31,6 +32,11 @@ class CertsCell: UITableViewCell {
         
         assigneesLabel.font = UIFont(name: MegaTheme.fontName, size: 12)
         assigneesLabel.textColor = MegaTheme.darkColor
+        
+        statusLabel.layer.cornerRadius = 8
+        statusLabel.layer.masksToBounds = true
+        statusLabel.font = UIFont(name: MegaTheme.fontName, size: 10)
+        statusLabel.textColor = UIColor.whiteColor()
         
         assignnesUserLabel.font = UIFont(name: MegaTheme.fontName, size: 12)
         assignnesUserLabel.textColor = MegaTheme.lightColor

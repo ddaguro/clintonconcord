@@ -41,7 +41,7 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         }
         
         toolbar.clipsToBounds = true
-        labelTitle.text = "My Requests"
+        labelTitle.text = "Track Requests"
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
@@ -57,10 +57,10 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         
         let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/requests?limit=10"
         if myRequests.count == 0 {
-            println("load from api")
+            //println("load from api")
             api.loadRequests(myLoginId, apiUrl: url, completion : didLoadData)
         } else {
-            println("load from storage")
+            //println("load from storage")
         }
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = UIColor.redColor()

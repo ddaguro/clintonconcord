@@ -753,6 +753,167 @@ class API{
         task.resume()
     }
     
+    func loadUserItem(loginId: String, apiUrl: String, completion: (([UserItem]) -> Void)!) {
+        var request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
+        var session = NSURLSession.sharedSession()
+        request.HTTPMethod = "GET"
+        
+        var err: NSError?
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(loginId, forHTTPHeaderField: "loginId")
+        
+        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            var err: NSError?
+            
+            if(err != nil) {
+                println(err!.localizedDescription)
+            }
+            else {
+                var error : NSError?
+                var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
+                
+                let results: NSArray = jsonData["identityCertifications"]!["userCertificationLineItems"] as! NSArray
+                
+                var users = [UserItem]()
+                for usr in results{
+                    let usr = UserItem(data: usr as! NSDictionary)
+                    users.append(usr)
+                }
+                
+                let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+                dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        completion(users)
+                    }
+                }
+            }
+        })
+        
+        task.resume()
+    }
+    
+    func loadCertUserItemDetails(loginId: String, apiUrl: String, completion: (([UserItemDetail]) -> Void)!) {
+        var request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
+        var session = NSURLSession.sharedSession()
+        request.HTTPMethod = "GET"
+        
+        var err: NSError?
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(loginId, forHTTPHeaderField: "loginId")
+        
+        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            var err: NSError?
+            
+            if(err != nil) {
+                println(err!.localizedDescription)
+            }
+            else {
+                var error : NSError?
+                var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
+                
+                let results: NSArray = jsonData["identityCertifications"]!["accounts"]  as! NSArray
+                
+                
+                var users = [UserItemDetail]()
+                for user in results{
+                    let user = UserItemDetail(data: user as! NSDictionary)
+                    users.append(user)
+                }
+                
+                let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+                dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        completion(users)
+                    }
+                }
+            }
+        })
+        
+        task.resume()
+    }
+    
+    func loadRoleItem(loginId: String, apiUrl: String, completion: (([RoleItem]) -> Void)!) {
+        var request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
+        var session = NSURLSession.sharedSession()
+        request.HTTPMethod = "GET"
+        
+        var err: NSError?
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(loginId, forHTTPHeaderField: "loginId")
+        
+        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            var err: NSError?
+            
+            if(err != nil) {
+                println(err!.localizedDescription)
+            }
+            else {
+                var error : NSError?
+                var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
+                
+                let results: NSArray = jsonData["identityCertifications"]!["roleCertificationLineItems"] as! NSArray
+                
+                var roles = [RoleItem]()
+                for role in results{
+                    let role = RoleItem(data: role as! NSDictionary)
+                    roles.append(role)
+                }
+                
+                let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+                dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        completion(roles)
+                    }
+                }
+            }
+        })
+        
+        task.resume()
+    }
+    
+    func loadCertRoleItemDetails(loginId: String, apiUrl: String, completion: (([RoleItemDetail]) -> Void)!) {
+        var request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
+        var session = NSURLSession.sharedSession()
+        request.HTTPMethod = "GET"
+        
+        var err: NSError?
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(loginId, forHTTPHeaderField: "loginId")
+        
+        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            var err: NSError?
+            
+            if(err != nil) {
+                println(err!.localizedDescription)
+            }
+            else {
+                var error : NSError?
+                var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
+                
+                let results: NSArray = jsonData["identityCertifications"]!["roleMembers"]  as! NSArray
+                
+                var roles = [RoleItemDetail]()
+                for role in results{
+                    let role = RoleItemDetail(data: role as! NSDictionary)
+                    roles.append(role)
+                }
+                
+                let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+                dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        completion(roles)
+                    }
+                }
+            }
+        })
+        
+        task.resume()
+    }
+    
     // 0713 point to idaas
     func RequestCertificationsAction(loginId : String, params : String, url : String, postCompleted : (succeeded: Bool, msg: String) -> ()) {
         var request = NSMutableURLRequest(URL: NSURL(string: url)!)

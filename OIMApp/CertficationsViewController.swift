@@ -41,7 +41,7 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
         
         toolbar.clipsToBounds = true
         
-        labelTitle.text = "My Certfications"
+        labelTitle.text = "Certfications"
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
@@ -56,7 +56,7 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
         self.certs = [Certs]()
         self.api = API()
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/certifications"
+        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/certifications?limit=15"
         api.loadPendingCerts(myLoginId, apiUrl: url, completion : didLoadData)
         
         
@@ -130,13 +130,33 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
         let cell = tableView.dequeueReusableCellWithIdentifier("CertsCell") as! CertsCell
         
         cell.titleLabel.text = cert.title
-        cell.statusImage.image = cert.state == "New" ? UIImage(named: "badge-new") : UIImage(named: "Badge-Assigned")
+        //cell.statusImage.image = cert.state == "New" ? UIImage(named: "badge-new") : UIImage(named: "Badge-Assigned")
+        var statuscolor : UIColor
+        
+        switch cert.state {
+            
+        case "New":
+            statuscolor = self.UIColorFromHex(0x88c057, alpha: 1.0)
+            break;
+        case "In Progress":
+            statuscolor = self.UIColorFromHex(0x47a0db, alpha: 1.0)
+            break;
+        default:
+            statuscolor = self.UIColorFromHex(0x546979, alpha: 1.0)
+            break;
+        }
+        cell.statusLabel.backgroundColor = statuscolor
+        
+        cell.statusLabel.text = "  " + cert.state + "  "
         cell.assigneesLabel.text = "Assignee"
         cell.assignnesUserLabel.text = cert.asignee
         cell.dateLabel.text = cert.createdDate + " | id " + "\(cert.certificationId)" + " | type " + cert.certificationType
         cell.progressLabel.text = "Progress"
         cell.progressImage.image = cert.percentComplete ==  "0.0"  ? UIImage(named: "percent0") : UIImage(named: "percent50")
         cell.percentLabel.text =  cert.percentComplete ==  "0.0"  ? "0" : "50"
+        
+        cell.selectionStyle = UITableViewCellSelectionStyle.Default
+        
         return cell
         
     }
@@ -155,6 +175,9 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
             controller.navigationController
             showViewController(controller, sender: self)
         }
+        
+        tableView.deselectRowAtIndexPath(indexPath, animated: false)
+        
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -192,5 +215,13 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
         toViewController.transitioningDelegate = self.transitionOperator
         
     }
-
+    
+    func UIColorFromHex(rgbValue:UInt32, alpha:Double=1.0)->UIColor {
+        let red = CGFloat((rgbValue & 0xFF0000) >> 16)/256.0
+        let green = CGFloat((rgbValue & 0xFF00) >> 8)/256.0
+        let blue = CGFloat(rgbValue & 0xFF)/256.0
+        
+        return UIColor(red:red, green:green, blue:blue, alpha:CGFloat(alpha))
+    }
+    
 }

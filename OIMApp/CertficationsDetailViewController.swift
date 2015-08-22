@@ -23,8 +23,12 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
     var certId : Int!
     var certTitle : String!
     var certType: String!
+    
     var certitem : [CertItem]!
     var entitem : [EntitlementItem]!
+    var useritem : [UserItem]!
+    var roleitem : [RoleItem]!
+    
     var api : API!
     
     override func viewDidLoad() {
@@ -40,6 +44,9 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
         
         self.certitem = [CertItem]()
         self.entitem = [EntitlementItem]()
+        self.useritem = [UserItem]()
+        self.roleitem = [RoleItem]()
+        
         self.api = API()
         
         let url = Persistent.endpoint + Persistent.baseroot + "/certifications/certificationlineitems/" + "\(certId)/" + certType
@@ -48,6 +55,10 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
             api.loadCertItem(myLoginId, apiUrl : url, completion : didLoadData)
         } else if certType == "Entitlement" {
             api.loadEntItem(myLoginId, apiUrl : url, completion : didLoadEntitlementData)
+        } else if certType == "User" {
+            api.loadUserItem(myLoginId, apiUrl : url, completion : didLoadUserData)
+        } else if certType == "Role" {
+            api.loadRoleItem(myLoginId, apiUrl : url, completion : didLoadRoleData)
         }
         
         refreshControl = UIRefreshControl()
@@ -86,7 +97,36 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
         self.tableView.reloadData()
         self.view.hideLoading()
         self.refreshControl?.endRefreshing()
-
+    }
+    
+    func didLoadUserData(loadedData: [UserItem]){
+        self.useritem = [UserItem]()
+        
+        for data in loadedData {
+            self.useritem.append(data)
+        }
+        
+        if isFirstTime  {
+            self.view.showLoading()
+        }
+        self.tableView.reloadData()
+        self.view.hideLoading()
+        self.refreshControl?.endRefreshing()
+    }
+    
+    func didLoadRoleData(loadedData: [RoleItem]){
+        self.roleitem = [RoleItem]()
+        
+        for data in loadedData {
+            self.roleitem.append(data)
+        }
+        
+        if isFirstTime  {
+            self.view.showLoading()
+        }
+        self.tableView.reloadData()
+        self.view.hideLoading()
+        self.refreshControl?.endRefreshing()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -111,6 +151,10 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
             api.loadCertItem(myLoginId, apiUrl : url, completion : didLoadData)
         } else if certType == "Entitlement" {
             api.loadEntItem(myLoginId, apiUrl : url, completion : didLoadEntitlementData)
+        } else if certType == "User" {
+            api.loadUserItem(myLoginId, apiUrl : url, completion : didLoadUserData)
+        } else if certType == "Role" {
+            api.loadRoleItem(myLoginId, apiUrl : url, completion : didLoadRoleData)
         }
         
         SoundPlayer.play("upvote.wav")
@@ -123,6 +167,10 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
             count = certitem.count
         } else if certType == "Entitlement" {
             count = entitem.count
+        } else if certType == "User" {
+            count = useritem.count
+        } else if certType == "Role" {
+            count = roleitem.count
         }
         
         return count
@@ -200,9 +248,77 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
             
             cell.progressImage.image = percentCompleteImage
             cell.percentLabel.text = "\(info.percentComplete)"
+        } else if certType == "User" {
+            let info = useritem[indexPath.row]
+            cell.titleLabel.text = info.firstName + " " + info.lastName
+            cell.riskLabel.text = "Risk"
+            
+            var itemRiskImage = UIImage()
+            if info.roleRiskSummary == "Low Risk" {
+                itemRiskImage = UIImage(named: "risk-low")!
+            } else if info.roleRiskSummary == "Medium Risk" {
+                itemRiskImage = UIImage(named: "risk-medium")!
+            } else if info.roleRiskSummary == "High Risk" {
+                itemRiskImage = UIImage(named: "risk-high")!
+            }
+            cell.riskImage.image = itemRiskImage
+            cell.riskStatusLabel.text = info.roleRiskSummary
+            cell.descriptionLabel.text = "cid " + "\(certId)" + " | type " + certType + " | uid " + "\(info.userId)"
+            cell.progressLabel.text = "Progress"
+            
+            var percentCompleteImage = UIImage()
+            
+            if info.percentComplete <= 0 {
+                percentCompleteImage = UIImage(named: "percent0")!
+            } else if info.percentComplete <= 25 {
+                percentCompleteImage = UIImage(named: "percent25")!
+            } else if info.percentComplete <= 50 {
+                percentCompleteImage = UIImage(named: "percent50")!
+            } else if info.percentComplete <= 75 {
+                percentCompleteImage = UIImage(named: "percent75")!
+            } else if info.percentComplete <= 100 {
+                percentCompleteImage = UIImage(named: "percent100")!
+            }
+            
+            cell.progressImage.image = percentCompleteImage
+            cell.percentLabel.text = "\(info.percentComplete)"
+        } else if certType == "Role" {
+            let info = roleitem[indexPath.row]
+            cell.titleLabel.text = info.roleDisplayName
+            cell.riskLabel.text = "Risk"
+            
+            var itemRiskImage = UIImage()
+            if info.roleItemRisk == "Low Risk" {
+                itemRiskImage = UIImage(named: "risk-low")!
+            } else if info.roleItemRisk == "Medium Risk" {
+                itemRiskImage = UIImage(named: "risk-medium")!
+            } else if info.roleItemRisk == "High Risk" {
+                itemRiskImage = UIImage(named: "risk-high")!
+            }
+            cell.riskImage.image = itemRiskImage
+            cell.riskStatusLabel.text = info.roleItemRisk
+            cell.descriptionLabel.text = "cid " + "\(certId)" + " | type " + certType + " | uid " + "\(info.roleEntityId)"
+            cell.progressLabel.text = "Progress"
+            
+            var percentCompleteImage = UIImage()
+            
+            if info.rolePercentComplete <= 0 {
+                percentCompleteImage = UIImage(named: "percent0")!
+            } else if info.rolePercentComplete <= 25 {
+                percentCompleteImage = UIImage(named: "percent25")!
+            } else if info.rolePercentComplete <= 50 {
+                percentCompleteImage = UIImage(named: "percent50")!
+            } else if info.rolePercentComplete <= 75 {
+                percentCompleteImage = UIImage(named: "percent75")!
+            } else if info.rolePercentComplete <= 100 {
+                percentCompleteImage = UIImage(named: "percent100")!
+            }
+            
+            cell.progressImage.image = percentCompleteImage
+            cell.percentLabel.text = "\(info.rolePercentComplete)"
         }
         
-        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        cell.selectionStyle = UITableViewCellSelectionStyle.Default
         
         return cell
     }
@@ -226,9 +342,23 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
                 controller.certTitle = info.applicationInstanceName
                 controller.certType = info.certificationType
                 controller.entitlementId = info.entitlementId
+            } else if certType == "User" {
+                let info = useritem[indexPath.row]
+                controller.certId = certId
+                controller.certTitle = info.firstName + " " + info.lastName
+                controller.certType = certType
+                controller.userId = info.userId
+            } else if certType == "Role" {
+                let info = roleitem[indexPath.row]
+                controller.certId = certId
+                controller.certTitle = info.roleDisplayName
+                controller.certType = certType
+                controller.roleentityId = info.roleEntityId
             }
             controller.navigationController
             showViewController(controller, sender: self)
         }
+        
+        tableView.deselectRowAtIndexPath(indexPath, animated: false)
     }
 }

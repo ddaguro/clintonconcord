@@ -87,10 +87,10 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
         passwordTextField.textColor = UIColor.whiteColor()
         passwordTextField.secureTextEntry = true
         
-        forgotPassword.setTitle("Forgot Password?", forState: .Normal)
+        forgotPassword.setTitle("", forState: .Normal)
         forgotPassword.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         forgotPassword.titleLabel?.font = UIFont(name: MegaTheme.semiBoldFontName, size: 15)
-        forgotPassword.addTarget(self, action: "dismiss", forControlEvents: .TouchUpInside)
+        //forgotPassword.addTarget(self, action: "dismiss", forControlEvents: .TouchUpInside)
         
         signInButton.setTitle("Sign In", forState: .Normal)
         signInButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -167,7 +167,7 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
                                 
                                 if username != "" {
                                     self.api.LogIn(paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
-                                        var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay.")
+                                        var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
                                         if(succeeded) {
                                             alert.title = "Success!"
                                             alert.message = msg
@@ -177,6 +177,7 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
                                             
                                             let url = Persistent.endpoint + Persistent.baseroot + "/users/" + username
                                             self.api.loadUser(username, apiUrl: url, completion : self.didLoadUsers)
+                                            
                                             
                                             myLoginId = username
                                             
@@ -233,7 +234,7 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
         
         if username != "" {
             api.LogIn(paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
-                var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay.")
+                var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
                 if(succeeded) {
                     alert.title = "Success!"
                     alert.message = msg
@@ -283,23 +284,19 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
     func didLoadUsers(loadedUsers: [Users]){
         for usr in loadedUsers {
             users.append(usr)
+            
+            NSUserDefaults.standardUserDefaults().setObject(usr.DisplayName, forKey: "DisplayName")
+            NSUserDefaults.standardUserDefaults().setObject(usr.Title, forKey: "Title")
+            NSUserDefaults.standardUserDefaults().synchronize()
         }
+        
+        
     }
     
     func DismissKeyboard(){
         view.endEditing(true)
     }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return users.count
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let user = users[indexPath.row]
-        
-        let cell = tableView.dequeueReusableCellWithIdentifier("NavigationTableCell", forIndexPath: indexPath) as! UITableViewCell
-        return cell
-    }
+
     
     func SaveLogin (usr: String, pwd: String) {
         let file = "userlogin.txt"

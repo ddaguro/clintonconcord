@@ -43,3 +43,63 @@ class Roles {
         */
     }
 }
+
+class RoleItem {
+    
+    var roleDisplayName : String!
+    var roleEntityId : Int!
+    var roleMemberCount : Int!
+    var rolePercentComplete : Int!
+    var roleItemRisk : String!
+    var rolePolicyCount : Int!
+    
+    
+    init(data : NSDictionary){
+        
+        self.roleDisplayName = Utils.getStringFromJSON(data, key: "roleDisplayName")
+        self.roleEntityId = data["roleEntityId"] as! Int
+        self.roleMemberCount = data["roleMemberCount"] as! Int
+        self.rolePercentComplete = data["rolePercentComplete"] as! Int
+        self.roleItemRisk = Utils.getStringFromJSON(data, key: "roleItemRisk")
+        self.rolePolicyCount = data["rolePolicyCount"] as! Int
+        
+        /*
+        "roleDisplayName": "ERP Transaction Manager",
+        "roleEntityId": 9,
+        "roleMemberCount": 3,
+        "rolePercentComplete": 0,
+        "roleItemRisk": "High Risk",
+        "rolePolicyCount": 0
+        */
+    }
+}
+
+class RoleItemDetail {
+    
+    var firstName : String!
+    var lastName : String!
+    var roleId : Int!
+    var userEntityId : Int!
+    var userLogin : String!
+    var riskSummary : String!
+    
+    
+    init(data : NSDictionary){
+        
+        self.firstName = Utils.getStringFromJSON(data, key: "firstName")
+        self.lastName = Utils.getStringFromJSON(data, key: "lastName")
+        self.roleId = data["roleId"] as! Int
+        self.userEntityId = data["userEntityId"] as! Int
+        self.userLogin = Utils.getStringFromJSON(data, key: "userLogin")
+        self.riskSummary = Utils.getStringFromJSON(data, key: "riskSummary")
+        
+        /*
+        "firstName": "Danny",
+        "lastName": "Crane",
+        "roleId": 9,
+        "userEntityId": 661,
+        "userLogin": "DCRANE",
+        "riskSummary": "High Risk"
+        */
+    }
+}

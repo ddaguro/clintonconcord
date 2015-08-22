@@ -29,6 +29,8 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     var api : API!
     
     let transitionOperator = TransitionOperator()
+    var refreshControl:UIRefreshControl!
+    var isFirstTime = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,10 +42,9 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         
         menuItem.image = UIImage(named: "menu")
         toolbar.clipsToBounds = true
-        labelTitle.text = "My Dashboard"
+        labelTitle.text = "Dashboard"
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.addSubview(dashView)
         
         getPendingCounts(myLoginId)
 
@@ -55,8 +56,8 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         self.activities = [Activities]()
         self.api = API()
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + requestorUserId
-        api.loadUser(requestorUserId, apiUrl: url, completion : didLoadUsers)
+        //let url = Persistent.endpoint + Persistent.baseroot + "/users/" + requestorUserId
+        //api.loadUser(requestorUserId, apiUrl: url, completion : didLoadUsers)
         
         
         let url2 = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/recentactivity?limit=10"
@@ -69,29 +70,39 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             println("load from storage")
         }
         */
+        
+        refreshControl = UIRefreshControl()
+        refreshControl.tintColor = UIColor.redColor()
+        refreshControl.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
+        tableView.addSubview(refreshControl)
+        
         //---> PanGestureRecognizer
         let recognizer = UIPanGestureRecognizer(target: self, action: "panGestureRecognized:")
         self.view.addGestureRecognizer(recognizer)
+
+    }
+    
+    func refresh(){
         
+        let url2 = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/recentactivity?limit=10"
+        api.loadActivities(myLoginId, apiUrl: url2, completion : didLoadActivities)
+        
+        SoundPlayer.play("upvote.wav")
     }
     
     func showAlert(){
         var createAccountErrorAlert: UIAlertView = UIAlertView()
-        
         createAccountErrorAlert.delegate = self
-        
         createAccountErrorAlert.title = ""
         createAccountErrorAlert.message = "Would you like to register for FIDO biometric authentication?"
         createAccountErrorAlert.addButtonWithTitle("Cancel")
         createAccountErrorAlert.addButtonWithTitle("OK")
-        
         createAccountErrorAlert.show()
     }
     
     func alertView(View: UIAlertView!, clickedButtonAtIndex buttonIndex: Int){
         
         switch buttonIndex{
-            
         case 0:
             //NSLog("Cancel");
             break;
@@ -118,12 +129,9 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                     })
                 })
             }
-                
             else {
                 self.showAlertController("Touch ID Not Available")
             }
-            
-            
             break;
         default:
             NSLog("Default");
@@ -165,6 +173,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         self.frostedViewController.panGestureRecognized(sender)
     }
 
+    /*
     func didLoadUsers(loadedUsers: [Users]){
         
         for usr in loadedUsers {
@@ -172,19 +181,30 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         tableView.reloadData()
     }
-    
+    */
     
     func didLoadActivities(loadedActivities: [Activities]){
+        self.activities = [Activities]()
         
         for act in loadedActivities {
             self.activities.append(act)
         }
-        activities.sort({ $0.reqCreatedOn > $1.reqCreatedOn })
+        activities.sort({ $0.reqModifiedOnDate < $1.reqModifiedOnDate })
         tableView.reloadData()
+        view.hideLoading()
+        
+        if isFirstTime  {
+            self.view.showLoading()
+        }
+        self.tableView.reloadData()
+        self.view.hideLoading()
+        self.refreshControl?.endRefreshing()
     }
 
     
     func getPendingCounts(requestorUserId: String) {
+        
+        view.showDashLoading()
         self.lblTotalCounts.layer.cornerRadius = 9;
         lblTotalCounts.layer.masksToBounds = true;
         
@@ -322,6 +342,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             recentimageView.contentMode = UIViewContentMode.ScaleAspectFill
             self.tableView.addSubview(recentimageView)
             */
+            
 
         })
     }
@@ -341,8 +362,6 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
 
         let info = activities[indexPath.row]
         
-        
-
         if info.requester == "kclark" {
             cell.profileImage.image = UIImage(named: "kclark")
         } else if info.requester == "gdavis" {
@@ -411,7 +430,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         
         cell.assigneeLabel.text = assigneeText
-        cell.dateLabel.text = info.reqCreatedOn
+        cell.dateLabel.text = info.reqModifiedOnDate
         /*
         var approverText = ""
         for approve in info.currentApprovers {

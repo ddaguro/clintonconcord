@@ -216,7 +216,7 @@ class MenuViewController: UITableViewController {
             cell.viewImage.image = UIImage(named: "menuicon-myaccess")
             
         } else if indexPath.row == 2 {
-            cell.lblTitle.text = "MY CERTIFICATIONS"
+            cell.lblTitle.text = "CERTIFICATIONS"
             cell.viewImage.image = UIImage(named: "menuicon-mycertifications")
             if (myCertificates > 0) {
                 cell.lblNotification.hidden = false;
@@ -229,7 +229,7 @@ class MenuViewController: UITableViewController {
             }
             
         } else if indexPath.row == 3 {
-            cell.lblTitle.text = "MY APPROVALS"
+            cell.lblTitle.text = "PENDING APPROVALS"
             cell.viewImage.image = UIImage(named: "menuicon-myapprovals")
             if (myApprovals > 0) {
                 cell.lblNotification.hidden = false;
@@ -242,7 +242,7 @@ class MenuViewController: UITableViewController {
             }
             
         } else if indexPath.row == 4 {
-            cell.lblTitle.text = "MY REQUESTS"
+            cell.lblTitle.text = "TRACK REQUESTS"
             cell.viewImage.image = UIImage(named: "menuicon-myrequests")
             if (myRequest > 0){
                 cell.lblNotification.hidden = false;
@@ -255,7 +255,7 @@ class MenuViewController: UITableViewController {
             }
             
         } else if indexPath.row == 5 {
-            cell.lblTitle.text = "MAKE A REQUEST"
+            cell.lblTitle.text = "REQUEST ACCESS"
             cell.viewImage.image = UIImage(named: "menuicon-makearequest")
             
         } else if indexPath.row == 6 {

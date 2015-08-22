@@ -24,13 +24,24 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
     var certId : Int!
     var certTitle : String!
     var certType: String!
+    
     var applicationInstanceId : Int!
     var entitlementId : Int!
+    var userId : Int!
+    var roleentityId : Int!
     
     var certitemdetail : [CertItemDetail]!
-    var certentitemdetail : [EntitlementItemDetail]!
     var selectedcertitem : [CertItemDetail] = []
+    
+    var certentitemdetail : [EntitlementItemDetail]!
     var selectedcertentitem : [EntitlementItemDetail] = []
+    
+    var certuseritemdetail : [UserItemDetail]!
+    var selectedcertuseritem : [UserItemDetail] = []
+    
+    var certroleitemdetail : [RoleItemDetail]!
+    var selectedcertroleitem : [RoleItemDetail] = []
+    
     var api : API!
     
     @IBAction func btnEditAction(sender: AnyObject) {
@@ -187,6 +198,9 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         
         self.certitemdetail = [CertItemDetail]()
         self.certentitemdetail = [EntitlementItemDetail]()
+        self.certuseritemdetail = [UserItemDetail]()
+        self.certroleitemdetail = [RoleItemDetail]()
+        
         self.api = API()
         
         var certdetailid : Int!
@@ -194,14 +208,27 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
             certdetailid = applicationInstanceId
         } else if certType == "Entitlement" {
             certdetailid = entitlementId
+        } else if certType == "User" {
+            certdetailid = userId
+        } else if certType == "Role" {
+            certdetailid = roleentityId
         }
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/certifications/certificationlineitemdetails/" + "\(certId)/" + certType + "/\(certdetailid)"
+        var roletype : String! = ""
+        if certType == "Role" {
+            roletype = "/members"
+        }
+        
+        let url = Persistent.endpoint + Persistent.baseroot + "/certifications/certificationlineitemdetails/" + "\(certId)/" + certType + "/\(certdetailid)" + roletype
         
         if certType == "ApplicationInstance" {
             api.loadCertItemDetails(myLoginId, apiUrl : url, completion : didLoadData)
         } else if certType == "Entitlement" {
             api.loadCertEntItemDetails(myLoginId, apiUrl: url, completion : didLoadEntDetailData)
+        } else if certType == "User" {
+            api.loadCertUserItemDetails(myLoginId, apiUrl: url, completion : didLoadUserDetailData)
+        } else if certType == "Role" {
+            api.loadCertRoleItemDetails(myLoginId, apiUrl: url, completion : didLoadRoleDetailData)
         }
         
         refreshControl = UIRefreshControl()
@@ -211,6 +238,28 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         
         self.navigationController?.interactivePopGestureRecognizer.delegate = self;
         
+    }
+    
+    func refresh(){
+        var certdetailid : Int!
+        if certType == "ApplicationInstance" {
+            certdetailid = applicationInstanceId
+        } else if certType == "Entitlement" {
+            certdetailid = entitlementId
+        }
+        let url = Persistent.endpoint + Persistent.baseroot + "/certifications/certificationlineitemdetails/" + "\(certId)/" + certType + "/\(certdetailid)"
+        
+        if certType == "ApplicationInstance" {
+            api.loadCertItemDetails(myLoginId, apiUrl : url, completion : didLoadData)
+        } else if certType == "Entitlement" {
+            api.loadCertEntItemDetails(myLoginId, apiUrl: url, completion : didLoadEntDetailData)
+        } else if certType == "User" {
+            api.loadCertUserItemDetails(myLoginId, apiUrl: url, completion : didLoadUserDetailData)
+        } else if certType == "Role" {
+            api.loadCertRoleItemDetails(myLoginId, apiUrl: url, completion : didLoadRoleDetailData)
+        }
+        
+        SoundPlayer.play("upvote.wav")
     }
     
     func didLoadData(loadedData: [CertItemDetail]){
@@ -241,6 +290,32 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         self.refreshControl?.endRefreshing()
     }
     
+    func didLoadUserDetailData(loadedData: [UserItemDetail]){
+        self.certuseritemdetail = [UserItemDetail]()
+        for data in loadedData {
+            self.certuseritemdetail.append(data)
+        }
+        if isFirstTime  {
+            self.view.showLoading()
+        }
+        self.tableView.reloadData()
+        self.view.hideLoading()
+        self.refreshControl?.endRefreshing()
+    }
+    
+    func didLoadRoleDetailData(loadedData: [RoleItemDetail]){
+        self.certroleitemdetail = [RoleItemDetail]()
+        for data in loadedData {
+            self.certroleitemdetail.append(data)
+        }
+        if isFirstTime  {
+            self.view.showLoading()
+        }
+        self.tableView.reloadData()
+        self.view.hideLoading()
+        self.refreshControl?.endRefreshing()
+    }
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -255,24 +330,6 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         }
     }
     
-    func refresh(){
-        var certdetailid : Int!
-        if certType == "ApplicationInstance" {
-            certdetailid = applicationInstanceId
-        } else if certType == "Entitlement" {
-            certdetailid = entitlementId
-        }
-        let url = Persistent.endpoint + Persistent.baseroot + "/certifications/certificationlineitemdetails/" + "\(certId)/" + certType + "/\(certdetailid)"
-        
-        if certType == "ApplicationInstance" {
-            api.loadCertItemDetails(myLoginId, apiUrl : url, completion : didLoadData)
-        } else if certType == "Entitlement" {
-            api.loadCertEntItemDetails(myLoginId, apiUrl: url, completion : didLoadEntDetailData)
-        }
-        
-        SoundPlayer.play("upvote.wav")
-    }
-    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var count : Int!
         
@@ -280,6 +337,10 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
             count = certitemdetail.count
         } else if certType == "Entitlement" {
             count = certentitemdetail.count
+        } else if certType == "User" {
+            count = certuseritemdetail.count
+        } else if certType == "Role" {
+            count = certroleitemdetail.count
         }
         
         return count
@@ -372,6 +433,66 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
                 
             cell.riskStatusLabel.text = info.riskSummary
             cell.descriptionLabel.text = info.accountName
+        }  else if certType == "User" {
+            let info = certuseritemdetail[indexPath.row]
+            
+            cell.certifyButton.tag = indexPath.row
+            cell.certifyButton.setBackgroundImage(UIImage(named:"btn-certify"), forState: .Normal)
+            cell.certifyButton.addTarget(self, action: "buttonOtherAction:", forControlEvents: .TouchUpInside)
+            
+            cell.revokeButton.tag = indexPath.row
+            cell.revokeButton.setBackgroundImage(UIImage(named:"btn-revoke"), forState: .Normal)
+            cell.revokeButton.addTarget(self, action: "buttonOtherAction:", forControlEvents: .TouchUpInside)
+            
+            cell.moreButton.tag = indexPath.row
+            cell.moreButton.setBackgroundImage(UIImage(named:"btn-more"), forState: .Normal)
+            cell.moreButton.addTarget(self, action: "buttonOtherAction:", forControlEvents: .TouchUpInside)
+            
+            cell.titleLabel.text = info.displayName
+            cell.riskLabel.text = "Risk"
+            
+            var itemRiskImage = UIImage()
+            if info.riskSummary == "Low Risk" {
+                itemRiskImage = UIImage(named: "risk-low")!
+            } else if info.riskSummary == "Medium Risk" {
+                itemRiskImage = UIImage(named: "risk-medium")!
+            } else if info.riskSummary == "High Risk" {
+                itemRiskImage = UIImage(named: "risk-high")!
+            }
+            cell.riskImage.image = itemRiskImage
+            
+            cell.riskStatusLabel.text = info.riskSummary
+            cell.descriptionLabel.text = ""
+        }  else if certType == "Role" {
+            let info = certroleitemdetail[indexPath.row]
+            
+            cell.certifyButton.tag = indexPath.row
+            cell.certifyButton.setBackgroundImage(UIImage(named:"btn-certify"), forState: .Normal)
+            cell.certifyButton.addTarget(self, action: "buttonOtherAction:", forControlEvents: .TouchUpInside)
+            
+            cell.revokeButton.tag = indexPath.row
+            cell.revokeButton.setBackgroundImage(UIImage(named:"btn-revoke"), forState: .Normal)
+            cell.revokeButton.addTarget(self, action: "buttonOtherAction:", forControlEvents: .TouchUpInside)
+            
+            cell.moreButton.tag = indexPath.row
+            cell.moreButton.setBackgroundImage(UIImage(named:"btn-more"), forState: .Normal)
+            cell.moreButton.addTarget(self, action: "buttonOtherAction:", forControlEvents: .TouchUpInside)
+            
+            cell.titleLabel.text = info.firstName + " " + info.lastName
+            cell.riskLabel.text = "Risk"
+            
+            var itemRiskImage = UIImage()
+            if info.riskSummary == "Low Risk" {
+                itemRiskImage = UIImage(named: "risk-low")!
+            } else if info.riskSummary == "Medium Risk" {
+                itemRiskImage = UIImage(named: "risk-medium")!
+            } else if info.riskSummary == "High Risk" {
+                itemRiskImage = UIImage(named: "risk-high")!
+            }
+            cell.riskImage.image = itemRiskImage
+            
+            cell.riskStatusLabel.text = info.riskSummary
+            cell.descriptionLabel.text = ""
         }
         
         if self.tableView.editing {
@@ -591,6 +712,95 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
             certaction = "REVOKE"
             alerttitle = "Certification Revoke Confirmation"
             alertmsg = "Please confirm certification revoke for " + displayname
+            
+        } else if action == "More" {
+            
+            certaction = ""
+            alerttitle = ""
+            alertmsg = ""
+        }
+        
+        var doalert : DOAlertController
+        
+        if action != "More" {
+            
+            doalert = DOAlertController(title: alerttitle, message: alertmsg, preferredStyle: .Alert)
+            
+            doalert.addTextFieldWithConfigurationHandler { textField in
+                textField.placeholder = " Enter Comments "
+            }
+            let certifyAction = DOAlertAction(title: "OK", style: .Default) { action in
+                let textField = doalert.textFields![0] as! UITextField
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.navigationController?.popViewControllerAnimated(true)
+                    
+                })
+            }
+            let cancelAction = DOAlertAction(title: "Cancel", style: .Cancel) { action in
+            }
+            doalert.addAction(cancelAction)
+            doalert.addAction(certifyAction)
+            
+            presentViewController(doalert, animated: true, completion: nil)
+        } else {
+            doalert = DOAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+            let certifyAction = DOAlertAction(title: "Certify", style: .Destructive) { action in
+            }
+            let abstainAction = DOAlertAction(title: "Abstain", style: .Destructive) { action in
+            }
+            let revokeAction = DOAlertAction(title: "Revoke", style: .Destructive) { action in
+            }
+            let conditionallyAction = DOAlertAction(title: "Certify Conditonally", style: .Destructive) { action in
+            }
+            let signoffAction = DOAlertAction(title: "Sign-off", style: .Destructive) { action in
+            }
+            let resetAction = DOAlertAction(title: "Reset Status", style: .Destructive) { action in
+            }
+            let editAction = DOAlertAction(title: "Edit Comment", style: .Destructive) { action in
+            }
+            let cancelAction = DOAlertAction(title: "Cancel", style: .Cancel) { action in
+            }
+            // Add the action.
+            doalert.addAction(certifyAction)
+            doalert.addAction(abstainAction)
+            doalert.addAction(revokeAction)
+            doalert.addAction(conditionallyAction)
+            doalert.addAction(signoffAction)
+            doalert.addAction(resetAction)
+            doalert.addAction(editAction)
+            doalert.addAction(cancelAction)
+            
+            presentViewController(doalert, animated: true, completion: nil)
+        }
+    }
+    
+    func buttonOtherAction(sender:UIButton!)
+    {
+        var certaction : String!
+        var alerttitle : String!
+        var alertmsg : String!
+        
+        var btnsendtag:UIButton = sender
+        let action = sender.currentTitle
+        
+        if certType == "User" {
+            
+        } else if certType == "Role" {
+            
+        }
+
+        if action == "Certify" {
+            
+            certaction = "CERTIFY"
+            alerttitle = "Certification Confirmation"
+            alertmsg = "Please confirm certification"
+            
+        } else if action == "Revoke" {
+            
+            certaction = "REVOKE"
+            alerttitle = "Certification Revoke Confirmation"
+            alertmsg = "Please confirm certification revoke"
             
         } else if action == "More" {
             
