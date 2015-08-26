@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Tasks {
+public class Tasks {
     
     var requestId : String!
     var taskId : String!
@@ -19,13 +19,16 @@ class Tasks {
     var taskState : String!
     var taskAssignedOn : String!
     var requestType : String!
-    var requestEntityName : String!
+    //var requestEntityName : String!
     var taskApprovalStage : String!
     var taskStageParticipantName : String!
     var requestRaisedByUser : String!
-    var beneficiearyUser : String!
+    //var beneficiearyUser : String!
     var requestJustification : String!
     var requestedDate : String!
+    
+    var beneficiaryUser : [BeneficiaryUser]!
+    var requestEntityName : [RequestEntityName]!
     
     init(data : NSDictionary){
         
@@ -38,17 +41,37 @@ class Tasks {
         self.taskState = Utils.getStringFromJSON(data, key: "taskState")
         self.taskAssignedOn = Utils.getStringFromJSON(data, key: "taskAssignedOn")
         self.requestType = Utils.getStringFromJSON(data, key: "requestType")
-        self.requestEntityName = Utils.getStringFromJSON(data, key: "requestEntityName")
+        //self.requestEntityName = Utils.getStringFromJSON(data, key: "requestEntityName")
         self.taskApprovalStage = Utils.getStringFromJSON(data, key: "taskApprovalStage")
         self.taskStageParticipantName = Utils.getStringFromJSON(data, key: "taskStageParticipantName")
         self.requestRaisedByUser = Utils.getStringFromJSON(data, key: "requestRaisedByUser")
-        self.beneficiearyUser = Utils.getStringFromJSON(data, key: "beneficiearyUser")
+        //self.beneficiearyUser = Utils.getStringFromJSON(data, key: "beneficiearyUser")
         self.requestJustification = Utils.getStringFromJSON(data, key: "requestJustification")
         self.requestedDate = Utils.getStringFromJSON(data, key: "requestedDate")
         
+        if let entityresults: NSArray = data["requestEntityName"] as? NSArray {
+            
+            var ents = [RequestEntityName]()
+            for ent in entityresults {
+                let ent = RequestEntityName(data: ent as! String)
+                ents.append(ent)
+            }
+            self.requestEntityName = ents
+        }
+        
+        if let beneficiaryresults: NSArray = data["beneficiearyUser"] as? NSArray {
+            
+            var bens = [BeneficiaryUser]()
+            for ben in beneficiaryresults {
+                let ben = BeneficiaryUser(data: ben as! String)
+                bens.append(ben)
+            }
+            self.beneficiaryUser = bens
+        }
+        
     }
     
-    /* sampel data
+    /* sample data
     
     requestId: "1160"
     taskId: "1a568e4d-17fa-4ff1-b069-4140d00f69da"
@@ -69,4 +92,18 @@ class Tasks {
     
     */
     
+}
+
+class RequestEntityName {
+    var entityname : String!
+    init(data : String){
+        self.entityname = data
+    }
+}
+
+class BeneficiaryUser {
+    var beneficiary : String!
+    init(data : String) {
+        self.beneficiary = data
+    }
 }

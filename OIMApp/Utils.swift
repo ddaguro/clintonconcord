@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class Utils {
+public class Utils {
     
     class func getStringFromJSON(data: NSDictionary, key: String) -> String{
         

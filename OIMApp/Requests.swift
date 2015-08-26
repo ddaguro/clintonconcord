@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Requests {
+public class Requests {
     
     var reqType : String!
     var reqId : String!

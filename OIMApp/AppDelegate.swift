@@ -15,7 +15,7 @@ var totalCounter: Int = 0
 var myRequestorId : String = ""
 var myLoginId : String = ""
 /* for caching */
-var myRequests : [Requests]!
+public var myRequests : [Requests]!
 var myApplications : [Applications]!
 var myActivities : [Activities]!
 var myFIDO : Bool = false
@@ -118,6 +118,8 @@ struct Persistent {
     // http://ec2-52-11-216-76.us-west-2.compute.amazonaws.com:8080/
     // http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9080/
     // http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9080/webappv2/rest/
+    // http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9080/
+    // http://idaasapi.persistent.com:9080/
     static let endpoint = "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9080/"
-    static let baseroot = "idaasv2/oig/v1"
+    static let baseroot = "idaas/oig/v1"
 }

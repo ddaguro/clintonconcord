@@ -252,28 +252,46 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.moreBtn.tag = indexPath.row
         cell.moreBtn.setBackgroundImage(UIImage(named:"btn-more"), forState: .Normal)
         cell.moreBtn.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
+
+        var titleText = ""
+        for ent in task.requestEntityName {
+            if titleText.isEmpty {
+                titleText = ent.entityname
+            } else {
+                titleText += " , \(ent.entityname)"
+            }
+        }
+        cell.nameLabel.text = titleText
+        cell.postLabel?.text = task.requestType
+        cell.beneficiaryLabel.text = "Beneficiaries"
         
+        var beneficiaryText = ""
+        for ben in task.beneficiaryUser {
+            if beneficiaryText.isEmpty {
+                beneficiaryText = ben.beneficiary
+            } else {
+                beneficiaryText += " , \(ben.beneficiary)"
+            }
+        }
         var username : String
-        if task.beneficiearyUser == "Kevin Clark" {
+        if beneficiaryText == "Kevin Clark" {
             username = "kclark"
             cell.typeImageView.image = UIImage(named: "kclark")
-        } else if task.beneficiearyUser == "Grace Davis" {
+        } else if beneficiaryText == "Grace Davis" {
             username = "gdavis"
             cell.typeImageView.image = UIImage(named: "gdavis")
-        } else if task.beneficiearyUser == "Danny Crane" {
+        } else if beneficiaryText == "Danny Crane" {
             username = "dcrane"
             cell.typeImageView.image = UIImage(named: "dcrane")
-        } else if task.beneficiearyUser == "Billie Rojero" {
+        } else if beneficiaryText == "Billie Rojero" {
             username = "brojero"
             cell.typeImageView.image = UIImage(named: "brojero")
         } else {
             cell.typeImageView.image = UIImage(named: "profileBlankPic")
         }
-
-        cell.nameLabel.text = task.requestEntityName
-        cell.postLabel?.text = task.requestType
-        cell.beneficiaryLabel.text = "Beneficiaries"
-        cell.beneiciaryUserLabel.text = task.beneficiearyUser
+        cell.beneiciaryUserLabel.text = beneficiaryText
+        
+        //cell.beneiciaryUserLabel.text = task.beneficiearyUser.stringByReplacingOccurrencesOfString("[", withString: "").stringByReplacingOccurrencesOfString("]", withString: "")
         cell.justificationLabel.text = task.requestJustification
         cell.dateLabel.text = task.requestedDate + "      |      Request " + task.requestId
         
@@ -336,110 +354,6 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         return view
     }
     
-    /*
-    func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        
-        var footerView: UIView! = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 40))
-        footerView.backgroundColor = UIColor(red: 236.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, alpha: 1)
-        
-        let bulkButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
-        bulkButton.backgroundColor = UIColor(red: 236.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, alpha: 1)
-        bulkButton.setTitle("BULK ACTION", forState: UIControlState.Normal)
-        bulkButton.setTitleColor(UIColor.darkGrayColor(), forState: UIControlState.Normal)
-        bulkButton.frame = CGRectMake(0, 0, self.view.frame.size.width, 40)
-        bulkButton.addTarget(self, action: "buttonTouched:", forControlEvents: UIControlEvents.TouchUpInside)
-        
-        footerView.addSubview(bulkButton)
-        
-        return footerView
-    }
-    
-    func buttonTouched(sender:UIButton!){
-        if self.tableView.editing {
-            //println("APPROVE")
-            var doalert : DOAlertController
-            doalert = DOAlertController(title: "Approval Confirmation", message: "Bulk Action", preferredStyle: .Alert)
-            
-            // Add the text field for text entry.
-            doalert.addTextFieldWithConfigurationHandler { textField in
-                // If you need to customize the text field, you can do so here.
-                textField.placeholder = " Enter Comments"
-            }
-            
-            let approveAction = DOAlertAction(title: "OK", style: .Default) { action in
-                
-                let textField = doalert.textFields![0] as! UITextField
-                
-                let url = Persistent.endpoint + Persistent.baseroot + "/approvals"
-  
-                var taskaction = "APPROVE" as String!
-  
-                var paramstring = "{\"requester\": {\"User Login\": \"" + myLoginId + "\"},\"task\": ["
-                
-                for var i = 0; i < self.selectedtasks.count; ++i {
-                    let task = self.selectedtasks[i]
-                    paramstring += "{\"requestId\": \""
-                    paramstring += task.requestId + "\",\"taskId\": \""
-                    paramstring += task.taskId + "\", \"taskNumber\": \""
-                    paramstring += task.taskNumber + "\",\"taskPriority\": \""
-                    paramstring += task.taskPriority + "\",\"taskState\": \""
-                    paramstring += task.taskState + "\",\"taskTitle\": \""
-                    paramstring += task.taskTitle + "\" ,\"taskActionComments\": \""
-                    paramstring += textField.text + "\",\"taskAction\": \""
-                    paramstring += taskaction + "\"},"
-                }
-                paramstring += "]}"
-                
-                
-                var idx = advance(paramstring.endIndex, -3)
-                
-                var substring1 = paramstring.substringToIndex(idx)
-                substring1 += "]}"
-                //println(substring1)
-                
-                self.api.RequestApprovalAction(myLoginId, params : substring1, url : url) { (succeeded: Bool, msg: String) -> () in
-                var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
-                if(succeeded) {
-                    alert.title = "Success!"
-                    alert.message = msg
-                
-                }
-                else {
-                    alert.title = "Failed : ("
-                    alert.message = msg
-                }
-                
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.view.showLoading()
-                    self.refresh()
-                    
-                    self.tableView.setEditing(true, animated: true)
-                    self.btnEditLabel.title = "Cancel"
-                
-                    })
-                }
-            }
-            let cancelAction = DOAlertAction(title: "Cancel", style: .Cancel) { action in
-            }
-            doalert.addAction(cancelAction)
-            doalert.addAction(approveAction)
-            
-            presentViewController(doalert, animated: true, completion: nil)
-        } else {
-            var alert = UIAlertView(title: "Error : (", message: "You must select at least one", delegate: nil, cancelButtonTitle: "Okay")
-            alert.show()
-        }
-    }
-    
-    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 60.0
-    }
-    */
-    
-    //func tableView(tableView: UITableView, shouldIndentWhileEditingRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-    //    return false
-    //}
-    
     @IBAction func presentNavigation(sender: AnyObject?){
         
         self.view.endEditing(true)
@@ -476,17 +390,26 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         var alerttitle : String!
         var alertmsg : String!
         
+        var titleText = ""
+        for ent in task.requestEntityName {
+            if titleText.isEmpty {
+                titleText = ent.entityname
+            } else {
+                titleText += " , \(ent.entityname)"
+            }
+        }
+        
         if action == "Approve" {
             
             taskaction = "APPROVE"
             alerttitle = "Approval Confirmation"
-            alertmsg = "Please confirm approval for " + task.requestEntityName + " Requested by " + task.requestRaisedByUser
+            alertmsg = "Please confirm approval for " + titleText + " Requested by " + task.requestRaisedByUser
             
         } else if action == "Decline" {
             
             taskaction = "REJECT"
             alerttitle = "Decline Confirmation"
-            alertmsg = "Please confirm rejection of " + task.requestEntityName + " Requested by " + task.requestRaisedByUser
+            alertmsg = "Please confirm rejection of " + titleText + " Requested by " + task.requestRaisedByUser
             
         } else if action == "More" {
             

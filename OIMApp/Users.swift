@@ -13,8 +13,8 @@ class Users {
     var DisplayName : String!
     var Email : String!
     var UserLogin : String!
-    var Title : String!
-    var Role : String!
+    //var Title : String!
+    //var Role : String!
     
     
     init(data : NSDictionary){
@@ -22,8 +22,8 @@ class Users {
         self.DisplayName = Utils.getStringFromJSON(data, key: "Display Name")
         self.Email = Utils.getStringFromJSON(data, key: "Email")
         self.UserLogin = Utils.getStringFromJSON(data, key: "User Login")
-        self.Title = Utils.getStringFromJSON(data, key: "Title")
-        self.Role = Utils.getStringFromJSON(data, key: "Role")
+        //self.Title = Utils.getStringFromJSON(data, key: "Title")
+        //self.Role = Utils.getStringFromJSON(data, key: "Role")
         
     }
 }

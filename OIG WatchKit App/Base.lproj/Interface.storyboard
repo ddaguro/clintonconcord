@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AgC-eL-Hgc">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="7701"/>
+    </dependencies>
+    <scenes>
+        <!--Approvals-->
+        <scene sceneID="aou-V4-d1y">
+            <objects>
+                <controller identifier="InterfaceController" title="Approvals" id="AgC-eL-Hgc" customClass="InterfaceController" customModule="OIG_WatchKit_App" customModuleProvider="target">
+                    <items>
+                        <table alignment="left" id="XyJ-oe-TjJ">
+                            <items>
+                                <tableRow identifier="ApproveTableRowController" id="FFd-Fx-Z7x" customClass="ApproveTableRowController" customModule="OIG_WatchKit_Extension">
+                                    <group key="rootItem" width="1" height="92" alignment="left" layout="vertical" id="k3h-03-dbN">
+                                        <items>
+                                            <label alignment="left" text="Label" id="P2p-cv-toW">
+                                                <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
+                                            </label>
+                                            <label alignment="left" text="Label" id="bcw-Wn-oyM">
+                                                <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
+                                            </label>
+                                            <label alignment="left" text="Label" id="faQ-9t-Tvx"/>
+                                            <label alignment="left" text="Label" id="h7O-y8-ytz"/>
+                                        </items>
+                                        <connections>
+                                            <segue destination="iAq-Em-79O" kind="modal" identifier="ApproveDetails" id="CzF-vo-ikS"/>
+                                        </connections>
+                                    </group>
+                                    <connections>
+                                        <outlet property="dateLabel" destination="h7O-y8-ytz" id="wE2-jn-V1P"/>
+                                        <outlet property="descriptionLabel" destination="faQ-9t-Tvx" id="67N-FL-nIj"/>
+                                        <outlet property="subtitleLabel" destination="bcw-Wn-oyM" id="N7n-4Y-F0s"/>
+                                        <outlet property="titleLabel" destination="P2p-cv-toW" id="xlA-0S-8KU"/>
+                                    </connections>
+                                </tableRow>
+                            </items>
+                        </table>
+                    </items>
+                    <connections>
+                        <outlet property="approveTable" destination="XyJ-oe-TjJ" id="gZF-zw-MKC"/>
+                        <segue destination="0Aq-Nb-xyR" kind="relationship" relationship="nextPage" id="XFC-fD-5wd"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="397" y="337"/>
+        </scene>
+        <!--Detail Interface Controller-->
+        <scene sceneID="1ay-57-Uy3">
+            <objects>
+                <controller id="iAq-Em-79O" customClass="DetailInterfaceController" customModule="OIG_WatchKit_Extension">
+                    <items>
+                        <label alignment="left" text="Label" id="VAA-gX-v34"/>
+                        <label alignment="left" text="Label" id="Zef-Im-9xQ"/>
+                        <label alignment="left" text="Label" id="L8Z-6W-S9V"/>
+                        <label alignment="left" text="Label" id="bJt-nU-YtG"/>
+                        <label alignment="left" text="Label" id="ne6-3L-YWe"/>
+                        <group width="1" height="55" alignment="center" id="Mjv-eW-CJA">
+                            <items>
+                                <button width="55" height="55" alignment="left" id="6Kk-27-2To">
+                                    <connections>
+                                        <action selector="ApproveAction" destination="iAq-Em-79O" id="4cj-nm-tGg"/>
+                                    </connections>
+                                </button>
+                                <button width="55" height="55" alignment="right" id="kEB-g8-VHf">
+                                    <connections>
+                                        <action selector="DeclineAction" destination="iAq-Em-79O" id="YUP-Yo-XxE"/>
+                                    </connections>
+                                </button>
+                            </items>
+                        </group>
+                        <group width="1" alignment="center" id="zvi-Qm-nG1">
+                            <items>
+                                <label alignment="left" text="Label" id="1GB-oi-Ecc"/>
+                                <label alignment="right" text="Label" id="FHR-eF-NEX"/>
+                            </items>
+                        </group>
+                    </items>
+                    <connections>
+                        <outlet property="approveBtn" destination="6Kk-27-2To" id="XkZ-Zd-qmL"/>
+                        <outlet property="approveLabel" destination="1GB-oi-Ecc" id="56O-Jy-3zW"/>
+                        <outlet property="beneficiaryLabel" destination="L8Z-6W-S9V" id="e9L-se-0KA"/>
+                        <outlet property="beneficiaryTitleLabel" destination="Zef-Im-9xQ" id="4XC-uL-uxg"/>
+                        <outlet property="dateLabel" destination="ne6-3L-YWe" id="WFd-QH-aH7"/>
+                        <outlet property="declineBtn" destination="kEB-g8-VHf" id="rnU-NU-qbA"/>
+                        <outlet property="declineLabel" destination="FHR-eF-NEX" id="RZu-7m-ak5"/>
+                        <outlet property="descriptionLabel" destination="bJt-nU-YtG" id="62f-uz-Ew3"/>
+                        <outlet property="titleLabel" destination="VAA-gX-v34" id="ysc-Ks-VB3"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="781" y="426"/>
+        </scene>
+        <!--Static Notification Interface Controller-->
+        <scene sceneID="AEw-b0-oYE">
+            <objects>
+                <notificationController id="YCC-NB-fut">
+                    <items>
+                        <label alignment="left" text="Alert Label" id="IdU-wH-bcW"/>
+                    </items>
+                    <notificationCategory key="notificationCategory" identifier="myCategory" id="JfB-70-Muf"/>
+                    <connections>
+                        <outlet property="notificationAlertLabel" destination="IdU-wH-bcW" id="JKC-fr-R95"/>
+                        <segue destination="4sK-HA-Art" kind="relationship" relationship="dynamicNotificationInterface" id="kXh-Jw-8B1"/>
+                    </connections>
+                </notificationController>
+            </objects>
+            <point key="canvasLocation" x="220" y="643"/>
+        </scene>
+        <!--Notification Controller-->
+        <scene sceneID="ZPc-GJ-vnh">
+            <objects>
+                <controller id="4sK-HA-Art" customClass="NotificationController" customModule="OIG_WatchKit_App" customModuleProvider="target"/>
+            </objects>
+            <point key="canvasLocation" x="468" y="643"/>
+        </scene>
+        <!--Approve Chart Interface Controller-->
+        <scene sceneID="fSy-Qr-Kcj">
+            <objects>
+                <controller id="0Aq-Nb-xyR" customClass="ApproveChartInterfaceController" customModule="OIG_WatchKit_Extension">
+                    <items>
+                        <group width="1" alignment="left" id="Eih-jS-n58">
+                            <items>
+                                <group width="1" height="1" alignment="left" backgroundImage="singleArc0.png" contentMode="scaleAspectFit" id="gEA-oT-3N8">
+                                    <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
+                                </group>
+                            </items>
+                            <edgeInsets key="margins" left="10" right="10" top="0.0" bottom="0.0"/>
+                        </group>
+                    </items>
+                    <connections>
+                        <outlet property="group" destination="gEA-oT-3N8" id="Tsr-hz-g8R"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="702" y="103"/>
+        </scene>
+    </scenes>
+    <color key="tintColor" red="0.23921568630000001" green="0.5568627451" blue="0.83137254900000002" alpha="1" colorSpace="calibratedRGB"/>
+</document>

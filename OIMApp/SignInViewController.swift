@@ -286,7 +286,7 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
             users.append(usr)
             
             NSUserDefaults.standardUserDefaults().setObject(usr.DisplayName, forKey: "DisplayName")
-            NSUserDefaults.standardUserDefaults().setObject(usr.Title, forKey: "Title")
+            //NSUserDefaults.standardUserDefaults().setObject(usr.Title, forKey: "Title")
             NSUserDefaults.standardUserDefaults().synchronize()
         }
         
@@ -315,6 +315,7 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
         if let dirs : [String] = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true) as? [String] {
             let dir = dirs[0] //documents directory
             let path = dir.stringByAppendingPathComponent(file);
+            println(path)
             //reading
             let text = String(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil)
             
