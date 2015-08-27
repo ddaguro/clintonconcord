@@ -11,7 +11,7 @@ import Foundation
 
 
 class DetailInterfaceController: WKInterfaceController {
-    let endpoint = "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9080/"
+    let endpoint = "http://idaasapi.persistent.com:9080/"
     let baseroot = "idaas/oig/v1"
     let myLoginId = "dcrane"
     var paramstring : String = ""
@@ -84,7 +84,7 @@ class DetailInterfaceController: WKInterfaceController {
             beneficiaryTitleLabel.setText("Beneficiary")
             beneficiaryLabel.setText(beneficiaryText)
             descriptionLabel.setText(tasks.requestJustification)
-            dateLabel.setText(tasks.requestedDate)
+            dateLabel.setText(formatDate(tasks.requestedDate))
             approveBtn.setBackgroundImage(UIImage(named: "btn-approve"))
             approveLabel.setText("APPROVE")
             declineBtn.setBackgroundImage(UIImage(named: "btn-decline"))
@@ -102,6 +102,17 @@ class DetailInterfaceController: WKInterfaceController {
             paramstring += "APPROVE" + "\"}]}"
             
         }
+    }
+    
+    func formatDate(dateString: String) -> String {
+        
+        let formatter = NSDateFormatter()
+        //Thu Aug 13 18:19:07 EDT 2015
+        formatter.dateFormat = "EEE MMM dd H:mm:ss yyyy" //yyyy-MM-dd'T'HH:mm:ssZ
+        let date = formatter.dateFromString(dateString.stringByReplacingOccurrencesOfString("EDT", withString: ""))
+        
+        formatter.dateFormat = "EEE, MMM dd h:mm a"
+        return formatter.stringFromDate(date!)
     }
     
     override func willActivate() {

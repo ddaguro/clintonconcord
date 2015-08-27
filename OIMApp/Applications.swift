@@ -25,18 +25,19 @@ class Applications {
     
     
     /* sample data
-
-    status: "Provisioned"
-    provisionedOnDate: "2013-02-28"
-    accountType: "primary"
-    requestKey: "34"
-    accountDescriptiveField: "dcrane"
-    displayName: "Badge Access"
-    description: "Badge Access for physical access control"
-    applicationInstanceName: "badging"
-    dataSetName: "badging"
-    uiFragmentName: "badging"
-    appInstanceKey: 1
+    
+    "provisionedOnDate": "2015-06-18",
+    "accountType": "unknown",
+    "requestKey": "6008",
+    "accountDescriptiveField": "2323",
+    "status": "Provisioning",
+    "appInstanceKey": 1,
+    "applicationInstanceName": "PhysicalBadge",
+    "dataSetName": "PhysicalBadge",
+    "catalogId": "1",
+    "uiFragmentName": "PhysicalBadge",
+    "description": "Provides physical badge / smartcard to access enterprise facilities",
+    "displayName": "Physical Badge Access"
     
     */
     

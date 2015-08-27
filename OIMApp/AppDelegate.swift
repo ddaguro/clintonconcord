@@ -117,9 +117,9 @@ struct Persistent {
     // http://73.50.120.243:9190
     // http://ec2-52-11-216-76.us-west-2.compute.amazonaws.com:8080/
     // http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9080/
-    // http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9080/webappv2/rest/
-    // http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9080/
     // http://idaasapi.persistent.com:9080/
-    static let endpoint = "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9080/"
+    //"host" : "idaasapi.persistent.com:9080",
+    //"basePath" : "/idaas/oig/v1",
+    static let endpoint = "http://idaasapi.persistent.com:9080/"
     static let baseroot = "idaas/oig/v1"
 }

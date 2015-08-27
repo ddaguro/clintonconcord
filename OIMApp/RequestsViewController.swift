@@ -149,10 +149,10 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
                 text += " , \(action.entity)"
             }
         }
-        cell.nameLabel.text = text
+        cell.nameLabel.text = text.length == 0 ? dataObject.reqType : text
 
-        cell.postLabel?.text = dataObject.reqStatus
-        cell.dateLabel.text = dataObject.reqCreatedOn
+        cell.postLabel?.text = dataObject.reqStatus.stringByReplacingOccurrencesOfString("Request ", withString: "")
+        cell.dateLabel.text = formatDate(dataObject.reqCreatedOn)
         
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         return cell
@@ -187,6 +187,17 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         
         let toViewController = segue.destinationViewController as! UIViewController
         toViewController.transitioningDelegate = self.transitionOperator
+    }
+    
+    func formatDate(dateString: String) -> String {
+        
+        let formatter = NSDateFormatter()
+        //Thu Aug 13 18:19:07 EDT 2015
+        formatter.dateFormat = "EEE MMM dd H:mm:ss yyyy" //yyyy-MM-dd'T'HH:mm:ssZ
+        let date = formatter.dateFromString(dateString.stringByReplacingOccurrencesOfString("EDT", withString: ""))
+        
+        formatter.dateFormat = "EEE, MMM dd yyyy h:mm a"
+        return formatter.stringFromDate(date!)
     }
     
 }

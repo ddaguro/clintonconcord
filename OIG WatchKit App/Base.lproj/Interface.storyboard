@@ -13,16 +13,20 @@
                         <table alignment="left" id="XyJ-oe-TjJ">
                             <items>
                                 <tableRow identifier="ApproveTableRowController" id="FFd-Fx-Z7x" customClass="ApproveTableRowController" customModule="OIG_WatchKit_Extension">
-                                    <group key="rootItem" width="1" height="92" alignment="left" layout="vertical" id="k3h-03-dbN">
+                                    <group key="rootItem" width="1" height="0.0" alignment="left" layout="vertical" id="k3h-03-dbN">
                                         <items>
                                             <label alignment="left" text="Label" id="P2p-cv-toW">
                                                 <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
                                             </label>
                                             <label alignment="left" text="Label" id="bcw-Wn-oyM">
-                                                <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
+                                                <fontDescription key="font" style="UICTFontTextStyleSubhead"/>
                                             </label>
-                                            <label alignment="left" text="Label" id="faQ-9t-Tvx"/>
-                                            <label alignment="left" text="Label" id="h7O-y8-ytz"/>
+                                            <label alignment="left" text="Label" numberOfLines="5" id="faQ-9t-Tvx">
+                                                <fontDescription key="font" type="system" pointSize="10"/>
+                                            </label>
+                                            <label alignment="left" text="Label" id="h7O-y8-ytz">
+                                                <fontDescription key="font" type="system" pointSize="8"/>
+                                            </label>
                                         </items>
                                         <connections>
                                             <segue destination="iAq-Em-79O" kind="modal" identifier="ApproveDetails" id="CzF-vo-ikS"/>
@@ -37,6 +41,12 @@
                                 </tableRow>
                             </items>
                         </table>
+                        <button width="1" alignment="left" title="Refresh" id="4Oo-61-uZt">
+                            <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="refreshButton" destination="AgC-eL-Hgc" id="0b5-WD-e27"/>
+                            </connections>
+                        </button>
                     </items>
                     <connections>
                         <outlet property="approveTable" destination="XyJ-oe-TjJ" id="gZF-zw-MKC"/>
@@ -51,11 +61,21 @@
             <objects>
                 <controller id="iAq-Em-79O" customClass="DetailInterfaceController" customModule="OIG_WatchKit_Extension">
                     <items>
-                        <label alignment="left" text="Label" id="VAA-gX-v34"/>
-                        <label alignment="left" text="Label" id="Zef-Im-9xQ"/>
-                        <label alignment="left" text="Label" id="L8Z-6W-S9V"/>
-                        <label alignment="left" text="Label" id="bJt-nU-YtG"/>
-                        <label alignment="left" text="Label" id="ne6-3L-YWe"/>
+                        <label alignment="left" text="Label" id="VAA-gX-v34">
+                            <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
+                        </label>
+                        <label alignment="left" text="Label" id="Zef-Im-9xQ">
+                            <fontDescription key="font" type="system" pointSize="10"/>
+                        </label>
+                        <label alignment="left" text="Label" id="L8Z-6W-S9V">
+                            <fontDescription key="font" style="UICTFontTextStyleSubhead"/>
+                        </label>
+                        <label alignment="left" text="Label" numberOfLines="5" id="bJt-nU-YtG">
+                            <fontDescription key="font" type="system" pointSize="10"/>
+                        </label>
+                        <label alignment="left" text="Label" id="ne6-3L-YWe">
+                            <fontDescription key="font" type="system" pointSize="8"/>
+                        </label>
                         <group width="1" height="55" alignment="center" id="Mjv-eW-CJA">
                             <items>
                                 <button width="55" height="55" alignment="left" id="6Kk-27-2To">
@@ -69,11 +89,16 @@
                                     </connections>
                                 </button>
                             </items>
+                            <edgeInsets key="margins" left="5" right="5" top="0.0" bottom="0.0"/>
                         </group>
                         <group width="1" alignment="center" id="zvi-Qm-nG1">
                             <items>
-                                <label alignment="left" text="Label" id="1GB-oi-Ecc"/>
-                                <label alignment="right" text="Label" id="FHR-eF-NEX"/>
+                                <label alignment="left" text="Label" id="1GB-oi-Ecc">
+                                    <fontDescription key="font" style="UICTFontTextStyleSubhead"/>
+                                </label>
+                                <label alignment="right" text="Label" id="FHR-eF-NEX">
+                                    <fontDescription key="font" style="UICTFontTextStyleSubhead"/>
+                                </label>
                             </items>
                         </group>
                     </items>
@@ -115,10 +140,10 @@
             </objects>
             <point key="canvasLocation" x="468" y="643"/>
         </scene>
-        <!--Approve Chart Interface Controller-->
+        <!--Approvals-->
         <scene sceneID="fSy-Qr-Kcj">
             <objects>
-                <controller id="0Aq-Nb-xyR" customClass="ApproveChartInterfaceController" customModule="OIG_WatchKit_Extension">
+                <controller title="Approvals" id="0Aq-Nb-xyR" customClass="ApproveChartInterfaceController" customModule="OIG_WatchKit_Extension">
                     <items>
                         <group width="1" alignment="left" id="Eih-jS-n58">
                             <items>

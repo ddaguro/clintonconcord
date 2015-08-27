@@ -14,7 +14,7 @@ class ApproveChartInterfaceController: WKInterfaceController {
 
     @IBOutlet weak var group: WKInterfaceGroup!
     let duration = 1.2
-    let endpoint = "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9080/"
+    let endpoint = "http://idaasapi.persistent.com:9080/"
     let baseroot = "idaas/oig/v1"
     let myLoginId = "dcrane"
     var myCertificates: Int = 0

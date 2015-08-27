@@ -374,13 +374,13 @@ class API{
                     let user = Users(data: user as! NSDictionary)
                     users.append(user)
                 }
-                /*
+                
                 let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
                 dispatch_async(dispatch_get_global_queue(priority, 0)) {
                     dispatch_async(dispatch_get_main_queue()) {
                         completion(users)
                     }
-                }*/
+                }
             }
         })
         

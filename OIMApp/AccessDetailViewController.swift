@@ -138,21 +138,21 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
         if catalog == "Applications" {
             let dataObject = applications[indexPath.row]
             cell.titleLabel.text = dataObject.displayName
-            cell.subtitleLabel.text = dataObject.description
+            cell.subtitleLabel.text = dataObject.description.length == 0 ? dataObject.displayName : dataObject.description
             cell.dateImage?.image = UIImage(named: "clock")
-            cell.dateLabel?.text = dataObject.provisionedOnDate
+            cell.dateLabel?.text = "Date Provisioned On " + formatDate(dataObject.provisionedOnDate)
         } else if catalog == "Entitlements" {
             let dataObject = entitlements[indexPath.row]
             cell.titleLabel.text = dataObject.entitlementDisplayName
-            cell.subtitleLabel.text = dataObject.entitlementDescription
+            cell.subtitleLabel.text = dataObject.entitlementDescription.length == 0 ? dataObject.entitlementDisplayName : dataObject.entitlementDescription
             cell.dateImage?.image = UIImage(named: "clock")
-            cell.dateLabel?.text = dataObject.provisionedOnDate
+            cell.dateLabel?.text = "Date Provisioned On " + formatDate(dataObject.provisionedOnDate)
         } else if catalog == "Roles" {
             let dataObject = roles[indexPath.row]
             cell.titleLabel.text = dataObject.roleName
-            cell.subtitleLabel.text = dataObject.description
+            cell.subtitleLabel.text = dataObject.description.length == 0 ? dataObject.roleName : dataObject.description
             cell.dateImage?.image = UIImage(named: "clock")
-            cell.dateLabel?.text = dataObject.assignedOn
+            cell.dateLabel?.text = "Date Assigned On " + formatDate(dataObject.assignedOn)
         }
         
         cell.selectionStyle = UITableViewCellSelectionStyle.None
@@ -213,6 +213,16 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
         self.refreshControl?.endRefreshing()
     }
     
+    func formatDate(dateString: String) -> String {
+        
+        let formatter = NSDateFormatter()
+        //Thu Aug 13 18:19:07 EDT 2015
+        formatter.dateFormat = "yyyy-MM-dd"
+        let date = formatter.dateFromString(dateString)
+        
+        formatter.dateFormat = "EEE, MMM dd yyyy"
+        return formatter.stringFromDate(date!)
+    }
 
 }
 

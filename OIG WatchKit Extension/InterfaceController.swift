@@ -14,11 +14,16 @@ class InterfaceController: WKInterfaceController {
 
     @IBOutlet var approveTable: WKInterfaceTable!
     
-    let endpoint = "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9080/"
+    let endpoint = "http://idaasapi.persistent.com:9080/"
     let baseroot = "idaas/oig/v1"
     let myLoginId = "dcrane"
     
     var tasks : [Tasks]!
+    
+    @IBAction func refreshButton() {
+        self.loadTableData()
+        approveTable.scrollToRowAtIndex(0)
+    }
     
     override func awakeWithContext(context: AnyObject?) {
         super.awakeWithContext(context)
@@ -106,6 +111,8 @@ class InterfaceController: WKInterfaceController {
     override func willActivate() {
         // This method is called when watch view controller is about to be visible to user
         super.willActivate()
+        //self.loadTableData()
+        approveTable.scrollToRowAtIndex(0)
     }
 
     override func didDeactivate() {
@@ -204,7 +211,7 @@ class InterfaceController: WKInterfaceController {
         formatter.dateFormat = "EEE MMM dd H:mm:ss yyyy" //yyyy-MM-dd'T'HH:mm:ssZ
         let date = formatter.dateFromString(dateString.stringByReplacingOccurrencesOfString("EDT", withString: ""))
         
-        formatter.dateFormat = "EEE, MMM dd"
+        formatter.dateFormat = "EEE, MMM dd h:mm a"
         return formatter.stringFromDate(date!)
     }
 }

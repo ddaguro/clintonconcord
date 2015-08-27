@@ -286,7 +286,7 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
             users.append(usr)
             
             NSUserDefaults.standardUserDefaults().setObject(usr.DisplayName, forKey: "DisplayName")
-            //NSUserDefaults.standardUserDefaults().setObject(usr.Title, forKey: "Title")
+            NSUserDefaults.standardUserDefaults().setObject(usr.Title, forKey: "Title")
             NSUserDefaults.standardUserDefaults().synchronize()
         }
         

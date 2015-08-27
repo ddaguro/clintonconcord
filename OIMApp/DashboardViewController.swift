@@ -383,7 +383,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             }
         }
         cell.titleLabel.text = titleText
-        cell.titleLabel.adjustsFontSizeToFitWidth = true
+        //cell.titleLabel.adjustsFontSizeToFitWidth = true
         //cell.statusImage.image = info.reqStatus == "Request Completed" ? UIImage(named: "badge-new") : UIImage(named: "Badge-Assigned")
         cell.statusLabel.text = "  " + info.reqStatus.stringByReplacingOccurrencesOfString("Request ", withString: "") + "  "
         
