@@ -15,7 +15,8 @@
                                 <tableRow identifier="ApproveTableRowController" id="FFd-Fx-Z7x" customClass="ApproveTableRowController" customModule="OIG_WatchKit_Extension">
                                     <group key="rootItem" width="1" height="0.0" alignment="left" layout="vertical" id="k3h-03-dbN">
                                         <items>
-                                            <label alignment="left" text="Label" id="P2p-cv-toW">
+                                            <label alignment="left" text="Label" numberOfLines="2" id="P2p-cv-toW">
+                                                <color key="textColor" red="0.23921568630000001" green="0.5568627451" blue="0.83137254900000002" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
                                             </label>
                                             <label alignment="left" text="Label" id="bcw-Wn-oyM">
@@ -61,21 +62,25 @@
             <objects>
                 <controller id="iAq-Em-79O" customClass="DetailInterfaceController" customModule="OIG_WatchKit_Extension">
                     <items>
-                        <label alignment="left" text="Label" id="VAA-gX-v34">
-                            <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
-                        </label>
-                        <label alignment="left" text="Label" id="Zef-Im-9xQ">
-                            <fontDescription key="font" type="system" pointSize="10"/>
-                        </label>
-                        <label alignment="left" text="Label" id="L8Z-6W-S9V">
-                            <fontDescription key="font" style="UICTFontTextStyleSubhead"/>
-                        </label>
-                        <label alignment="left" text="Label" numberOfLines="5" id="bJt-nU-YtG">
-                            <fontDescription key="font" type="system" pointSize="10"/>
-                        </label>
-                        <label alignment="left" text="Label" id="ne6-3L-YWe">
-                            <fontDescription key="font" type="system" pointSize="8"/>
-                        </label>
+                        <group alignment="center" layout="vertical" id="PiA-aU-6PK">
+                            <items>
+                                <imageView width="55" height="55" alignment="center" id="TrF-PJ-1Pm"/>
+                                <label alignment="center" text="Label" numberOfLines="3" id="L8Z-6W-S9V">
+                                    <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
+                                </label>
+                                <label alignment="center" text="Label" numberOfLines="3" id="VAA-gX-v34">
+                                    <color key="textColor" red="0.23921568630000001" green="0.5568627451" blue="0.83137254900000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <fontDescription key="font" style="UICTFontTextStyleSubhead"/>
+                                </label>
+                                <label alignment="left" text="Label" numberOfLines="5" id="bJt-nU-YtG">
+                                    <fontDescription key="font" type="system" pointSize="10"/>
+                                </label>
+                                <label alignment="left" text="Label" id="ne6-3L-YWe">
+                                    <fontDescription key="font" type="system" pointSize="8"/>
+                                </label>
+                            </items>
+                            <edgeInsets key="margins" left="2" right="2" top="2" bottom="2"/>
+                        </group>
                         <group width="1" height="55" alignment="center" id="Mjv-eW-CJA">
                             <items>
                                 <button width="55" height="55" alignment="left" id="6Kk-27-2To">
@@ -89,7 +94,7 @@
                                     </connections>
                                 </button>
                             </items>
-                            <edgeInsets key="margins" left="5" right="5" top="0.0" bottom="0.0"/>
+                            <edgeInsets key="margins" left="7" right="7" top="0.0" bottom="0.0"/>
                         </group>
                         <group width="1" alignment="center" id="zvi-Qm-nG1">
                             <items>
@@ -106,11 +111,11 @@
                         <outlet property="approveBtn" destination="6Kk-27-2To" id="XkZ-Zd-qmL"/>
                         <outlet property="approveLabel" destination="1GB-oi-Ecc" id="56O-Jy-3zW"/>
                         <outlet property="beneficiaryLabel" destination="L8Z-6W-S9V" id="e9L-se-0KA"/>
-                        <outlet property="beneficiaryTitleLabel" destination="Zef-Im-9xQ" id="4XC-uL-uxg"/>
                         <outlet property="dateLabel" destination="ne6-3L-YWe" id="WFd-QH-aH7"/>
                         <outlet property="declineBtn" destination="kEB-g8-VHf" id="rnU-NU-qbA"/>
                         <outlet property="declineLabel" destination="FHR-eF-NEX" id="RZu-7m-ak5"/>
                         <outlet property="descriptionLabel" destination="bJt-nU-YtG" id="62f-uz-Ew3"/>
+                        <outlet property="profileImage" destination="TrF-PJ-1Pm" id="8yz-L9-chN"/>
                         <outlet property="titleLabel" destination="VAA-gX-v34" id="ysc-Ks-VB3"/>
                     </connections>
                 </controller>

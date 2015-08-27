@@ -22,11 +22,11 @@ class DetailInterfaceController: WKInterfaceController {
     @IBOutlet var approveLabel: WKInterfaceLabel!
     @IBOutlet var declineBtn: WKInterfaceButton!
     @IBOutlet var declineLabel: WKInterfaceLabel!
-    @IBOutlet var beneficiaryTitleLabel: WKInterfaceLabel!
     @IBOutlet var beneficiaryLabel: WKInterfaceLabel!
     @IBOutlet var descriptionLabel: WKInterfaceLabel!
     @IBOutlet var dateLabel: WKInterfaceLabel!
     
+    @IBOutlet var profileImage: WKInterfaceImage!
     
     @IBAction func ApproveAction() {
         let url = endpoint + baseroot + "/approvals"
@@ -63,6 +63,7 @@ class DetailInterfaceController: WKInterfaceController {
             //setTitle(tasks.requestEntityName)
             //NSLog("\(self.tasks)")
             
+            
             var titleText = ""
             for ent in tasks.requestEntityName {
                 if titleText.isEmpty {
@@ -81,7 +82,16 @@ class DetailInterfaceController: WKInterfaceController {
                 }
             }
             
-            beneficiaryTitleLabel.setText("Beneficiary")
+            if beneficiaryText == "Kevin Clark" {
+                profileImage.setImage(UIImage(named: "kclark"))
+            } else if beneficiaryText == "Grace Davis" {
+                profileImage.setImage(UIImage(named: "gdavis"))
+            } else if beneficiaryText == "Danny Crane" {
+                profileImage.setImage(UIImage(named: "dcrane"))
+            } else {
+                profileImage.setImage(UIImage(named: "profileBlankPic"))
+            }
+            
             beneficiaryLabel.setText(beneficiaryText)
             descriptionLabel.setText(tasks.requestJustification)
             dateLabel.setText(formatDate(tasks.requestedDate))

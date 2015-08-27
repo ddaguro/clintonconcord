@@ -189,7 +189,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         for act in loadedActivities {
             self.activities.append(act)
         }
-        activities.sort({ $0.reqModifiedOnDate < $1.reqModifiedOnDate })
+        activities.sort({ $0.reqModifiedOnDate > $1.reqModifiedOnDate })
         tableView.reloadData()
         view.hideLoading()
         
