@@ -163,6 +163,8 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.allowsSelection = false
         tableView.allowsSelectionDuringEditing = true
+        //tableView.estimatedRowHeight = 300
+        //tableView.rowHeight = UITableViewAutomaticDimension
         menuItem.image = UIImage(named: "menu")
         toolbar.tintColor = UIColor.blackColor()
         
@@ -241,6 +243,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         
         let cell = tableView.dequeueReusableCellWithIdentifier("TasksCell") as! TasksCell
         
+        
         cell.approveBtn.tag = indexPath.row
         cell.approveBtn.setBackgroundImage(UIImage(named:"btn-approve"), forState: .Normal)
         cell.approveBtn.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
@@ -293,7 +296,9 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         
         //cell.beneiciaryUserLabel.text = task.beneficiearyUser.stringByReplacingOccurrencesOfString("[", withString: "").stringByReplacingOccurrencesOfString("]", withString: "")
         cell.justificationLabel.text = task.requestJustification
-        cell.dateLabel.text = task.requestedDate + "      |      Request " + task.requestId
+        //cell.justificationLabel.bounds = CGRectMake(0, 0, self.tableView.size.width, self.tableView.size.height)
+        
+        cell.dateLabel.text = task.requestedDate + "   |   Request " + task.requestId
         
         cell.selectionStyle = UITableViewCellSelectionStyle.Default
         

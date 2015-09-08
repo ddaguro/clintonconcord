@@ -200,7 +200,7 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         if (self.resultSearchController.active) {
             cell.titleLabel.text = filteredTableData[indexPath.row].name
             cell.descriptionLabel.text = ""
-            cell.displaynameLabel.text = "Ent Key: " + "\(filteredTableData[indexPath.row].key)" + " | Catgory Id: " + filteredTableData[indexPath.row].categoryId
+            cell.displaynameLabel.text = "Ent Key: " + "\(filteredTableData[indexPath.row].key)" + " | Category Id: " + filteredTableData[indexPath.row].categoryId
         }
         else {
             /*
@@ -229,7 +229,7 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
             let dataObject = tableData[indexPath.row]
             cell.titleLabel.text = dataObject.name
             cell.descriptionLabel.text = dataObject.name
-            cell.displaynameLabel.text = "Key: " + "\(dataObject.key)" + " | Catgory Id: " + dataObject.categoryId
+            cell.displaynameLabel.text = "Key: " + "\(dataObject.key)" + " | Category Id: " + dataObject.categoryId
         }
         
         cell.selectionStyle = UITableViewCellSelectionStyle.Default

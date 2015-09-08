@@ -150,7 +150,7 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
         cell.statusLabel.text = "  " + cert.state + "  "
         cell.assigneesLabel.text = "Assignee"
         cell.assignnesUserLabel.text = cert.asignee
-        cell.dateLabel.text = cert.createdDate + " | id " + "\(cert.certificationId)" + " | type " + cert.certificationType
+        cell.dateLabel.text = cert.createdDate + " | id " + "\(cert.certificationId)" //+ " | type " + cert.certificationType
         cell.progressLabel.text = "Progress"
         cell.progressImage.image = cert.percentComplete ==  "0.0"  ? UIImage(named: "percent0") : UIImage(named: "percent50")
         cell.percentLabel.text =  cert.percentComplete ==  "0.0"  ? "0" : "50"

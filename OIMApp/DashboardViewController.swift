@@ -232,12 +232,12 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             let apptotcnt = myApprovals ==  0  ? 0 : myApprovals + totalCounter/2
             let arcValues = [apptotcnt,0,totalCounter]
             let appradius = 90.0
-            let appCenter = CGPointMake(CGFloat(self.screenSize.width/2.0), CGFloat(self.screenSize.height/2) - CGFloat(230.0))
+            let appCenter = CGPointMake(CGFloat(self.screenSize.width/2.0), CGFloat(self.screenSize.height/2) - CGFloat(205))
             self.createArc(appCenter, radius: appradius, startAngle: arcStart, endAngle: arcEnd, color: self.UIColorFromHex(0xeeeeee, alpha: 1.0).CGColor)
             self.animateArcs(arcValues, radius: appradius, center: appCenter, color: self.UIColorFromHex(0x9777a8, alpha: 1.0).CGColor)
             
             var appcntlabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
-            appcntlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) , CGFloat(self.screenSize.height/2) - CGFloat(230.0))
+            appcntlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) , CGFloat(self.screenSize.height/2) - CGFloat(205.0))
             appcntlabel.textAlignment = NSTextAlignment.Center
             appcntlabel.font = UIFont(name: MegaTheme.fontName, size: 40)
             appcntlabel.textColor = self.UIColorFromHex(0xa6afaa, alpha: 1.0)
@@ -245,7 +245,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             self.dashView.addSubview(appcntlabel)
             
             var applabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
-            applabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) , CGFloat(self.screenSize.height/2) - CGFloat(190.0))
+            applabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) , CGFloat(self.screenSize.height/2) - CGFloat(175.0))
             applabel.textAlignment = NSTextAlignment.Center
             applabel.font = UIFont(name: MegaTheme.fontName, size: 12)
             applabel.textColor = self.UIColorFromHex(0xa6afaa, alpha: 1.0)
@@ -255,7 +255,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             
             let appButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
             appButton.frame = CGRectMake(0, 0, 200, 200)
-            appButton.center = CGPointMake(CGFloat(self.screenSize.width/2.0) , CGFloat(self.screenSize.height/2) - CGFloat(230.0))
+            appButton.center = CGPointMake(CGFloat(self.screenSize.width/2.0) , CGFloat(self.screenSize.height/2) - CGFloat(205.0))
             appButton.addTarget(self, action: "appBtnTouched:", forControlEvents: UIControlEvents.TouchUpInside)
             appButton.tag = 1
             self.dashView.addSubview(appButton)
@@ -264,12 +264,12 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             let reqtotcnt = myRequest ==  0  ? 0 : myRequest + totalCounter/2
             let arcValues2 = [reqtotcnt,10,totalCounter]
             let reqradius = 50.0
-            let reqCenter = CGPointMake(CGFloat(self.screenSize.width/2.0) - CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) - CGFloat(50.0))
+            let reqCenter = CGPointMake(CGFloat(self.screenSize.width/2.0) - CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) - CGFloat(40.0))
             self.createArc(reqCenter, radius: reqradius, startAngle: arcStart, endAngle: arcEnd, color: self.UIColorFromHex(0xeeeeee, alpha: 1.0).CGColor)
             self.animateArcs(arcValues2, radius: reqradius, center: reqCenter, color: self.UIColorFromHex(0x4a90e2, alpha: 1.0).CGColor)
             
             var reqcntlabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
-            reqcntlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) - CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) - CGFloat(50.0))
+            reqcntlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) - CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) - CGFloat(40.0))
             reqcntlabel.textAlignment = NSTextAlignment.Center
             reqcntlabel.font = UIFont(name: MegaTheme.fontName, size: 30)
             reqcntlabel.textColor = self.UIColorFromHex(0xa6afaa, alpha: 1.0)
@@ -277,7 +277,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             self.dashView.addSubview(reqcntlabel)
             
             var reqlabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
-            reqlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) - CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) + CGFloat(40.0))
+            reqlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) - CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) + CGFloat(35.0))
             reqlabel.textAlignment = NSTextAlignment.Center
             reqlabel.font = UIFont(name: MegaTheme.fontName, size: 12)
             reqlabel.textColor = self.UIColorFromHex(0xa6afaa, alpha: 1.0)
@@ -287,7 +287,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             
             let reqButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
             reqButton.frame = CGRectMake(0, 0, 100, 100)
-            reqButton.center = CGPointMake(CGFloat(self.screenSize.width/2.0) - CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) - CGFloat(50.0))
+            reqButton.center = CGPointMake(CGFloat(self.screenSize.width/2.0) - CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) - CGFloat(40.0))
             reqButton.addTarget(self, action: "reqBtnTouched:", forControlEvents: UIControlEvents.TouchUpInside)
             reqButton.tag = 2
             self.tableView.addSubview(reqButton)
@@ -296,12 +296,12 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             let certtotcnt = myCertificates ==  0  ? 0 : myCertificates + totalCounter/2
             let arcValues3 = [certtotcnt,10,totalCounter]
             let certradius = 50.0
-            let certCenter = CGPointMake(CGFloat(self.screenSize.width/2.0) + CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) - CGFloat(50.0))
+            let certCenter = CGPointMake(CGFloat(self.screenSize.width/2.0) + CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) - CGFloat(40.0))
             self.createArc(certCenter, radius: certradius, startAngle: arcStart, endAngle: arcEnd, color: self.UIColorFromHex(0xeeeeee, alpha: 1.0).CGColor)
             self.animateArcs(arcValues3, radius: certradius, center: certCenter,color: self.UIColorFromHex(0x88c057, alpha: 1.0).CGColor)
         
             var certcntlabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
-            certcntlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) + CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) - CGFloat(50.0))
+            certcntlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) + CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) - CGFloat(40.0))
             certcntlabel.textAlignment = NSTextAlignment.Center
             certcntlabel.font = UIFont(name: MegaTheme.fontName, size: 30)
             certcntlabel.textColor = self.UIColorFromHex(0xa6afaa, alpha: 1.0)
@@ -309,7 +309,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             self.dashView.addSubview(certcntlabel)
             
             var certlabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
-            certlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) + CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) + CGFloat(40.0))
+            certlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) + CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) + CGFloat(35.0))
             certlabel.textAlignment = NSTextAlignment.Center
             certlabel.font = UIFont(name: MegaTheme.fontName, size: 12)
             certlabel.textColor = self.UIColorFromHex(0xa6afaa, alpha: 1.0)
@@ -319,12 +319,12 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             
             let certButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
             certButton.frame = CGRectMake(0, 0, 100, 100)
-            certButton.center = CGPointMake(CGFloat(self.screenSize.width/2.0) + CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) - CGFloat(50.0))
+            certButton.center = CGPointMake(CGFloat(self.screenSize.width/2.0) + CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) - CGFloat(40.0))
             certButton.addTarget(self, action: "certBtnTouched:", forControlEvents: UIControlEvents.TouchUpInside)
             certButton.tag = 3
             self.dashView.addSubview(certButton)
             
-            var lblHeading : UILabel! = UILabel(frame: CGRectMake(0, 395, self.view.frame.size.width, 30))
+            var lblHeading : UILabel! = UILabel(frame: CGRectMake(0, 390, self.view.frame.size.width, 30))
             lblHeading.backgroundColor = UIColor(red: 236.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, alpha: 1)
             //lblHeading.layer.borderWidth = 1
             //lblHeading.layer.borderColor = UIColor.lightGrayColor().CGColor

@@ -47,6 +47,10 @@ class TasksCell : UITableViewCell {
         
         justificationLabel.font = UIFont(name: MegaTheme.fontName, size: 12)
         justificationLabel.textColor = MegaTheme.lightColor
+        //justificationLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        //justificationLabel.numberOfLines = 5
+        //justificationLabel.preferredMaxLayoutWidth = 200
+        //justificationLabel.sizeToFit()
     }
     
     override func layoutSubviews() {
