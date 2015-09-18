@@ -33,7 +33,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     
     @IBAction func btnEditCeclineAction(sender: AnyObject) {
         
-        var alert = UIAlertView(title: "Decline Confirmation", message: "Bulk Decline", delegate: nil, cancelButtonTitle: "Okay")
+        let alert = UIAlertView(title: "Decline Confirmation", message: "Bulk Decline", delegate: nil, cancelButtonTitle: "Okay")
         alert.show()
     }
     
@@ -70,13 +70,13 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
                     paramstring += task.taskPriority + "\",\"taskState\": \""
                     paramstring += task.taskState + "\",\"taskTitle\": \""
                     paramstring += task.taskTitle + "\" ,\"taskActionComments\": \""
-                    paramstring += textField.text + "\",\"taskAction\": \""
+                    paramstring += textField.text! + "\",\"taskAction\": \""
                     paramstring += taskaction + "\"},"
                 }
                 paramstring += "]}"
                 
                 
-                var idx = advance(paramstring.endIndex, -3)
+                var idx = paramstring.endIndex.advancedBy(-3)
                 
                 var substring1 = paramstring.substringToIndex(idx)
                 substring1 += "]}"
@@ -320,7 +320,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        if let indexPath = self.tableView.indexPathsForSelectedRows() as? [NSIndexPath]{
+        if let indexPath = self.tableView.indexPathsForSelectedRows as? [NSIndexPath]! {
             self.selectedtasks.removeAll(keepCapacity: true)
             for idx in indexPath {
                 let info = tasks[idx.item]
@@ -349,9 +349,9 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        var view: UIView! = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 40))
+        let view: UIView! = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 40))
         view.backgroundColor = UIColor(red: 236.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, alpha: 1)
-        var lblHeading : UILabel! = UILabel(frame: CGRectMake(20, 0, 200, 20))
+        let lblHeading : UILabel! = UILabel(frame: CGRectMake(20, 0, 200, 20))
         lblHeading.font = UIFont.systemFontOfSize(12)
         lblHeading.textColor = UIColor.darkGrayColor()
         lblHeading.text = itemHeading.objectAtIndex(section) as! NSString as String
@@ -369,7 +369,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        let toViewController = segue.destinationViewController as! UIViewController
+        let toViewController = segue.destinationViewController 
         toViewController.transitioningDelegate = self.transitionOperator
 
     }
@@ -449,7 +449,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
                 paramstring += taskpriority + "\",\"taskState\": \""
                 paramstring += taskstate + "\",\"taskTitle\": \""
                 paramstring += tasktitle + "\" ,\"taskActionComments\": \""
-                paramstring += textField.text + "\",\"taskAction\": \""
+                paramstring += textField.text! + "\",\"taskAction\": \""
                 paramstring += taskaction + "\"}]}"
                 
                 self.api.RequestApprovalAction(myLoginId, params : paramstring, url : url) { (succeeded: Bool, msg: String) -> () in

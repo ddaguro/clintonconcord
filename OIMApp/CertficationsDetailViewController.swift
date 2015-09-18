@@ -66,7 +66,7 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
         refreshControl.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
         tableView.addSubview(refreshControl)
         
-        self.navigationController?.interactivePopGestureRecognizer.delegate = self;
+        self.navigationController?.interactivePopGestureRecognizer!.delegate = self;
         
     }
 
@@ -328,7 +328,7 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
         let controller = storyboard.instantiateViewControllerWithIdentifier("CertficationsActionViewController") as! CertficationsActionViewController
         
         
-        if let indexPath = self.tableView.indexPathForSelectedRow() {
+        if let indexPath = self.tableView.indexPathForSelectedRow {
             
             if certType == "ApplicationInstance" {
                 let info = certitem[indexPath.row]

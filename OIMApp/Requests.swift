@@ -85,7 +85,7 @@ class TargetEntities {
     
     init(data : NSString){
         
-        self.entity = data as! String
+        self.entity = data as String
     }
 }
 

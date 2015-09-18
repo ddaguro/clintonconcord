@@ -28,8 +28,18 @@ class InterfaceController: WKInterfaceController {
     override func awakeWithContext(context: AnyObject?) {
         super.awakeWithContext(context)
         
+        let appGroupID = "group.com.persistent.plat-sol.OIGApp"
+        
+        let defaults = NSUserDefaults(suiteName: appGroupID)
+        
+        if let username = defaults?.stringForKey("requestorUserId") {
+            print(username)
+        }
+        let username = defaults?.stringForKey("requestorUserId")
+        
+        
         let url2 = endpoint + baseroot + "/users/login"
-        let paramstring = "username=dcrane&password=Oracle123"
+        let paramstring = "username=" + username! + "&password=Oracle123"
         LogIn(paramstring, url : url2) { (succeeded: Bool, msg: String) -> () in
             if(succeeded) {
                 //println("Success")
@@ -51,8 +61,14 @@ class InterfaceController: WKInterfaceController {
     
     private func loadTableData() {
         self.tasks = [Tasks]()
+        
+        let appGroupID = "group.com.persistent.plat-sol.OIGApp"
+        
+        let defaults = NSUserDefaults(suiteName: appGroupID)
+        let username = defaults?.stringForKey("requestorUserId")
+        
         let url = endpoint + baseroot + "/users/dcrane/approvals/"
-        loadPendingApprovals("dcrane", apiUrl: url, completion : didLoadData)
+        loadPendingApprovals(username!, apiUrl: url, completion : didLoadData)
        
     }
     
@@ -69,7 +85,7 @@ class InterfaceController: WKInterfaceController {
             approveTable.setNumberOfRows(tasks.count, withRowType: "ApproveTableRowController")
         }
         
-        for (index, info) in enumerate(tasks) {
+        for (index, info) in tasks.enumerate() {
             //println(index)
             if let row = approveTable.rowControllerAtIndex(index) as? ApproveTableRowController {
                 var titleText = ""
@@ -121,24 +137,20 @@ class InterfaceController: WKInterfaceController {
     }
     
     func loadPendingApprovals(loginId: String, apiUrl: String, completion: (([Tasks]) -> Void)!) {
-        var request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
-        var session = NSURLSession.sharedSession()
-        request.HTTPMethod = "GET"
+        let request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
+        let session = NSURLSession.sharedSession()
         
-        var err: NSError?
+        request.HTTPMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         
-        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-            var err: NSError?
-            
-            if(err != nil) {
-                println(err!.localizedDescription)
+        let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            if(error != nil) {
+                print(error!.localizedDescription)
             }
             else {
-                var error : NSError?
-                var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
+                let jsonData = (try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as! NSDictionary
                 
                 let results: NSArray = jsonData["task"] as! NSArray
                 
@@ -156,34 +168,25 @@ class InterfaceController: WKInterfaceController {
                 }
             }
         })
-        
         task.resume()
     }
     
     func LogIn(params : String, url : String, postCompleted : (succeeded: Bool, msg: String) -> ()) {
-        var request = NSMutableURLRequest(URL: NSURL(string: url)!)
-        var session = NSURLSession.sharedSession()
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        let session = NSURLSession.sharedSession()
+        
         request.HTTPMethod = "POST"
-        
-        var err: NSError?
-        
         request.HTTPBody = params.dataUsingEncoding(NSUTF8StringEncoding);
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         
-        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-            
-            var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
-            var err: NSError?
-            var json = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &err) as? NSDictionary
-            
-            var msg = "No message"
-            if(err != nil) {
-                println(err!.localizedDescription)
-                let jsonStr = NSString(data: data, encoding: NSUTF8StringEncoding)
+        let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            if(error != nil) {
+                print(error!.localizedDescription)
                 postCompleted(succeeded: false, msg: "Error")
             }
             else {
+                let json = (try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as? NSDictionary
                 if let parseJSON = json {
                     let success = parseJSON["isAuthenticated"] as? Int
                     if success == 1 {
@@ -195,12 +198,10 @@ class InterfaceController: WKInterfaceController {
                     return
                 }
                 else {
-                    let jsonStr = NSString(data: data, encoding: NSUTF8StringEncoding)
                     postCompleted(succeeded: false, msg: "Error")
                 }
             }
         })
-        
         task.resume()
     }
     

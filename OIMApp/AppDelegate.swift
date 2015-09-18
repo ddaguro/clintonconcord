@@ -13,13 +13,17 @@ var myApprovals: Int = 0
 var myRequest: Int = 0
 var totalCounter: Int = 0
 var myRequestorId : String = ""
+
+
 var myLoginId : String = ""
+
 /* for caching */
 public var myRequests : [Requests]!
 var myApplications : [Applications]!
 var myActivities : [Activities]!
 var myFIDO : Bool = false
 
+var myClientId : String = "TestClient"
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -32,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //NSURLCache.setSharedURLCache(URLCache)
         myRequests = [Requests]()
         myApplications = [Applications]()
-        var navAppearance = UINavigationBar.appearance()
+        let navAppearance = UINavigationBar.appearance()
         //48A0DC
         //navAppearance.tintColor = uicolorFromHex(0xf48A0DC)
         //navAppearance.barTintColor = uicolorFromHex(0x48A0DC)
@@ -45,8 +49,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         textAttributes.setObject(UIColor.blackColor(), forKey: NSForegroundColorAttributeName)
         textAttributes.setObject(UIFont(name: MegaTheme.fontName, size: 19)!, forKey: NSFontAttributeName)
         
-        navAppearance.titleTextAttributes = textAttributes as [NSObject : AnyObject]
-        navAppearance.tintColor = UIColor.blackColor()
+        //navAppearance.titleTextAttributes = textAttributes as [NSObject : AnyObject]
+        //navAppearance.tintColor = UIColor.blackColor()
         
         let barButtonAppearance = UIBarButtonItem.appearance()
         barButtonAppearance.setBackButtonTitlePositionAdjustment(UIOffsetMake(0, -60), forBarMetrics: .Default)
@@ -89,7 +93,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Slide menu methods
     func setSideMenu() {
-        println("setSlideMenu is Called...")
+        print("setSlideMenu is Called...")
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         // Create frosted view controller
         let frostedViewController: REFrostedViewController = storyboard.instantiateViewControllerWithIdentifier("RootViewController") as! REFrostedViewController
@@ -120,6 +124,11 @@ struct Persistent {
     // http://idaasapi.persistent.com:9080/
     //"host" : "idaasapi.persistent.com:9080",
     //"basePath" : "/idaas/oig/v1",
-    static let endpoint = "http://idaasapi.persistent.com:9080/"
-    static let baseroot = "idaas/oig/v1"
+    /*
+    9441 (HTTP)
+    9442 (HTTPS – 1 way SSL)
+    9443 (HTTPS – 1 way SSL with Basic Auth), use s_APIUser/password
+    */
+    static let endpoint = "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9441/"
+    static let baseroot = "idaas/im/v1"
 }

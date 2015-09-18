@@ -29,9 +29,9 @@ class Certs {
         
         let sTitle = Utils.getStringFromJSON(data, key: "title")
         let needle: Character = "["
-        if let idx = find(sTitle, needle) {
-            let pos = distance(sTitle.startIndex, idx)
-            self.title = sTitle.substringToIndex(advance(sTitle.startIndex,pos))
+        if let idx = sTitle.characters.indexOf(needle) {
+            let pos = sTitle.startIndex.distanceTo(idx)
+            self.title = sTitle.substringToIndex(sTitle.startIndex.advancedBy(pos))
         }
         else {
             self.title = Utils.getStringFromJSON(data, key: "title")

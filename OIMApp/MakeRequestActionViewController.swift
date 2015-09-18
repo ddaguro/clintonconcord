@@ -35,7 +35,7 @@ class MakeRequestActionViewController: UIViewController, UITableViewDelegate, UI
         
         self.api = API()
         
-        self.navigationController?.interactivePopGestureRecognizer.delegate = self;
+        self.navigationController?.interactivePopGestureRecognizer!.delegate = self;
 
     }
 
@@ -114,7 +114,7 @@ class MakeRequestActionViewController: UIViewController, UITableViewDelegate, UI
                 
                 var jsonstring = "{\"requester\":{\"User Login\":\"" + myLoginId + "\"},\"targetUsers\":[{\"User Login\":\"" + myLoginId
                 jsonstring += "\"}],\"accounts\":[{\"entitlements\":[{\"entitlementKey\":\"" + "\(self.appInstanceKey)"
-                jsonstring += "\",\"catalogId\":\"" + self.catalogId + "\",\"comments\":\"" + textField.text + "\"}]}]}"
+                jsonstring += "\",\"catalogId\":\"" + self.catalogId + "\",\"comments\":\"" + textField.text! + "\"}]}]}"
                 
                 self.api.RequestAction(myLoginId, params : jsonstring, url : url) { (succeeded: Bool, msg: String) -> () in
                     var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")

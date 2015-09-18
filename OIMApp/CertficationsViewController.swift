@@ -56,7 +56,7 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
         self.certs = [Certs]()
         self.api = API()
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/certifications?limit=15"
+        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/certifications?limit=50"
         api.loadPendingCerts(myLoginId, apiUrl: url, completion : didLoadData)
         
         
@@ -164,7 +164,7 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         let info = certs[indexPath.row]
-        if let indexPath = self.tableView.indexPathForSelectedRow() {
+        if let indexPath = self.tableView.indexPathForSelectedRow {
             let info = certs[indexPath.row]
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -187,9 +187,9 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         
-        var view: UIView! = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 40))
+        let view: UIView! = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 40))
         view.backgroundColor = UIColor(red: 236.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, alpha: 1)
-        var lblHeading : UILabel! = UILabel(frame: CGRectMake(20, 0, 200, 20))
+        let lblHeading : UILabel! = UILabel(frame: CGRectMake(20, 0, 200, 20))
         lblHeading.font = UIFont.systemFontOfSize(12)
         lblHeading.textColor = UIColor.darkGrayColor()
         lblHeading.text = itemHeading.objectAtIndex(section) as! NSString as String
@@ -210,7 +210,7 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        let toViewController = segue.destinationViewController as! UIViewController
+        let toViewController = segue.destinationViewController 
         self.modalPresentationStyle = UIModalPresentationStyle.Custom
         toViewController.transitioningDelegate = self.transitionOperator
         

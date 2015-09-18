@@ -78,7 +78,7 @@ class AccessViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         let info = viewLinks[indexPath.row]
-        if let indexPath = self.tableView.indexPathForSelectedRow() {
+        if let indexPath = self.tableView.indexPathForSelectedRow {
             let info = viewLinks[indexPath.row]
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -100,7 +100,7 @@ class AccessViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        let toViewController = segue.destinationViewController as! UIViewController
+        let toViewController = segue.destinationViewController 
         self.modalPresentationStyle = UIModalPresentationStyle.Custom
         toViewController.transitioningDelegate = self.transitionOperator
     }

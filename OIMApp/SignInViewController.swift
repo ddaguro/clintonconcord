@@ -100,11 +100,11 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
         signInButton.layer.cornerRadius = 5
         signInButton.addTarget(self, action: "LoggedIn", forControlEvents: .TouchUpInside)
         
-        var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         view.addGestureRecognizer(tap)
         
         for key in NSUserDefaults.standardUserDefaults().dictionaryRepresentation().keys {
-            NSUserDefaults.standardUserDefaults().removeObjectForKey(key.description)
+            NSUserDefaults.standardUserDefaults().removeObjectForKey(key)
         }
         
     }
@@ -130,94 +130,101 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
     
     func LoggedInFIDO(){
         
-        if myLoginId != self.userTextField.text {
-            var alert = UIAlertView(title: "Failed \u{1F44E}", message: "FIDO UAF Authenication Failed", delegate: nil, cancelButtonTitle: "Okay")
+        if self.ReadLogin() {
+            if myLoginId != self.userTextField.text {
+                let alert = UIAlertView(title: "Failed \u{1F44E}", message: "FIDO UAF Authenication Failed", delegate: nil, cancelButtonTitle: "Okay")
+                alert.show()
+                dismissViewControllerAnimated(true, completion: nil)
+            } else {
+                let context = LAContext()
+                var error: NSError?
+                
+                // check if Touch ID is available
+                if context.canEvaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, error: &error) {
+                
+                    //try context.canEvaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, error: &error)
+                    let reason = "Authenticate with Touch ID"
+                    context.evaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, localizedReason: reason, reply:
+                        {(succes: Bool, error: NSError?) in
+                            dispatch_async(dispatch_get_main_queue(), {
+                                
+                                if succes {
+                                    myFIDO = true
+                                    //var alert = UIAlertView(title: "Success \u{1F44D}", message: "FIDO UAF Authenication Succeeded", delegate: nil, cancelButtonTitle: "Okay")
+                                    //alert.show()
+                                    
+                                    self.api = API()
+                                    
+                                    let url = Persistent.endpoint + Persistent.baseroot + "/users/login"
+                                    
+                                    //self.ReadLogin()
+                                    
+                                    //var username = self.userTextField.text
+                                    //var password = "Oracle123"
+                                    let username = self.FIDOusername
+                                    let password = self.FIDOpassword
+                                    
+                                    let paramstring = "username=" + username + "&password=" + password
+                                    
+                                    if username != "" {
+                                        self.api.LogIn(username, params: paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
+                                            let alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
+                                            if(succeeded) {
+                                                alert.title = "Success!"
+                                                alert.message = msg
+                                                
+                                                //load user object
+                                                self.users = [Users]()
+                                                
+                                                let url = Persistent.endpoint + Persistent.baseroot + "/users/" + username
+                                                self.api.loadUser(username, apiUrl: url, completion : self.didLoadUsers)
+                                                
+                                                //myLoginId = username
+                                                
+                                                let appGroupID = "group.com.persistent.plat-sol.OIGApp"
+                                                
+                                                if let defaults = NSUserDefaults(suiteName: appGroupID) {
+                                                    defaults.setValue(username, forKey: "requestorUserId")
+                                                }
+                                                
+                                                NSUserDefaults.standardUserDefaults().setObject(username, forKey: "requestorUserId")
+                                                NSUserDefaults.standardUserDefaults().synchronize()
+                                                
+                                                myLoginId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
+
+                                            }
+                                            else {
+                                                alert.title = "Failed : ("
+                                                alert.message = msg
+                                            }
+                                            
+                                            // Move to the UI thread
+                                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                                if(succeeded)
+                                                {
+                                                    self.performSegueWithIdentifier("SegueDashboard", sender: self)
+                                                    
+                                                } else {
+                                                    alert.show()
+                                                }
+                                            })
+                                        }
+                                    } else {
+                                        let alert = UIAlertView(title: "Failed : (", message: "Incorrect username and password", delegate: nil, cancelButtonTitle: "Okay")
+                                        alert.show()
+                                    }
+                                }
+                                else {
+                                    //self.showAlertController("Touch ID Authentication Failed")
+                                }
+                            })
+                    })
+                }
+            }
+        } else {
+            let alert = UIAlertView(title: "Please Register for FIOD", message: "This user account is not registered for FIDO UAF, or the application was upgraded and re-registration is required.  Please sign in with your Username and Password and re-register for FIDO UAF.", delegate: nil, cancelButtonTitle: "Okay")
             alert.show()
             dismissViewControllerAnimated(true, completion: nil)
-        } else {
-        
-        //if myFIDO {
-            let context = LAContext()
-            var error: NSError?
-            
-            // check if Touch ID is available
-            if context.canEvaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, error: &error) {
-                let reason = "Authenticate with Touch ID"
-                context.evaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, localizedReason: reason, reply:
-                    {(succes: Bool, error: NSError!) in
-                        dispatch_async(dispatch_get_main_queue(), {
-                            
-                            if succes {
-                                myFIDO = true
-                                //var alert = UIAlertView(title: "Success \u{1F44D}", message: "FIDO UAF Authenication Succeeded", delegate: nil, cancelButtonTitle: "Okay")
-                                //alert.show()
-                                
-                                self.api = API()
-                                
-                                let url = Persistent.endpoint + Persistent.baseroot + "/users/login"
-
-                                self.ReadLogin()
-                                
-                                //var username = self.userTextField.text
-                                //var password = "Oracle123"
-                                var username = self.FIDOusername
-                                var password = self.FIDOpassword
-                                
-                                let paramstring = "username=" + username + "&password=" + password
-                                
-                                if username != "" {
-                                    self.api.LogIn(paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
-                                        var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
-                                        if(succeeded) {
-                                            alert.title = "Success!"
-                                            alert.message = msg
-                                            
-                                            //load user object
-                                            self.users = [Users]()
-                                            
-                                            let url = Persistent.endpoint + Persistent.baseroot + "/users/" + username
-                                            self.api.loadUser(username, apiUrl: url, completion : self.didLoadUsers)
-                                            
-                                            
-                                            myLoginId = username
-                                            
-                                            NSUserDefaults.standardUserDefaults().setObject(username, forKey: "requestorUserId")
-                                            NSUserDefaults.standardUserDefaults().synchronize()
-                                        }
-                                        else {
-                                            alert.title = "Failed : ("
-                                            alert.message = msg
-                                        }
-                                        
-                                        // Move to the UI thread
-                                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                            if(succeeded)
-                                            {
-                                                self.performSegueWithIdentifier("SegueDashboard", sender: self)
-                                                
-                                            } else {
-                                                alert.show()
-                                            }
-                                        })
-                                    }
-                                } else {
-                                    var alert = UIAlertView(title: "Failed : (", message: "Incorrect username and password", delegate: nil, cancelButtonTitle: "Okay")
-                                    alert.show()
-                                }
-                            }
-                            else {
-                                //self.showAlertController("Touch ID Authentication Failed")
-                            }
-                        })
-                })
-            }
-                
-            else {
-                //self.showAlertController("Touch ID not available")
-            }
-        //} else {
-        //    dismissViewControllerAnimated(true, completion: nil)
-        //}
         }
     }
     
@@ -226,44 +233,39 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
         self.api = API()
         
         let url = Persistent.endpoint + Persistent.baseroot + "/users/login"
-        
         let username = userTextField.text
-        var password = passwordTextField.text
-        
-        let paramstring = "username=" + username + "&password=" + password
+        let password = passwordTextField.text
+        let paramstring = "username=" + username! + "&password=" + password!
         
         if username != "" {
-            api.LogIn(paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
-                var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
+            api.LogIn(username!, params: paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
+                let alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
                 if(succeeded) {
-                    alert.title = "Success!"
-                    alert.message = msg
-                    
-                    //load user object
                     self.users = [Users]()
                     
-                    let url = Persistent.endpoint + Persistent.baseroot + "/users/" + username
-                    self.api.loadUser(username, apiUrl: url, completion : self.didLoadUsers)
+                    let url = Persistent.endpoint + Persistent.baseroot + "/users/" + username!
+                    self.api.loadUser(username!, apiUrl: url, completion : self.didLoadUsers)
                     
                     if myLoginId != username {
                         myFIDO = false
                     }
+                    let appGroupID = "group.com.persistent.plat-sol.OIGApp"
                     
-                    myLoginId = username
+                    if let defaults = NSUserDefaults(suiteName: appGroupID) {
+                        defaults.setValue(username, forKey: "requestorUserId")
+                    }
                     
                     NSUserDefaults.standardUserDefaults().setObject(username, forKey: "requestorUserId")
                     NSUserDefaults.standardUserDefaults().synchronize()
                     
-                    self.SaveLogin(username, pwd: password)
+                    myLoginId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
                     
-                    
+                    self.SaveLogin(username!, pwd: password!)
                 }
                 else {
                     alert.title = "Failed : ("
                     alert.message = msg
                 }
-                
-                // Move to the UI thread
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     if(succeeded)
                     {
@@ -275,10 +277,9 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
                 })
             }
         } else {
-            var alert = UIAlertView(title: "Failed : (", message: "Incorrect username and password", delegate: nil, cancelButtonTitle: "Okay")
+            let alert = UIAlertView(title: "Failed : (", message: "Incorrect username and password", delegate: nil, cancelButtonTitle: "Okay")
             alert.show()
         }
-
     }
     
     func didLoadUsers(loadedUsers: [Users]){
@@ -289,49 +290,49 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
             NSUserDefaults.standardUserDefaults().setObject(usr.Title, forKey: "Title")
             NSUserDefaults.standardUserDefaults().synchronize()
         }
-        
-        
     }
     
     func DismissKeyboard(){
         view.endEditing(true)
     }
 
-    
     func SaveLogin (usr: String, pwd: String) {
         let file = "userlogin.txt"
-        if let dirs : [String] = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true) as? [String] {
-            let dir = dirs[0] //documents directory
+        if let dirs : [String] = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true) {
+            let dir = dirs[0] as NSString!
             let path = dir.stringByAppendingPathComponent(file);
             let text = usr + "," + pwd
             
-            //writing
-            text.writeToFile(path, atomically: false, encoding: NSUTF8StringEncoding, error: nil)
+            do {
+                try text.writeToFile(path, atomically: false, encoding: NSUTF8StringEncoding)
+            } catch {
+            }
         }
     }
     
-    func ReadLogin() {
+    func ReadLogin() -> Bool {
         let file = "userlogin.txt"
-        if let dirs : [String] = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true) as? [String] {
-            let dir = dirs[0] //documents directory
+        if let dirs : [String] = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true) {
+            let dir = dirs[0] as NSString!
             let path = dir.stringByAppendingPathComponent(file);
-            println(path)
-            //reading
-            let text = String(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil)
+            let text = try? String(contentsOfFile: path, encoding: NSUTF8StringEncoding)
             
-            var loginInfo: String = text!
-            let loginInfoArray = loginInfo.componentsSeparatedByString(",")
-            
-            var username: String = loginInfoArray[0]
-            var password: String = loginInfoArray[1]
-            
-            FIDOusername = username
-            FIDOpassword = password
-            
-            println(username)
-            println(password)
+            if text != nil {
+                
+                let loginInfo: String = text!
+                let loginInfoArray = loginInfo.componentsSeparatedByString(",")
+                
+                let username: String = loginInfoArray[0]
+                let password: String = loginInfoArray[1]
+                
+                FIDOusername = username
+                FIDOpassword = password
+                
+                return true
+            } else {
+                return false
+            }
         }
+        return false
     }
-
 }
-

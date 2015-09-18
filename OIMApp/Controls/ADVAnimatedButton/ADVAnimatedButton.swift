@@ -21,7 +21,7 @@ import UIKit
         setupView()
     }
     
-    required init(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupView()
     }
@@ -35,7 +35,7 @@ import UIKit
     func setupView(){
         refreshImageView.image = UIImage(named: "sync")?.imageWithRenderingMode(.AlwaysTemplate)
         refreshImageView.tintColor = UIColor(white: 1.0, alpha: 0.5)
-        refreshImageView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        refreshImageView.translatesAutoresizingMaskIntoConstraints = false
         
         self.addSubview(refreshImageView)
         
@@ -67,7 +67,7 @@ import UIKit
     func startAnimating(){
         
         if !animating {
-            var animation = CABasicAnimation(keyPath: "transform.rotation.z")
+            let animation = CABasicAnimation(keyPath: "transform.rotation.z")
             animation.toValue =  M_PI * 2.0
             animation.cumulative = true
             animation.duration = 1.0

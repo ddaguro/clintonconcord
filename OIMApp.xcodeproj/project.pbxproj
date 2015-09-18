@@ -13,10 +13,8 @@
 		0124323D1B8B715500101F59 /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0124323C1B8B715500101F59 /* InterfaceController.swift */; };
 		0124323F1B8B715500101F59 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0124323E1B8B715500101F59 /* NotificationController.swift */; };
 		012432411B8B715500101F59 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 012432401B8B715500101F59 /* Images.xcassets */; };
-		012432451B8B715500101F59 /* OIG WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = 012432441B8B715500101F59 /* OIG WatchKit App.app */; };
 		0124324D1B8B715500101F59 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0124324B1B8B715500101F59 /* Interface.storyboard */; };
 		0124324F1B8B715500101F59 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0124324E1B8B715500101F59 /* Images.xcassets */; };
-		012432521B8B715500101F59 /* OIG WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 012432371B8B715500101F59 /* OIG WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0124325B1B8B7B4100101F59 /* ApproveTableRowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0124325A1B8B7B4100101F59 /* ApproveTableRowController.swift */; };
 		012432791B8BA85700101F59 /* Tasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FBA2B91B14EA53006C1915 /* Tasks.swift */; };
 		0124327A1B8BA87E00101F59 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013AB3D01AFA854400160A34 /* Utils.swift */; };
@@ -88,6 +86,8 @@
 		018060421B20D6B600F4C68D /* UnwindSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018060251B20D6B600F4C68D /* UnwindSegue.swift */; };
 		01A95BBA1B178EBC00869943 /* TasksCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A95BB91B178EBC00869943 /* TasksCell.swift */; };
 		01B7B4FE1B02A04A0090E62E /* ApprovalsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B7B4FD1B02A04A0090E62E /* ApprovalsViewController.swift */; };
+		01C5E1461BAB59540021CFFE /* OIG WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 012432371B8B715500101F59 /* OIG WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		01C5E1491BAB59550021CFFE /* OIG WatchKit App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 012432441B8B715500101F59 /* OIG WatchKit App.app */; };
 		01DA33BA1B0C5BE6002778DF /* Roles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DA33B91B0C5BE6002778DF /* Roles.swift */; };
 		01DA33BC1B0C5CB7002778DF /* Entitlements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DA33BB1B0C5CB7002778DF /* Entitlements.swift */; };
 		01DA33BE1B0C5D38002778DF /* Applications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DA33BD1B0C5D38002778DF /* Applications.swift */; };
@@ -209,20 +209,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		012432461B8B715500101F59 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 013AB39B1AFA7CA400160A34 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 012432431B8B715500101F59;
-			remoteInfo = "OIG WatchKit App";
-		};
-		012432501B8B715500101F59 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 013AB39B1AFA7CA400160A34 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 012432361B8B715500101F59;
-			remoteInfo = "OIG WatchKit Extension";
-		};
 		013AB3BB1AFA7CA400160A34 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 013AB39B1AFA7CA400160A34 /* Project object */;
@@ -230,18 +216,43 @@
 			remoteGlobalIDString = 013AB3A21AFA7CA400160A34;
 			remoteInfo = OIMApp;
 		};
+		01C5E1441BAB59540021CFFE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 013AB39B1AFA7CA400160A34 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 012432361B8B715500101F59;
+			remoteInfo = "OIG WatchKit Extension";
+		};
+		01C5E1471BAB59550021CFFE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 013AB39B1AFA7CA400160A34 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 012432431B8B715500101F59;
+			remoteInfo = "OIG WatchKit App";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		012432591B8B715500101F59 /* Embed App Extensions */ = {
+		01C5E14A1BAB59550021CFFE /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				012432521B8B715500101F59 /* OIG WatchKit Extension.appex in Embed App Extensions */,
+				01C5E1461BAB59540021CFFE /* OIG WatchKit Extension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		01C5E14B1BAB59550021CFFE /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				01C5E1491BAB59550021CFFE /* OIG WatchKit App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -250,6 +261,7 @@
 		010C6DF31B1E17AF00944643 /* MakeRequestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MakeRequestViewController.swift; sourceTree = "<group>"; };
 		010C7EB21B8D0AB80065BB66 /* ApproveChartInterfaceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApproveChartInterfaceController.swift; sourceTree = "<group>"; };
 		0113B4381B8383B600A80DFA /* Activities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Activities.swift; sourceTree = "<group>"; };
+		011CC9961B9F4CA300260121 /* OIMApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = OIMApp.entitlements; sourceTree = "<group>"; };
 		012432371B8B715500101F59 /* OIG WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "OIG WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0124323A1B8B715500101F59 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0124323B1B8B715500101F59 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
@@ -500,6 +512,7 @@
 		012432381B8B715500101F59 /* OIG WatchKit Extension */ = {
 			isa = PBXGroup;
 			children = (
+				010C7EB21B8D0AB80065BB66 /* ApproveChartInterfaceController.swift */,
 				0124325A1B8B7B4100101F59 /* ApproveTableRowController.swift */,
 				014EA1271B8BC2BC009125F6 /* DetailInterfaceController.swift */,
 				012432401B8B715500101F59 /* Images.xcassets */,
@@ -507,7 +520,6 @@
 				0124323E1B8B715500101F59 /* NotificationController.swift */,
 				0124325C1B8B84CB00101F59 /* OIG WatchKit Extension.entitlements */,
 				012432391B8B715500101F59 /* Supporting Files */,
-				010C7EB21B8D0AB80065BB66 /* ApproveChartInterfaceController.swift */,
 			);
 			path = "OIG WatchKit Extension";
 			sourceTree = "<group>";
@@ -606,6 +618,7 @@
 		013AB3A51AFA7CA400160A34 /* OIMApp */ = {
 			isa = PBXGroup;
 			children = (
+				011CC9961B9F4CA300260121 /* OIMApp.entitlements */,
 				013AB3CA1AFA7DF100160A34 /* API */,
 				013AB3A81AFA7CA400160A34 /* AppDelegate.swift */,
 				0138FC681AFAABA700837EAB /* Cells */,
@@ -1016,27 +1029,28 @@
 			buildRules = (
 			);
 			dependencies = (
-				012432471B8B715500101F59 /* PBXTargetDependency */,
 			);
 			name = "OIG WatchKit Extension";
 			productName = "OIG WatchKit Extension";
 			productReference = 012432371B8B715500101F59 /* OIG WatchKit Extension.appex */;
-			productType = "com.apple.product-type.watchkit-extension";
+			productType = "com.apple.product-type.watchkit2-extension";
 		};
 		012432431B8B715500101F59 /* OIG WatchKit App */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 012432571B8B715500101F59 /* Build configuration list for PBXNativeTarget "OIG WatchKit App" */;
 			buildPhases = (
 				012432421B8B715500101F59 /* Resources */,
+				01C5E14A1BAB59550021CFFE /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				01C5E1451BAB59540021CFFE /* PBXTargetDependency */,
 			);
 			name = "OIG WatchKit App";
 			productName = "OIG WatchKit App";
 			productReference = 012432441B8B715500101F59 /* OIG WatchKit App.app */;
-			productType = "com.apple.product-type.application.watchapp";
+			productType = "com.apple.product-type.application.watchapp2";
 		};
 		013AB3A21AFA7CA400160A34 /* OIMApp */ = {
 			isa = PBXNativeTarget;
@@ -1047,12 +1061,12 @@
 				013AB3A01AFA7CA400160A34 /* Frameworks */,
 				013AB3A11AFA7CA400160A34 /* Resources */,
 				1E7BC0C9DF3B675AB3563374 /* Copy Pods Resources */,
-				012432591B8B715500101F59 /* Embed App Extensions */,
+				01C5E14B1BAB59550021CFFE /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				012432511B8B715500101F59 /* PBXTargetDependency */,
+				01C5E1481BAB59550021CFFE /* PBXTargetDependency */,
 			);
 			name = OIMApp;
 			productName = OIMApp;
@@ -1083,7 +1097,9 @@
 		013AB39B1AFA7CA400160A34 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0630;
+				LastSwiftMigration = 0700;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Persistent Systems";
 				TargetAttributes = {
 					012432361B8B715500101F59 = {
@@ -1091,7 +1107,7 @@
 						DevelopmentTeam = Z85852MG3R;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
-								enabled = 0;
+								enabled = 1;
 							};
 						};
 					};
@@ -1102,6 +1118,11 @@
 					013AB3A21AFA7CA400160A34 = {
 						CreatedOnToolsVersion = 6.3.1;
 						DevelopmentTeam = Z85852MG3R;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 					013AB3B91AFA7CA400160A34 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -1135,7 +1156,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				012432451B8B715500101F59 /* OIG WatchKit App.app in Resources */,
 				012432411B8B715500101F59 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1415,20 +1435,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		012432471B8B715500101F59 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 012432431B8B715500101F59 /* OIG WatchKit App */;
-			targetProxy = 012432461B8B715500101F59 /* PBXContainerItemProxy */;
-		};
-		012432511B8B715500101F59 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 012432361B8B715500101F59 /* OIG WatchKit Extension */;
-			targetProxy = 012432501B8B715500101F59 /* PBXContainerItemProxy */;
-		};
 		013AB3BC1AFA7CA400160A34 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 013AB3A21AFA7CA400160A34 /* OIMApp */;
 			targetProxy = 013AB3BB1AFA7CA400160A34 /* PBXContainerItemProxy */;
+		};
+		01C5E1451BAB59540021CFFE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 012432361B8B715500101F59 /* OIG WatchKit Extension */;
+			targetProxy = 01C5E1441BAB59540021CFFE /* PBXContainerItemProxy */;
+		};
+		01C5E1481BAB59550021CFFE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 012432431B8B715500101F59 /* OIG WatchKit App */;
+			targetProxy = 01C5E1471BAB59550021CFFE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1456,8 +1476,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "OIG WatchKit Extension/OIG WatchKit Extension.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Abhijit Kulkarni (56L6BZRPE7)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Abhijit Kulkarni (56L6BZRPE7)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1465,9 +1485,13 @@
 				INFOPLIST_FILE = "OIG WatchKit Extension/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.persistent.plat-sol.OIGApp.watchkitapp.watchkitextension";
 				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "a5540443-3d61-429b-8ef0-1d5ba3568e44";
+				PROVISIONING_PROFILE = "";
+				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
 		};
@@ -1475,14 +1499,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "OIG WatchKit Extension/OIG WatchKit Extension.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Abhijit Kulkarni (56L6BZRPE7)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Abhijit Kulkarni (56L6BZRPE7)";
 				INFOPLIST_FILE = "OIG WatchKit Extension/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.persistent.plat-sol.OIGApp.watchkitapp.watchkitextension";
 				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "a5540443-3d61-429b-8ef0-1d5ba3568e44";
+				PROVISIONING_PROFILE = "";
+				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
 		};
@@ -1490,19 +1518,22 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
 				IBSC_MODULE = OIG_WatchKit_Extension;
 				INFOPLIST_FILE = "OIG WatchKit App/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.persistent.plat-sol.OIGApp.watchkitapp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
-				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
 		};
@@ -1510,15 +1541,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				IBSC_MODULE = OIG_WatchKit_Extension;
 				INFOPLIST_FILE = "OIG WatchKit App/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.persistent.plat-sol.OIGApp.watchkitapp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
-				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
 		};
@@ -1543,6 +1577,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1610,12 +1645,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
+				CODE_SIGN_ENTITLEMENTS = OIMApp/OIMApp.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Abhijit Kulkarni (56L6BZRPE7)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Abhijit Kulkarni (56L6BZRPE7)";
 				INFOPLIST_FILE = OIMApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.persistent.plat-sol.OIGApp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "ceb44a3c-c04e-4b1e-b4cb-adb66cea82ca";
 				SWIFT_OBJC_BRIDGING_HEADER = "OIMApp/OIMApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1629,12 +1667,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
+				CODE_SIGN_ENTITLEMENTS = OIMApp/OIMApp.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Abhijit Kulkarni (56L6BZRPE7)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Abhijit Kulkarni (56L6BZRPE7)";
 				INFOPLIST_FILE = OIMApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.persistent.plat-sol.OIGApp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "ceb44a3c-c04e-4b1e-b4cb-adb66cea82ca";
 				SWIFT_OBJC_BRIDGING_HEADER = "OIMApp/OIMApp-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1654,6 +1695,7 @@
 				);
 				INFOPLIST_FILE = OIMAppTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.persistent.plat-sol.OIGApp.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OIMApp.app/OIMApp";
 			};
@@ -1669,6 +1711,7 @@
 				);
 				INFOPLIST_FILE = OIMAppTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.persistent.plat-sol.OIGApp.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OIMApp.app/OIMApp";
 			};

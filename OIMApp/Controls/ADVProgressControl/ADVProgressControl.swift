@@ -71,7 +71,7 @@ import UIKit
         setupView()
     }
     
-    required init(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupView()
     }
@@ -84,7 +84,7 @@ import UIKit
         self.backgroundColor = UIColor.clearColor()
         
         label.numberOfLines = 0
-        label.setTranslatesAutoresizingMaskIntoConstraints(false)
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = UIColor.clearColor()
         label.textAlignment = .Center
         addSubview(label)

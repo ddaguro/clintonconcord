@@ -25,11 +25,18 @@ class ApproveChartInterfaceController: WKInterfaceController {
         super.awakeWithContext(context)
         
         let url2 = endpoint + baseroot + "/users/login"
-        let paramstring = "username=dcrane&password=Oracle123"
+        
+        let appGroupID = "group.com.persistent.plat-sol.OIGApp"
+        
+        let defaults = NSUserDefaults(suiteName: appGroupID)
+
+        let username = defaults?.stringForKey("requestorUserId")
+        
+        let paramstring = "username=" + username! + "&password=Oracle123"
         LogIn(paramstring, url : url2) { (succeeded: Bool, msg: String) -> () in
             if(succeeded) {
-                let url = self.endpoint + self.baseroot + "/users/dcrane/pendingoperationscount"
-                self.getDashboardCount(self.myLoginId, apiUrl: url)
+                let url = self.endpoint + self.baseroot + "/users/" + username! + "/pendingoperationscount"
+                self.getDashboardCount(username!, apiUrl: url)
                 
             }
         }
@@ -46,29 +53,22 @@ class ApproveChartInterfaceController: WKInterfaceController {
     }
     
     func LogIn(params : String, url : String, postCompleted : (succeeded: Bool, msg: String) -> ()) {
-        var request = NSMutableURLRequest(URL: NSURL(string: url)!)
-        var session = NSURLSession.sharedSession()
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        let session = NSURLSession.sharedSession()
+        
         request.HTTPMethod = "POST"
-        
-        var err: NSError?
-        
         request.HTTPBody = params.dataUsingEncoding(NSUTF8StringEncoding);
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
+        //request.addValue(loginId, forHTTPHeaderField: "loginId")
         
-        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-            
-            var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
-            var err: NSError?
-            var json = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &err) as? NSDictionary
-            
-            var msg = "No message"
-            if(err != nil) {
-                println(err!.localizedDescription)
-                let jsonStr = NSString(data: data, encoding: NSUTF8StringEncoding)
+        let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            if(error != nil) {
+                print(error!.localizedDescription)
                 postCompleted(succeeded: false, msg: "Error")
             }
             else {
+                let json = (try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as? NSDictionary
                 if let parseJSON = json {
                     let success = parseJSON["isAuthenticated"] as? Int
                     if success == 1 {
@@ -80,34 +80,28 @@ class ApproveChartInterfaceController: WKInterfaceController {
                     return
                 }
                 else {
-                    let jsonStr = NSString(data: data, encoding: NSUTF8StringEncoding)
                     postCompleted(succeeded: false, msg: "Error")
                 }
             }
         })
-        
         task.resume()
     }
     
     func getDashboardCount(loginId: String, apiUrl: String) {
-        var request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
-        var session = NSURLSession.sharedSession()
-        request.HTTPMethod = "GET"
+        let request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
+        let session = NSURLSession.sharedSession()
         
-        var err: NSError?
+        request.HTTPMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         
-        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-            var err: NSError?
-            
-            if(err != nil) {
-                println(err!.localizedDescription)
+        let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            if(error != nil) {
+                print(error!.localizedDescription)
             }
             else {
-                var error : NSError?
-                var jsonData = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
+                let jsonData = (try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as! NSDictionary
                 
                 let cntapp: Int = jsonData["count"]!["approvals"] as! Int
                 let cntcert: Int = jsonData["count"]!["certifications"] as! Int
@@ -117,12 +111,10 @@ class ApproveChartInterfaceController: WKInterfaceController {
                 self.myRequest = cntreq
                 self.myCertificates = cntcert
                 
-                
                 self.group.setBackgroundImageNamed("singleArc")
                 self.group.startAnimatingWithImagesInRange(NSMakeRange(1, cntapp), duration: self.duration, repeatCount: 1)
             }
         })
-        
         task.resume()
     }
 

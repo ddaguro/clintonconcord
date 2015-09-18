@@ -36,7 +36,7 @@ class TransitionOperator: NSObject, UIViewControllerAnimatedTransitioning, UIVie
         
         let duration = self.transitionDuration(transitionContext)
         
-        UIView.animateWithDuration(duration, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.8, options: nil, animations: {
+        UIView.animateWithDuration(duration, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.8, options: [], animations: {
             
             self.snapshot.transform = CGAffineTransformIdentity
             
@@ -57,12 +57,12 @@ class TransitionOperator: NSObject, UIViewControllerAnimatedTransitioning, UIVie
         
         snapshot = fromView.snapshotViewAfterScreenUpdates(true)
         
-        container.addSubview(toView)
-        container.addSubview(snapshot)
+        container!.addSubview(toView)
+        container!.addSubview(snapshot)
         
         let duration = self.transitionDuration(transitionContext)
         
-        UIView.animateWithDuration(duration, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.8, options: nil, animations: {
+        UIView.animateWithDuration(duration, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.8, options: [], animations: {
             
             self.snapshot.transform = self.offSetTransform
             
@@ -73,7 +73,7 @@ class TransitionOperator: NSObject, UIViewControllerAnimatedTransitioning, UIVie
         
     }
     
-    func transitionDuration(transitionContext: UIViewControllerContextTransitioning) -> NSTimeInterval {
+    func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
         return 0.5
     }
     
@@ -96,7 +96,7 @@ class TransitionOperator: NSObject, UIViewControllerAnimatedTransitioning, UIVie
         if style == "presentSideNavigation" {
             return CGAffineTransformMakeTranslation(60, 0)
         }else if style == "presentFullNavigation" {
-            var transform = CGAffineTransformMakeTranslation(size.width - 120, 0)
+            let transform = CGAffineTransformMakeTranslation(size.width - 120, 0)
             return CGAffineTransformScale(transform, 0.6, 0.6)
             
         }else if style == "presentTableNavigation" {

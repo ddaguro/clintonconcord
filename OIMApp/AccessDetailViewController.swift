@@ -79,7 +79,7 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
         tableView.addSubview(refreshControl)
         
         
-        self.navigationController?.interactivePopGestureRecognizer.delegate = self;
+        self.navigationController?.interactivePopGestureRecognizer!.delegate = self;
 
     }
     

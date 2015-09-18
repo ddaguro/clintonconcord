@@ -124,7 +124,7 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         
         for role in loadedRoles {
             self.roles.append(role)
-            var data = RequestInfo(key: role.roleKey, categoryId: role.catalogId, name: role.roleName)
+            let data = RequestInfo(key: role.roleKey, categoryId: role.catalogId, name: role.roleName)
             self.tableData.append(data)
         }
         
@@ -141,7 +141,7 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         
         for ent in loadedEntitlements {
             self.entitlements.append(ent)
-            var data = RequestInfo(key: ent.entitlementKey, categoryId: ent.catalogId, name: ent.entitlementDisplayName)
+            let data = RequestInfo(key: ent.entitlementKey, categoryId: ent.catalogId, name: ent.entitlementDisplayName)
             self.tableData.append(data)
         }
         
@@ -158,7 +158,7 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         
         for app in loadedApplications {
             self.applications.append(app)
-            var data = RequestInfo(key: app.appInstanceKey, categoryId: app.catagoryId, name: app.displayName)
+            let data = RequestInfo(key: app.appInstanceKey, categoryId: app.catagoryId, name: app.displayName)
             self.tableData.append(data)
         }
         
@@ -239,7 +239,7 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        if let indexPath = self.tableView.indexPathForSelectedRow() {
+        if let indexPath = self.tableView.indexPathForSelectedRow {
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let controller = storyboard.instantiateViewControllerWithIdentifier("MakeRequestActionViewController") as! MakeRequestActionViewController
@@ -299,7 +299,7 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        let toViewController = segue.destinationViewController as! UIViewController
+        let toViewController = segue.destinationViewController 
         self.modalPresentationStyle = UIModalPresentationStyle.Custom
         toViewController.transitioningDelegate = self.transitionOperator
         
@@ -309,7 +309,7 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
     {
         filteredTableData.removeAll(keepCapacity: false)
         
-        let searchPredicate = NSPredicate(format: "name CONTAINS[c] %@", searchController.searchBar.text)
+        let searchPredicate = NSPredicate(format: "name CONTAINS[c] %@", searchController.searchBar.text!)
         let array = (tableData as NSArray).filteredArrayUsingPredicate(searchPredicate)
         filteredTableData = array as! [RequestInfo]
         

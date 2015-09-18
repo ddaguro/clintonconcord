@@ -165,9 +165,9 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
-        var view: UIView! = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 40))
+        let view: UIView! = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 40))
         view.backgroundColor = UIColor(red: 236.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, alpha: 1)
-        var lblHeading : UILabel! = UILabel(frame: CGRectMake(20, 0, 200, 20))
+        let lblHeading : UILabel! = UILabel(frame: CGRectMake(20, 0, 200, 20))
         lblHeading.font = UIFont.systemFontOfSize(12)
         lblHeading.textColor = UIColor.darkGrayColor()
         lblHeading.text = itemHeading.objectAtIndex(section) as! NSString as String
@@ -185,7 +185,7 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        let toViewController = segue.destinationViewController as! UIViewController
+        let toViewController = segue.destinationViewController 
         toViewController.transitioningDelegate = self.transitionOperator
     }
     

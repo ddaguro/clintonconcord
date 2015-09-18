@@ -22,8 +22,8 @@ class MenuViewController: UITableViewController {
         //println("----->>> MenuViewController")
         
         //---> Adding UIButton in UITableView Footer
-        var viewFooter = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 60))
-        var btnLogout = UIButton(frame: CGRectMake(10, 10, 150, 40))
+        let viewFooter = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 60))
+        let btnLogout = UIButton(frame: CGRectMake(10, 10, 150, 40))
         btnLogout.setTitle("LOGOUT", forState: UIControlState.Normal)
         btnLogout.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         btnLogout.layer.cornerRadius = 5.0
@@ -47,9 +47,9 @@ class MenuViewController: UITableViewController {
 
         
         
-        var view = UIView(frame: CGRectMake(0, 0, 0, 184.0))
+        let view = UIView(frame: CGRectMake(0, 0, 0, 184.0))
         /*var imageView = UIImageView(frame: CGRectMake(0, 40, 100, 100))*/
-        imageView.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleRightMargin
+        imageView.autoresizingMask = [UIViewAutoresizing.FlexibleLeftMargin, UIViewAutoresizing.FlexibleRightMargin]
         imageView.image = UIImage(named: "profileBlankPic")
         imageView.layer.masksToBounds = true;
         imageView.layer.cornerRadius = 50.0;
@@ -59,7 +59,7 @@ class MenuViewController: UITableViewController {
         imageView.layer.shouldRasterize = true;
         imageView.clipsToBounds = true
         
-        var displayname = NSUserDefaults.standardUserDefaults().objectForKey("DisplayName") as? String
+        let displayname = NSUserDefaults.standardUserDefaults().objectForKey("DisplayName") as? String
         // print("viewDidLoad----->>> ")
         // println(displayname)
         lblName.text = displayname
@@ -67,9 +67,9 @@ class MenuViewController: UITableViewController {
         lblName.backgroundColor = UIColor.clearColor()
         lblName.textColor = UIColor.whiteColor()  // UIColor(red: 62/255.0, green: 68/255.0, blue: 75/255.0, alpha: 1.0)
         lblName.sizeToFit();
-        lblName.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleRightMargin
+        lblName.autoresizingMask = [UIViewAutoresizing.FlexibleLeftMargin, UIViewAutoresizing.FlexibleRightMargin]
         
-        var btnSetting = UIButton(frame: CGRectMake(self.view.frame.size.width - 80, 25, 20, 20))
+        let btnSetting = UIButton(frame: CGRectMake(self.view.frame.size.width - 80, 25, 20, 20))
         btnSetting .setImage(UIImage(named: "menuicon-settings"), forState: UIControlState.Normal)
         btnSetting.addTarget(self, action: "btnSettingAction", forControlEvents: UIControlEvents.TouchUpInside)
         
@@ -79,9 +79,9 @@ class MenuViewController: UITableViewController {
         
         self.tblView.tableHeaderView = view
         // self.tblView.tableHeaderView?.backgroundColor = UIColor.clearColor()
-        var bView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height))
-        var bimage = UIImage(named: "side-menu-bg")
-        var bimageview = UIImageView(frame: CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height))
+        let bView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height))
+        let bimage = UIImage(named: "side-menu-bg")
+        let bimageview = UIImageView(frame: CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height))
         bimageview.image = bimage
         bView.addSubview(bimageview)
         self.tblView.backgroundView = bView
@@ -95,7 +95,7 @@ class MenuViewController: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        var displayname = NSUserDefaults.standardUserDefaults().objectForKey("DisplayName") as? String
+        let displayname = NSUserDefaults.standardUserDefaults().objectForKey("DisplayName") as? String
         // print("displayname----->>> ")
         // println(displayname)
         lblName.text = displayname
@@ -103,7 +103,7 @@ class MenuViewController: UITableViewController {
         // println(lblName.text)
         lblName.sizeToFit();
         lblName.center = CGPointMake(self.tblView.tableFooterView!.frame.size.width / 2, 160);
-        lblName.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleRightMargin
+        lblName.autoresizingMask = [UIViewAutoresizing.FlexibleLeftMargin, UIViewAutoresizing.FlexibleRightMargin]
         
         //imageView.autoresizingMask.contentMode = UIViewContentMode.ScaleAspectFit
         //let checkedUrl = Persistent.endpoint + Persistent.baseroot + "/users/" + myRequestorId + "/avatar"
@@ -139,7 +139,7 @@ class MenuViewController: UITableViewController {
     }
     
     func btnSettingAction() {
-        println("btnSettingAction clicked...")
+        print("btnSettingAction clicked...")
     }
     
     func btnLogoutAction() {
@@ -156,7 +156,7 @@ class MenuViewController: UITableViewController {
                 alert.message = msg
                 
                 for key in NSUserDefaults.standardUserDefaults().dictionaryRepresentation().keys {
-                    NSUserDefaults.standardUserDefaults().removeObjectForKey(key.description)
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey(key)
                 }
                 
             }
@@ -205,7 +205,7 @@ class MenuViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell:MenuCC = self.tblView.dequeueReusableCellWithIdentifier("MenuCC") as! MenuCC
+        let cell:MenuCC = self.tblView.dequeueReusableCellWithIdentifier("MenuCC") as! MenuCC
         
         if indexPath.row == 0 {
             cell.lblTitle.text = "DASHBOARD"
@@ -275,7 +275,7 @@ class MenuViewController: UITableViewController {
         if (indexPath.row == 0) {
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            var navigationController = storyboard.instantiateViewControllerWithIdentifier("REFrostedNavigationController") as! REFrostedNavigationController
+            let navigationController = storyboard.instantiateViewControllerWithIdentifier("REFrostedNavigationController") as! REFrostedNavigationController
             let dashBoardViewController = storyboard.instantiateViewControllerWithIdentifier("DashboardViewController") as! DashboardViewController
             navigationController.viewControllers = [dashBoardViewController]
             self.frostedViewController.contentViewController = navigationController;
@@ -285,7 +285,7 @@ class MenuViewController: UITableViewController {
         } else if (indexPath.row == 1) {
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            var navigationController = storyboard.instantiateViewControllerWithIdentifier("REFrostedNavigationController") as! REFrostedNavigationController
+            let navigationController = storyboard.instantiateViewControllerWithIdentifier("REFrostedNavigationController") as! REFrostedNavigationController
             let accessViewController = storyboard.instantiateViewControllerWithIdentifier("AccessViewController") as! AccessViewController
             navigationController.viewControllers = [accessViewController]
             self.frostedViewController.contentViewController = navigationController;
@@ -294,7 +294,7 @@ class MenuViewController: UITableViewController {
         } else if (indexPath.row == 2) {
 
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            var navigationController = storyboard.instantiateViewControllerWithIdentifier("REFrostedNavigationController") as! REFrostedNavigationController
+            let navigationController = storyboard.instantiateViewControllerWithIdentifier("REFrostedNavigationController") as! REFrostedNavigationController
             let certficationsViewController = storyboard.instantiateViewControllerWithIdentifier("CertficationsViewController") as! CertficationsViewController
             navigationController.viewControllers = [certficationsViewController]
             self.frostedViewController.contentViewController = navigationController;
@@ -303,7 +303,7 @@ class MenuViewController: UITableViewController {
         } else if (indexPath.row == 3) {
 
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            var navigationController = storyboard.instantiateViewControllerWithIdentifier("REFrostedNavigationController") as! REFrostedNavigationController
+            let navigationController = storyboard.instantiateViewControllerWithIdentifier("REFrostedNavigationController") as! REFrostedNavigationController
             let approvalsViewController = storyboard.instantiateViewControllerWithIdentifier("ApprovalsViewController") as! ApprovalsViewController
             navigationController.viewControllers = [approvalsViewController]
             self.frostedViewController.contentViewController = navigationController;
@@ -312,7 +312,7 @@ class MenuViewController: UITableViewController {
         } else if (indexPath.row == 4) {
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            var navigationController = storyboard.instantiateViewControllerWithIdentifier("REFrostedNavigationController") as! REFrostedNavigationController
+            let navigationController = storyboard.instantiateViewControllerWithIdentifier("REFrostedNavigationController") as! REFrostedNavigationController
             let requestsViewController = storyboard.instantiateViewControllerWithIdentifier("RequestsViewController") as! RequestsViewController
             navigationController.viewControllers = [requestsViewController]
             self.frostedViewController.contentViewController = navigationController;
@@ -321,7 +321,7 @@ class MenuViewController: UITableViewController {
         } else if (indexPath.row == 5) {
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            var navigationController = storyboard.instantiateViewControllerWithIdentifier("REFrostedNavigationController") as! REFrostedNavigationController
+            let navigationController = storyboard.instantiateViewControllerWithIdentifier("REFrostedNavigationController") as! REFrostedNavigationController
             let makeRequestViewController = storyboard.instantiateViewControllerWithIdentifier("MakeRequestViewController") as! MakeRequestViewController
             navigationController.viewControllers = [makeRequestViewController]
             self.frostedViewController.contentViewController = navigationController;
@@ -330,7 +330,7 @@ class MenuViewController: UITableViewController {
         } else if (indexPath.row == 6) {
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            var navigationController = storyboard.instantiateViewControllerWithIdentifier("REFrostedNavigationController") as! REFrostedNavigationController
+            let navigationController = storyboard.instantiateViewControllerWithIdentifier("REFrostedNavigationController") as! REFrostedNavigationController
             let webViewController = storyboard.instantiateViewControllerWithIdentifier("WebViewController") as! WebViewController
             navigationController.viewControllers = [webViewController]
             self.frostedViewController.contentViewController = navigationController;
@@ -408,7 +408,7 @@ class MenuViewController: UITableViewController {
             users.append(usr)
         }
     }
-    
+    /*
     func downloadImage(url: String){
         //println("Started downloading \"\(url.lastPathComponent!.stringByDeletingPathExtension)\".")
         self.api.getDataFromUrl(url) { data in
@@ -418,7 +418,7 @@ class MenuViewController: UITableViewController {
             }
         }
     }
-    
+    */
     /*
     // MARK: - Navigation
 

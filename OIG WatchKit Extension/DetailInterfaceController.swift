@@ -33,12 +33,12 @@ class DetailInterfaceController: WKInterfaceController {
         
         RequestApprovalAction(myLoginId, params : paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
             if(succeeded) {
-                println("Action Successful")
+                print("Action Successful")
                 self.pushControllerWithName("InterfaceController", context: self)
                 self.dismissController()
             }
             else {
-                println("Action Failed")
+                print("Action Failed")
             }
             
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -136,34 +136,24 @@ class DetailInterfaceController: WKInterfaceController {
     }
     
     func RequestApprovalAction(loginId : String, params : String, url : String, postCompleted : (succeeded: Bool, msg: String) -> ()) {
-        var request = NSMutableURLRequest(URL: NSURL(string: url)!)
-        var session = NSURLSession.sharedSession()
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        let session = NSURLSession.sharedSession()
+        
         request.HTTPMethod = "POST"
-        
-        var err: NSError?
-        
         request.HTTPBody = params.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true);
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         
-        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-            
-            //println("Response: \(response)")
-            var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
-            //println("Body: \(strData)")
-            var err: NSError?
-            var json = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &err) as? NSDictionary
-            
-            var msg = "No message"
-            if(err != nil) {
-                let jsonStr = NSString(data: data, encoding: NSUTF8StringEncoding)
+        let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            if(error != nil) {
                 postCompleted(succeeded: false, msg: "Error")
             }
             else {
+                let json = (try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as? NSDictionary
                 if let parseJSON = json {
-                    var info : NSArray =  json!.valueForKey("results") as! NSArray
-                    var success: Bool? = info[0].valueForKey("isSuccess") as? Bool
+                    let info : NSArray =  parseJSON.valueForKey("results") as! NSArray
+                    let success: Bool? = info[0].valueForKey("isSuccess") as? Bool
                     
                     if success == true {
                         postCompleted(succeeded: true, msg: "Approved Request")
@@ -172,8 +162,8 @@ class DetailInterfaceController: WKInterfaceController {
                     return
                 }
                 else {
-                    let jsonStr = NSString(data: data, encoding: NSUTF8StringEncoding)
-                    println("Error could not parse JSON: \(jsonStr)")
+                    let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                    print("Error could not parse JSON: \(jsonStr)")
                     postCompleted(succeeded: false, msg: "Error")
                 }
             }

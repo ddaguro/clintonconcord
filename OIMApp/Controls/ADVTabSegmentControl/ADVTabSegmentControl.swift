@@ -55,7 +55,7 @@ import UIKit
         setupView()
     }
     
-    required init(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupView()
     }
@@ -88,7 +88,7 @@ import UIKit
             label.textAlignment = .Center
             label.font = UIFont(name: MegaTheme.boldFontName, size: 15)
             label.textColor = index == 1 ? selectedLabelColor : unselectedLabelColor
-            label.setTranslatesAutoresizingMaskIntoConstraints(false)
+            label.translatesAutoresizingMaskIntoConstraints = false
             self.addSubview(label)
             labels.append(label)
             
@@ -96,7 +96,7 @@ import UIKit
             if index != items.count {
                 let separator = UIView()
                 separator.backgroundColor = borderColor
-                separator.setTranslatesAutoresizingMaskIntoConstraints(false)
+                separator.translatesAutoresizingMaskIntoConstraints = false
                 separators.append(separator)
                 self.addSubview(separator)
             }
@@ -109,12 +109,12 @@ import UIKit
         super.layoutSubviews()
     }
     
-    override func beginTrackingWithTouch(touch: UITouch, withEvent event: UIEvent) -> Bool {
+    override func beginTrackingWithTouch(touch: UITouch, withEvent event: UIEvent?) -> Bool {
         
         let location = touch.locationInView(self)
         
         var calculatedIndex : Int?
-        for (index, item) in enumerate(labels) {
+        for (index, item) in labels.enumerate() {
             if item.frame.contains(location) {
                 calculatedIndex = index
             }
@@ -130,23 +130,23 @@ import UIKit
     }
     
     func displayNewSelectedIndex(){
-        for (index, item) in enumerate(labels) {
+        for (index, item) in labels.enumerate() {
             item.textColor = unselectedLabelColor
         }
         
-        var label = labels[selectedIndex]
+        let label = labels[selectedIndex]
         label.textColor = selectedLabelColor
     }
     
     func addIndividualItemConstraints(items: [UIView], mainView: UIView, padding: CGFloat) {
         
-        let constraints = mainView.constraints()
+        let constraints = mainView.constraints
         
-        for (index, button) in enumerate(items) {
+        for (index, button) in items.enumerate() {
             
-            var topConstraint = NSLayoutConstraint(item: button, attribute: .Top, relatedBy: .Equal, toItem: mainView, attribute: .Top, multiplier: 1.0, constant: 0)
+            let topConstraint = NSLayoutConstraint(item: button, attribute: .Top, relatedBy: .Equal, toItem: mainView, attribute: .Top, multiplier: 1.0, constant: 0)
             
-            var bottomConstraint = NSLayoutConstraint(item: button, attribute: .Bottom, relatedBy: .Equal, toItem: mainView, attribute: .Bottom, multiplier: 1.0, constant: 0)
+            let bottomConstraint = NSLayoutConstraint(item: button, attribute: .Bottom, relatedBy: .Equal, toItem: mainView, attribute: .Bottom, multiplier: 1.0, constant: 0)
             
             var rightConstraint : NSLayoutConstraint!
             
@@ -174,7 +174,7 @@ import UIKit
                 
                 let firstItem = items[0]
                 
-                var widthConstraint = NSLayoutConstraint(item: button, attribute: .Width, relatedBy: .Equal, toItem: firstItem, attribute: .Width, multiplier: 1.0  , constant: 0)
+                let widthConstraint = NSLayoutConstraint(item: button, attribute: .Width, relatedBy: .Equal, toItem: firstItem, attribute: .Width, multiplier: 1.0  , constant: 0)
                 
                 mainView.addConstraint(widthConstraint)
             }
@@ -184,13 +184,13 @@ import UIKit
         
         for separator in separators {
             
-            var widthConstraint = NSLayoutConstraint(item: separator, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0  , constant: 0.5)
+            let widthConstraint = NSLayoutConstraint(item: separator, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0  , constant: 0.5)
             
             separator.addConstraint(widthConstraint)
             
-            var topConstraint = NSLayoutConstraint(item: separator, attribute: .Top, relatedBy: .Equal, toItem: mainView, attribute: .Top, multiplier: 1.0, constant: 10)
+            let topConstraint = NSLayoutConstraint(item: separator, attribute: .Top, relatedBy: .Equal, toItem: mainView, attribute: .Top, multiplier: 1.0, constant: 10)
             
-            var bottomConstraint = NSLayoutConstraint(item: separator, attribute: .Bottom, relatedBy: .Equal, toItem: mainView, attribute: .Bottom, multiplier: 1.0, constant: -10)
+            let bottomConstraint = NSLayoutConstraint(item: separator, attribute: .Bottom, relatedBy: .Equal, toItem: mainView, attribute: .Bottom, multiplier: 1.0, constant: -10)
             
             mainView.addConstraints([topConstraint, bottomConstraint])
         }

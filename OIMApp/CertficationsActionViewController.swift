@@ -84,7 +84,7 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
                     jsonstring += ",\"entityId\": " +  "\(self.applicationInstanceId)"
                     jsonstring += ",\"requesterId\": \"" + myLoginId
                     jsonstring += "\",\"certificationType\": \"" + self.certType
-                    jsonstring += "\",\"certificationComments\": \"" + textField.text
+                    jsonstring += "\",\"certificationComments\": \"" + textField.text!
                     jsonstring += "\",\"certificationDecision\": \"" + "CERTIFY"
                     jsonstring += "\",\"identityPassword\": \"" + "Oracle123" + "\""
                     jsonstring += ",\"accounts\": ["
@@ -98,7 +98,7 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
                     }
                     jsonstring += "]}"
                     
-                    var idx = advance(jsonstring.endIndex, -3)
+                    var idx = jsonstring.endIndex.advancedBy(-3)
                     
                     var substring1 = jsonstring.substringToIndex(idx)
                     substring1 += "]}}"
@@ -171,7 +171,7 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
     }
     
     @IBAction func btnEditRevokeAction(sender: AnyObject) {
-        var alert = UIAlertView(title: "Alert", message: "Revoke", delegate: nil, cancelButtonTitle: "Okay")
+        let alert = UIAlertView(title: "Alert", message: "Revoke", delegate: nil, cancelButtonTitle: "Okay")
         alert.show()
     }
     
@@ -236,7 +236,7 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         refreshControl.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
         tableView.addSubview(refreshControl)
         
-        self.navigationController?.interactivePopGestureRecognizer.delegate = self;
+        self.navigationController?.interactivePopGestureRecognizer!.delegate = self;
         
     }
     
@@ -271,7 +271,7 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
             self.view.showLoading()
         }
         
-        self.certitemdetail.sort({ $0.lastCertificationActionDetails < $1.lastCertificationActionDetails })
+        self.certitemdetail.sortInPlace({ $0.lastCertificationActionDetails < $1.lastCertificationActionDetails })
         self.tableView.reloadData()
         self.view.hideLoading()
         self.refreshControl?.endRefreshing()
@@ -511,7 +511,7 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        if let indexPath = self.tableView.indexPathsForSelectedRows() as? [NSIndexPath]{
+        if let indexPath = self.tableView.indexPathsForSelectedRows as? [NSIndexPath]! {
             
             if certType == "ApplicationInstance" {
                 self.selectedcertitem.removeAll(keepCapacity: true)
@@ -610,7 +610,7 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
                 jsonstring += "\",\"entitlements\": []}],"
                 jsonstring += "\"requesterId\": \"" + myLoginId
                 jsonstring += "\",\"certificationType\": \"" + ctype
-                jsonstring += "\",\"certificationComments\": \"" + textField.text
+                jsonstring += "\",\"certificationComments\": \"" + textField.text!
                 jsonstring += "\",\"certificationDecision\": \"" + "CERTIFY"
                 jsonstring += "\",\"identityPassword\": \"" + "Oracle123"
                 jsonstring += "\"}}"
@@ -674,7 +674,7 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
     
     func buttonEntAction(sender:UIButton!)
     {
-        var btnsendtag:UIButton = sender
+        let btnsendtag:UIButton = sender
         let action = sender.currentTitle
         
         var requestorUserId : String!

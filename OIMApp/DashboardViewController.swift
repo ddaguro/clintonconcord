@@ -91,7 +91,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func showAlert(){
-        var createAccountErrorAlert: UIAlertView = UIAlertView()
+        let createAccountErrorAlert: UIAlertView = UIAlertView()
         createAccountErrorAlert.delegate = self
         createAccountErrorAlert.title = ""
         createAccountErrorAlert.message = "Would you like to register for FIDO biometric authentication?"
@@ -115,12 +115,12 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             if context.canEvaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, error: &error) {
                 let reason = "Authenticate with Touch ID"
                 context.evaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, localizedReason: reason, reply:
-                    {(succes: Bool, error: NSError!) in
+                    {(succes: Bool, error: NSError?) in
                         dispatch_async(dispatch_get_main_queue(), {
                             
                         if succes {
                             myFIDO = true
-                            var alert = UIAlertView(title: "Success \u{1F44D}", message: "FIDO UAF Authentication Succeeded", delegate: nil, cancelButtonTitle: "Okay")
+                            let alert = UIAlertView(title: "Success \u{1F44D}", message: "FIDO UAF Authentication Succeeded", delegate: nil, cancelButtonTitle: "Okay")
                             alert.show()
                         }
                         else {
@@ -128,9 +128,6 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                         }
                     })
                 })
-            }
-            else {
-                self.showAlertController("Touch ID Not Available")
             }
             break;
         default:
@@ -146,21 +143,21 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func appBtnTouched(sender:UIButton!) {
-        var btnsendtag:UIButton = sender
+        let btnsendtag:UIButton = sender
         if btnsendtag.tag == 1 {
             //println("Button tapped pending approvals")
             self.performSegueWithIdentifier("SegueApprovals", sender: self)
         }
     }
     func reqBtnTouched(sender:UIButton!) {
-        var btnsendtag:UIButton = sender
+        let btnsendtag:UIButton = sender
         if btnsendtag.tag == 2 {
             //println("Button tapped pending requests")
             self.performSegueWithIdentifier("SegueRequests", sender: self)
         }
     }
     func certBtnTouched(sender:UIButton!) {
-        var btnsendtag:UIButton = sender
+        let btnsendtag:UIButton = sender
         if btnsendtag.tag == 3 {
             //println("Button tapped pending certifications")
             self.performSegueWithIdentifier("SegueCerts", sender: self)
@@ -189,7 +186,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         for act in loadedActivities {
             self.activities.append(act)
         }
-        activities.sort({ $0.reqModifiedOnDate > $1.reqModifiedOnDate })
+        activities.sortInPlace({ $0.reqModifiedOnDate > $1.reqModifiedOnDate })
         tableView.reloadData()
         view.hideLoading()
         
@@ -209,8 +206,8 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         lblTotalCounts.layer.masksToBounds = true;
         
         arcSize = degreesToRadians(360)
-        var arcStart = 3/4 * M_PI
-        var arcEnd = 3 * M_PI
+        let arcStart = 3/4 * M_PI
+        let arcEnd = 3 * M_PI
         
         api = API()
         
@@ -236,7 +233,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             self.createArc(appCenter, radius: appradius, startAngle: arcStart, endAngle: arcEnd, color: self.UIColorFromHex(0xeeeeee, alpha: 1.0).CGColor)
             self.animateArcs(arcValues, radius: appradius, center: appCenter, color: self.UIColorFromHex(0x9777a8, alpha: 1.0).CGColor)
             
-            var appcntlabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
+            let appcntlabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
             appcntlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) , CGFloat(self.screenSize.height/2) - CGFloat(205.0))
             appcntlabel.textAlignment = NSTextAlignment.Center
             appcntlabel.font = UIFont(name: MegaTheme.fontName, size: 40)
@@ -244,7 +241,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             appcntlabel.text = "\(myApprovals)"
             self.dashView.addSubview(appcntlabel)
             
-            var applabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
+            let applabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
             applabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) , CGFloat(self.screenSize.height/2) - CGFloat(175.0))
             applabel.textAlignment = NSTextAlignment.Center
             applabel.font = UIFont(name: MegaTheme.fontName, size: 12)
@@ -253,7 +250,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             applabel.text = "PENDING\nAPPROVALS"
             self.dashView.addSubview(applabel)
             
-            let appButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
+            let appButton = UIButton(type: UIButtonType.System)
             appButton.frame = CGRectMake(0, 0, 200, 200)
             appButton.center = CGPointMake(CGFloat(self.screenSize.width/2.0) , CGFloat(self.screenSize.height/2) - CGFloat(205.0))
             appButton.addTarget(self, action: "appBtnTouched:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -268,7 +265,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             self.createArc(reqCenter, radius: reqradius, startAngle: arcStart, endAngle: arcEnd, color: self.UIColorFromHex(0xeeeeee, alpha: 1.0).CGColor)
             self.animateArcs(arcValues2, radius: reqradius, center: reqCenter, color: self.UIColorFromHex(0x4a90e2, alpha: 1.0).CGColor)
             
-            var reqcntlabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
+            let reqcntlabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
             reqcntlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) - CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) - CGFloat(40.0))
             reqcntlabel.textAlignment = NSTextAlignment.Center
             reqcntlabel.font = UIFont(name: MegaTheme.fontName, size: 30)
@@ -276,7 +273,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             reqcntlabel.text = "\(myRequest)"
             self.dashView.addSubview(reqcntlabel)
             
-            var reqlabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
+            let reqlabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
             reqlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) - CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) + CGFloat(35.0))
             reqlabel.textAlignment = NSTextAlignment.Center
             reqlabel.font = UIFont(name: MegaTheme.fontName, size: 12)
@@ -285,7 +282,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             reqlabel.text = "PENDING\nREQUESTS"
             self.dashView.addSubview(reqlabel)
             
-            let reqButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
+            let reqButton = UIButton(type: UIButtonType.System)
             reqButton.frame = CGRectMake(0, 0, 100, 100)
             reqButton.center = CGPointMake(CGFloat(self.screenSize.width/2.0) - CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) - CGFloat(40.0))
             reqButton.addTarget(self, action: "reqBtnTouched:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -300,7 +297,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             self.createArc(certCenter, radius: certradius, startAngle: arcStart, endAngle: arcEnd, color: self.UIColorFromHex(0xeeeeee, alpha: 1.0).CGColor)
             self.animateArcs(arcValues3, radius: certradius, center: certCenter,color: self.UIColorFromHex(0x88c057, alpha: 1.0).CGColor)
         
-            var certcntlabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
+            let certcntlabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
             certcntlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) + CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) - CGFloat(40.0))
             certcntlabel.textAlignment = NSTextAlignment.Center
             certcntlabel.font = UIFont(name: MegaTheme.fontName, size: 30)
@@ -308,7 +305,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             certcntlabel.text = "\(myCertificates)"
             self.dashView.addSubview(certcntlabel)
             
-            var certlabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
+            let certlabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
             certlabel.center = CGPointMake(CGFloat(self.screenSize.width/2.0) + CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) + CGFloat(35.0))
             certlabel.textAlignment = NSTextAlignment.Center
             certlabel.font = UIFont(name: MegaTheme.fontName, size: 12)
@@ -317,14 +314,14 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             certlabel.text = "PENDING\nCERTIFICATIONS"
             self.dashView.addSubview(certlabel)
             
-            let certButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
+            let certButton = UIButton(type: UIButtonType.System)
             certButton.frame = CGRectMake(0, 0, 100, 100)
             certButton.center = CGPointMake(CGFloat(self.screenSize.width/2.0) + CGFloat(75.0) , CGFloat(self.screenSize.height/2.0) - CGFloat(40.0))
             certButton.addTarget(self, action: "certBtnTouched:", forControlEvents: UIControlEvents.TouchUpInside)
             certButton.tag = 3
             self.dashView.addSubview(certButton)
             
-            var lblHeading : UILabel! = UILabel(frame: CGRectMake(0, 390, self.view.frame.size.width, 30))
+            let lblHeading : UILabel! = UILabel(frame: CGRectMake(0, 390, self.view.frame.size.width, 30))
             lblHeading.backgroundColor = UIColor(red: 236.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, alpha: 1)
             //lblHeading.layer.borderWidth = 1
             //lblHeading.layer.borderColor = UIColor.lightGrayColor().CGColor
@@ -459,7 +456,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        let toViewController = segue.destinationViewController as! UIViewController
+        let toViewController = segue.destinationViewController 
         self.modalPresentationStyle = UIModalPresentationStyle.Custom
         toViewController.transitioningDelegate = self.transitionOperator
 
@@ -467,14 +464,14 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     
     /* Circle Chart */
     func animateArcs(arcValues:Array<Int>, radius: Double, center: CGPoint, color: CGColor) {
-        var sum = arcValues.reduce(0,combine: +)
+        let sum = arcValues.reduce(0,combine: +)
         var currentOffset = 0
         var currentStartAngle : Double?
         var currentEndAngle : Double?
         var currentDelay : Double = 0
         
         for var i = 0; i < arcValues.count; i++ {
-            var duration = Double(CGFloat(arcValues[i])/CGFloat(sum))
+            let duration = Double(CGFloat(arcValues[i])/CGFloat(sum))
             
             if currentEndAngle == nil {
                 currentStartAngle = degreesToRadians(120)
@@ -506,7 +503,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func createArc(center: CGPoint, radius: Double, startAngle : Double, endAngle : Double, color : CGColor) {
         
-        var arc = CAShapeLayer()
+        let arc = CAShapeLayer()
         arc.lineCap = kCALineCapRound
         //arc.zPosition = -1000
         
@@ -523,7 +520,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func createAnimatedArc(center: CGPoint, radius: Double, startAngle : Double, endAngle : Double, color : CGColor, duration: Double, beginTime: Double, z: CGFloat) {
         
-        var arc = CAShapeLayer()
+        let arc = CAShapeLayer()
         arc.zPosition = z
         arc.path = UIBezierPath(arcCenter: center, radius:
             CGFloat(radius), startAngle: CGFloat(startAngle), endAngle: CGFloat(endAngle), clockwise: true).CGPath
@@ -539,7 +536,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         arc.strokeStart = 0
         arc.strokeEnd = 0
         
-        var arcAnimation = CABasicAnimation(keyPath:"strokeEnd")
+        let arcAnimation = CABasicAnimation(keyPath:"strokeEnd")
         arcAnimation.fromValue = NSNumber(double: 0)
         arcAnimation.toValue = NSNumber(double: 1)
         
@@ -553,7 +550,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         let delay = (duration + beginTime - 0.07) * Double(NSEC_PER_SEC)
         let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
         dispatch_after(time, dispatch_get_main_queue(), {
-            var finalArc = CAShapeLayer()
+            let finalArc = CAShapeLayer()
             finalArc.zPosition = z
             finalArc.lineCap = kCALineCapRound
             finalArc.path = UIBezierPath(arcCenter: center, radius:

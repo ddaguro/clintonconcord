@@ -30,7 +30,7 @@ class NavigationViewController : UIViewController, UITableViewDelegate, UITableV
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        println("in MenuViewController - NavigationViewController")
+        print("in MenuViewController - NavigationViewController")
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorColor = UIColor(white: 0.20, alpha: 1.0)
@@ -145,7 +145,7 @@ class NavigationViewController : UIViewController, UITableViewDelegate, UITableV
         
         //controller.nagivationStyleToPresent = "presentTableNavigation"
         
-        let toViewController = segue.destinationViewController as! UIViewController
+        let toViewController = segue.destinationViewController 
         toViewController.transitioningDelegate = self.transitionOperator
         
     }

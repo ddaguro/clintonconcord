@@ -13,7 +13,7 @@ public class Utils {
     
     class func getStringFromJSON(data: NSDictionary, key: String) -> String{
         
-        let info : AnyObject? = data[key]
+        //let info : AnyObject? = data[key]
         
         if let info = data[key] as? String {
             return info
