@@ -8,15 +8,19 @@
 
 import WatchKit
 import Foundation
+import WatchConnectivity
 
 
-class InterfaceController: WKInterfaceController {
+class InterfaceController: WKInterfaceController, WCSessionDelegate {
 
+    private let session: WCSession? = WCSession.isSupported() ? WCSession.defaultSession() : nil
+    
     @IBOutlet var approveTable: WKInterfaceTable!
     
-    let endpoint = "http://idaasapi.persistent.com:9080/"
-    let baseroot = "idaas/oig/v1"
-    let myLoginId = "dcrane"
+    var username : String = ""
+    
+    let endpoint = "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9441/"
+    let baseroot = "idaas/im/v1"
     
     var tasks : [Tasks]!
     
@@ -25,21 +29,51 @@ class InterfaceController: WKInterfaceController {
         approveTable.scrollToRowAtIndex(0)
     }
     
+    
+    override init() {
+        super.init()
+        
+        session?.delegate = self
+        session?.activateSession()
+    }
+    
+    func session(session: WCSession, didReceiveUserInfo userInfo: [String : AnyObject]) {
+        let emoji = userInfo["user"] as? String
+        self.username = emoji!
+        print("user: \(self.username)")
+        //Use this to update the UI instantaneously (otherwise, takes a little while)
+        /*
+        dispatch_async(dispatch_get_main_queue()) {
+            if let emoji = emoji {
+                print("Last emoji: \(emoji)")
+                self.username = emoji
+                print("user: \(self.username)")
+            }
+        }
+*/
+    }
+    
     override func awakeWithContext(context: AnyObject?) {
         super.awakeWithContext(context)
         
-        let appGroupID = "group.com.persistent.plat-sol.OIGApp"
         
-        let defaults = NSUserDefaults(suiteName: appGroupID)
+        //let appGroupID = "group.com.persistent.plat-sol.OIGApp"
         
-        if let username = defaults?.stringForKey("requestorUserId") {
-            print(username)
+        //let defaults = NSUserDefaults(suiteName: appGroupID)
+        //let username = "dcrane" as String! //defaults?.stringForKey("userLogin")
+        
+        
+        var user = "" as String!
+        if self.username == "" {
+            user = "dcrane"
+        } else {
+            user = self.username
         }
-        let username = defaults?.stringForKey("requestorUserId")
-        
+        print("user 1: \(user)")
         
         let url2 = endpoint + baseroot + "/users/login"
-        let paramstring = "username=" + username! + "&password=Oracle123"
+        let paramstring = "username=" + user + "&password=Oracle123"
+        
         LogIn(paramstring, url : url2) { (succeeded: Bool, msg: String) -> () in
             if(succeeded) {
                 //println("Success")
@@ -51,24 +85,29 @@ class InterfaceController: WKInterfaceController {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 if(succeeded) {
                     //println("Success Async")
-                    
                     self.loadTableData()
                 }
             })
         }
     }
     
-    
     private func loadTableData() {
         self.tasks = [Tasks]()
         
-        let appGroupID = "group.com.persistent.plat-sol.OIGApp"
+        //let appGroupID = "group.com.persistent.plat-sol.OIGApp"
         
-        let defaults = NSUserDefaults(suiteName: appGroupID)
-        let username = defaults?.stringForKey("requestorUserId")
-        
-        let url = endpoint + baseroot + "/users/dcrane/approvals/"
-        loadPendingApprovals(username!, apiUrl: url, completion : didLoadData)
+        //let defaults = NSUserDefaults(suiteName: appGroupID)
+        //print(defaults?.stringForKey("userLogin"))
+        //let username = "dcrane" as String! //defaults?.stringForKey("userLogin")
+        var user = "" as String!
+        if self.username == "" {
+            user = "dcrane"
+        } else {
+            user = self.username
+        }
+        print("user 2: \(user)")
+        let url = endpoint + baseroot + "/users/" + user + "/approvals/"
+        loadPendingApprovals(user, apiUrl: url, completion : didLoadData)
        
     }
     
@@ -80,7 +119,6 @@ class InterfaceController: WKInterfaceController {
             self.tasks.append(data)
         }
         
-        //println(self.tasks.count)
         if approveTable.numberOfRows != tasks.count {
             approveTable.setNumberOfRows(tasks.count, withRowType: "ApproveTableRowController")
         }
@@ -107,7 +145,6 @@ class InterfaceController: WKInterfaceController {
                     }
                 }
                 row.subtitleLabel.setText(beneficiaryText)
-                
                 row.descriptionLabel.setText(info.requestJustification)
                 row.dateLabel.setText(formatDate(info.requestedDate))
             }
@@ -127,9 +164,9 @@ class InterfaceController: WKInterfaceController {
     override func willActivate() {
         // This method is called when watch view controller is about to be visible to user
         super.willActivate()
-        //self.loadTableData()
         approveTable.scrollToRowAtIndex(0)
     }
+
 
     override func didDeactivate() {
         // This method is called when watch view controller is no longer visible
@@ -144,6 +181,7 @@ class InterfaceController: WKInterfaceController {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
+        request.addValue("TestClient", forHTTPHeaderField: "clientId")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -173,12 +211,14 @@ class InterfaceController: WKInterfaceController {
     
     func LogIn(params : String, url : String, postCompleted : (succeeded: Bool, msg: String) -> ()) {
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
-        let session = NSURLSession.sharedSession()
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let session = NSURLSession(configuration: sessionConfig)
         
         request.HTTPMethod = "POST"
         request.HTTPBody = params.dataUsingEncoding(NSUTF8StringEncoding);
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("TestClient", forHTTPHeaderField: "clientId")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {

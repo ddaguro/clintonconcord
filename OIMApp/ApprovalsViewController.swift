@@ -187,6 +187,18 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         //---> PanGestureRecognizer
         let recognizer = UIPanGestureRecognizer(target: self, action: "panGestureRecognized:")
         self.view.addGestureRecognizer(recognizer)
+        
+        /*
+        let localNotification:UILocalNotification = UILocalNotification()
+        localNotification.alertAction = "Approve"
+        localNotification.alertBody = "Kevin Clark is requesting West Data Center Access."
+        localNotification.soundName = UILocalNotificationDefaultSoundName
+        localNotification.applicationIconBadgeNumber = 1
+        localNotification.fireDate = NSDate(timeIntervalSinceNow: 15)
+        UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
+        */
+
+        
     }
     
     // MARK: swipe gestures

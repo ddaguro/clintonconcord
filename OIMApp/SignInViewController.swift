@@ -9,9 +9,9 @@
 import Foundation
 import UIKit
 import LocalAuthentication
+import WatchConnectivity
 
-class SignInViewController : UIViewController, UITextFieldDelegate {
-    
+class SignInViewController : UIViewController, UITextFieldDelegate, WCSessionDelegate {
     
     @IBOutlet var titleLabel : UILabel!
     
@@ -44,8 +44,16 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
     var FIDOusername : String = ""
     var FIDOpassword : String = ""
     
+    private var session: WCSession? = WCSession.isSupported() ? WCSession.defaultSession() : nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        let session = WCSession.defaultSession()
+        session.delegate = self
+        session.activateSession()
+
         
         //hide
         facebookButton.hidden = true
@@ -107,7 +115,10 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
             NSUserDefaults.standardUserDefaults().removeObjectForKey(key)
         }
         
+        UIApplication.sharedApplication().registerForRemoteNotifications()
+        
     }
+    
     
     func textFieldShouldReturn(userText: UITextField) -> Bool {
         self.view.endEditing(true)
@@ -131,7 +142,7 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
     func LoggedInFIDO(){
         
         if self.ReadLogin() {
-            if myLoginId != self.userTextField.text {
+            if myLoginId != self.userTextField.text     {
                 let alert = UIAlertView(title: "Failed \u{1F44E}", message: "FIDO UAF Authenication Failed", delegate: nil, cancelButtonTitle: "Okay")
                 alert.show()
                 dismissViewControllerAnimated(true, completion: nil)
@@ -178,19 +189,18 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
                                                 
                                                 let url = Persistent.endpoint + Persistent.baseroot + "/users/" + username
                                                 self.api.loadUser(username, apiUrl: url, completion : self.didLoadUsers)
-                                                
-                                                //myLoginId = username
-                                                
+                                        
                                                 let appGroupID = "group.com.persistent.plat-sol.OIGApp"
                                                 
                                                 if let defaults = NSUserDefaults(suiteName: appGroupID) {
-                                                    defaults.setValue(username, forKey: "requestorUserId")
+                                                    defaults.setValue(username, forKey: "userLogin")
                                                 }
-                                                
                                                 NSUserDefaults.standardUserDefaults().setObject(username, forKey: "requestorUserId")
                                                 NSUserDefaults.standardUserDefaults().synchronize()
                                                 
                                                 myLoginId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
+                                                
+
 
                                             }
                                             else {
@@ -241,7 +251,7 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
             api.LogIn(username!, params: paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
                 let alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
                 if(succeeded) {
-                    self.users = [Users]()
+                    //self.users = [Users]()
                     
                     let url = Persistent.endpoint + Persistent.baseroot + "/users/" + username!
                     self.api.loadUser(username!, apiUrl: url, completion : self.didLoadUsers)
@@ -249,16 +259,22 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
                     if myLoginId != username {
                         myFIDO = false
                     }
+                    /*
                     let appGroupID = "group.com.persistent.plat-sol.OIGApp"
                     
                     if let defaults = NSUserDefaults(suiteName: appGroupID) {
-                        defaults.setValue(username, forKey: "requestorUserId")
+                        defaults.setValue(username, forKey: "userLogin")
+                        defaults.synchronize()
                     }
-                    
+                    */
                     NSUserDefaults.standardUserDefaults().setObject(username, forKey: "requestorUserId")
                     NSUserDefaults.standardUserDefaults().synchronize()
                     
                     myLoginId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
+
+                    if self.session == self.validSession {
+                        WCSession.defaultSession().transferUserInfo(["user" : myLoginId ])
+                    }
                     
                     self.SaveLogin(username!, pwd: password!)
                 }
@@ -277,12 +293,19 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
                 })
             }
         } else {
-            let alert = UIAlertView(title: "Failed : (", message: "Incorrect username and password", delegate: nil, cancelButtonTitle: "Okay")
-            alert.show()
+            //let alert = UIAlertView(title: "Failed : (", message: "Incorrect username and password", delegate: nil, cancelButtonTitle: "Okay")
+            //alert.show()
+            let alert = UIAlertController(title: "Failed : (", message: "Incorrect username and password", preferredStyle: .Alert)
+            
+            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in }
+            alert.addAction(OKAction)
+            self.presentViewController(alert, animated: true) { }
         }
     }
     
     func didLoadUsers(loadedUsers: [Users]){
+        users = [Users]()
+        
         for usr in loadedUsers {
             users.append(usr)
             
@@ -334,5 +357,19 @@ class SignInViewController : UIViewController, UITextFieldDelegate {
             }
         }
         return false
+    }
+    
+    private var validSession: WCSession? {
+        
+        // paired - the user has to have their device paired to the watch
+        // watchAppInstalled - the user must have your watch app installed
+        
+        // Note: if the device is paired, but your watch app is not installed
+        // consider prompting the user to install it for a better experience
+        
+        if let session = session where session.paired && session.watchAppInstalled {
+            return session
+        }
+        return nil
     }
 }

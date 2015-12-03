@@ -28,18 +28,27 @@ var myClientId : String = "TestClient"
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    enum Actions:String{
+        case approve = "APPROVE_ACTION"
+        case decline = "DECLINE_ACTION"
+        case cancel = "CANCEL_ACTION"
+    }
+    
+    var categoryID:String {
+        get{
+            return "APPROVALS_CATEGORY"
+        }
+    }
+    
     var window: UIWindow?
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        //let URLCache = NSURLCache(memoryCapacity: 4 * 1024 * 1024, diskCapacity: 20 * 1024 * 1024, diskPath: nil)
-        //NSURLCache.setSharedURLCache(URLCache)
+
         myRequests = [Requests]()
         myApplications = [Applications]()
+        
         let navAppearance = UINavigationBar.appearance()
-        //48A0DC
-        //navAppearance.tintColor = uicolorFromHex(0xf48A0DC)
-        //navAppearance.barTintColor = uicolorFromHex(0x48A0DC)
         
         let backImage = UIImage(named: "back")
         navAppearance.backIndicatorImage = backImage
@@ -49,21 +58,135 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         textAttributes.setObject(UIColor.blackColor(), forKey: NSForegroundColorAttributeName)
         textAttributes.setObject(UIFont(name: MegaTheme.fontName, size: 19)!, forKey: NSFontAttributeName)
         
-        //navAppearance.titleTextAttributes = textAttributes as [NSObject : AnyObject]
-        //navAppearance.tintColor = UIColor.blackColor()
-        
         let barButtonAppearance = UIBarButtonItem.appearance()
         barButtonAppearance.setBackButtonTitlePositionAdjustment(UIOffsetMake(0, -60), forBarMetrics: .Default)
         barButtonAppearance.setBackButtonTitlePositionAdjustment(UIOffsetMake(0, -60), forBarMetrics: .Compact)
-
         
-        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: true)
+        //UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: true)
         
         let host = Persistent.endpoint
         NSUserDefaults.standardUserDefaults().setObject(host, forKey: "endpoint")
         NSUserDefaults.standardUserDefaults().synchronize()
         
+        //let settings = UIUserNotificationSettings(forTypes: [.Alert, .Badge, .Sound], categories: nil)
+        //UIApplication.sharedApplication().registerUserNotificationSettings(settings)
+        registerNotification()
+        
         return true
+    }
+    
+    // Register notification settings
+    func registerNotification() {
+        
+        // 1. Create the actions **************************************************
+        
+        // increment Action
+        let incrementAction = UIMutableUserNotificationAction()
+        incrementAction.identifier = Actions.approve.rawValue
+        incrementAction.title = "APPROVE"
+        incrementAction.activationMode = UIUserNotificationActivationMode.Background
+        incrementAction.authenticationRequired = true
+        incrementAction.destructive = false
+        
+        // decrement Action
+        let decrementAction = UIMutableUserNotificationAction()
+        decrementAction.identifier = Actions.decline.rawValue
+        decrementAction.title = "DECLINE"
+        decrementAction.activationMode = UIUserNotificationActivationMode.Background
+        decrementAction.authenticationRequired = true
+        decrementAction.destructive = false
+        
+        // reset Action
+        let resetAction = UIMutableUserNotificationAction()
+        resetAction.identifier = Actions.cancel.rawValue
+        resetAction.title = "CANCEL"
+        resetAction.activationMode = UIUserNotificationActivationMode.Foreground
+        // NOT USED resetAction.authenticationRequired = true
+        resetAction.destructive = true
+        
+        
+        // 2. Create the category ***********************************************
+        
+        // Category
+        let counterCategory = UIMutableUserNotificationCategory()
+        counterCategory.identifier = categoryID
+        
+        // A. Set actions for the default context
+        counterCategory.setActions([incrementAction, decrementAction, resetAction],
+            forContext: UIUserNotificationActionContext.Default)
+        
+        // B. Set actions for the minimal context
+        counterCategory.setActions([incrementAction, decrementAction],
+            forContext: UIUserNotificationActionContext.Minimal)
+        
+        
+        // 3. Notification Registration *****************************************
+        
+        let types: UIUserNotificationType = [UIUserNotificationType.Alert, UIUserNotificationType.Sound]
+        let settings = UIUserNotificationSettings(forTypes: types, categories: NSSet(object: counterCategory) as? Set<UIUserNotificationCategory>)
+        UIApplication.sharedApplication().registerUserNotificationSettings(settings)
+    }
+    
+    // Schedule the Notifications with repeat
+    func scheduleNotification() {
+        //UIApplication.sharedApplication().cancelAllLocalNotifications()
+        
+        // Schedule the notification ********************************************
+        if UIApplication.sharedApplication().scheduledLocalNotifications!.count == 0 {
+            
+            let notification = UILocalNotification()
+            notification.alertBody = "Kevin Clark is requesting West Data Center Access"
+            notification.soundName = UILocalNotificationDefaultSoundName
+            notification.fireDate = NSDate(timeIntervalSinceNow: 15)
+            notification.category = categoryID
+            //notification.repeatInterval = NSCalendarUnit.Minute
+            
+            UIApplication.sharedApplication().scheduleLocalNotification(notification)
+        }
+    }
+    
+    func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
+        //scheduleNotification()
+    }
+    
+    func application(application: UIApplication, handleActionWithIdentifier identifier: String?, forLocalNotification notification: UILocalNotification, completionHandler: () -> Void) {
+            
+            // Handle notification action *****************************************
+            if notification.category == categoryID {
+                
+                let action:Actions = Actions(rawValue: identifier!)!
+
+                
+                switch action{
+                    
+                case Actions.approve: break
+                    //
+                    
+                case Actions.decline: break
+                    //
+                    
+                case Actions.cancel: break
+                    //
+                    
+                }
+            }
+            
+            completionHandler()
+    }
+    
+    func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
+        // Do something serious in a real app.
+        print("Received Local Notification:")
+        print(notification.alertBody)
+    }
+
+    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+        print("Got token data! \(deviceToken)")
+        //439af1a9 fc3e8597 110d5e40 1bc36b97 96da2a6e ff0521b7 8f769ad6 f720d162
+    }
+    
+    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+        print("Couldn't register: \(error)")
     }
 
     func applicationWillResignActive(application: UIApplication) {
@@ -102,19 +225,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Make it a root controller
         self.window!.rootViewController = frostedViewController;
     }
-
-    
 }
 
    // MARK: - Custom Methods
-
-func uicolorFromHex(rgbValue:UInt32)->UIColor{
-    let red = CGFloat((rgbValue & 0xFF0000) >> 16)/256.0
-    let green = CGFloat((rgbValue & 0xFF00) >> 8)/256.0
-    let blue = CGFloat(rgbValue & 0xFF)/256.0
-    
-    return UIColor(red:red, green:green, blue:blue, alpha:1.0)
-}
 
 struct Persistent {
     

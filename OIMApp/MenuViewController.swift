@@ -150,7 +150,7 @@ class MenuViewController: UITableViewController {
         let url = Persistent.endpoint + Persistent.baseroot + "/users/logout"
         
         api.LogOut(myLoginId, url: url) { (succeeded: Bool, msg: String) -> () in
-            var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay.")
+            let alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay.")
             if(succeeded) {
                 alert.title = "Success!"
                 alert.message = msg
@@ -165,30 +165,15 @@ class MenuViewController: UITableViewController {
                 alert.message = msg
             }
             
-            // Move to the UI thread
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                // Show the alert
-                
                 if(succeeded)
                 {
-                    //self.performSegueWithIdentifier("dashboardNav", sender: self)
-                    //alert.show()
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    var navigationController = storyboard.instantiateViewControllerWithIdentifier("REFrostedNavigationController") as! REFrostedNavigationController
+                    let navigationController = storyboard.instantiateViewControllerWithIdentifier("REFrostedNavigationController") as! REFrostedNavigationController
                     let signInViewController = storyboard.instantiateViewControllerWithIdentifier("SignInViewController") as! SignInViewController
                     navigationController.viewControllers = [signInViewController]
                     self.frostedViewController.contentViewController = navigationController;
                     self.frostedViewController.hideMenuViewController()
-                    
-                    /*let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    let controller = storyboard.instantiateViewControllerWithIdentifier("SignInViewController") as! SignInViewController
-                    self.showViewController(controller, sender: self)
-                    // Dismiss keyboard (optional)
-                    self.view.endEditing(true)
-                    self.frostedViewController.view.endEditing(true)
-                    // Present the view controller
-                    self.frostedViewController.hideMenuViewController()*/
-                    
                 } else {
                     alert.show()
                 }

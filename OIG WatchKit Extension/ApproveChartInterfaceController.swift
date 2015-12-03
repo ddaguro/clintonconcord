@@ -8,35 +8,59 @@
 
 import WatchKit
 import Foundation
+import WatchConnectivity
 
 
-class ApproveChartInterfaceController: WKInterfaceController {
-
+class ApproveChartInterfaceController: WKInterfaceController, WCSessionDelegate {
+    
     @IBOutlet weak var group: WKInterfaceGroup!
+    
+    private let session: WCSession? = WCSession.isSupported() ? WCSession.defaultSession() : nil
+    
     let duration = 1.2
-    let endpoint = "http://idaasapi.persistent.com:9080/"
-    let baseroot = "idaas/oig/v1"
-    let myLoginId = "dcrane"
+    let endpoint = "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9441/"
+    let baseroot = "idaas/im/v1"
+    
     var myCertificates: Int = 0
     var myApprovals: Int = 0
     var myRequest: Int = 0
+    var username : String = ""
     
+    override init() {
+        super.init()
+        
+        session?.delegate = self
+        session?.activateSession()
+    }
+    
+    func session(session: WCSession, didReceiveUserInfo userInfo: [String : AnyObject]) {
+        let user = userInfo["user"] as? String
+        self.username = user!
+    }
     override func awakeWithContext(context: AnyObject?) {
         super.awakeWithContext(context)
         
+        var user = "" as String!
+        if self.username == "" {
+            user = "dcrane"
+        } else {
+            user = self.username
+        }
+        
+        //let appGroupID = "group.com.persistent.plat-sol.OIGApp"
+        
+        //let defaults = NSUserDefaults(suiteName: appGroupID)
+        //print(defaults)
+        
+        //let username = "dcrane" as String?//defaults?.stringForKey("userLogin")
+        
         let url2 = endpoint + baseroot + "/users/login"
+        let paramstring = "username=" + user! + "&password=Oracle123"
         
-        let appGroupID = "group.com.persistent.plat-sol.OIGApp"
-        
-        let defaults = NSUserDefaults(suiteName: appGroupID)
-
-        let username = defaults?.stringForKey("requestorUserId")
-        
-        let paramstring = "username=" + username! + "&password=Oracle123"
         LogIn(paramstring, url : url2) { (succeeded: Bool, msg: String) -> () in
             if(succeeded) {
-                let url = self.endpoint + self.baseroot + "/users/" + username! + "/pendingoperationscount"
-                self.getDashboardCount(username!, apiUrl: url)
+                let url = self.endpoint + self.baseroot + "/users/" + user! + "/pendingoperationscount"
+                self.getDashboardCount(user!, apiUrl: url)
                 
             }
         }
@@ -58,9 +82,9 @@ class ApproveChartInterfaceController: WKInterfaceController {
         
         request.HTTPMethod = "POST"
         request.HTTPBody = params.dataUsingEncoding(NSUTF8StringEncoding);
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
-        //request.addValue(loginId, forHTTPHeaderField: "loginId")
+        request.addValue("TestClient", forHTTPHeaderField: "clientId")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -89,12 +113,14 @@ class ApproveChartInterfaceController: WKInterfaceController {
     
     func getDashboardCount(loginId: String, apiUrl: String) {
         let request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
-        let session = NSURLSession.sharedSession()
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let session = NSURLSession(configuration: sessionConfig)
         
         request.HTTPMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
+        request.addValue("TestClient", forHTTPHeaderField: "clientId")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -111,11 +137,13 @@ class ApproveChartInterfaceController: WKInterfaceController {
                 self.myRequest = cntreq
                 self.myCertificates = cntcert
                 
-                self.group.setBackgroundImageNamed("singleArc")
-                self.group.startAnimatingWithImagesInRange(NSMakeRange(1, cntapp), duration: self.duration, repeatCount: 1)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.group.setBackgroundImageNamed("singleArc")
+                    self.group.startAnimatingWithImagesInRange(NSMakeRange(1, cntapp), duration: self.duration, repeatCount: 1)
+                })
+                
             }
         })
         task.resume()
     }
-
 }

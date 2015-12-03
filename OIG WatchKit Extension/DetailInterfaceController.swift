@@ -8,12 +8,16 @@
 
 import WatchKit
 import Foundation
+import WatchConnectivity
 
-
-class DetailInterfaceController: WKInterfaceController {
-    let endpoint = "http://idaasapi.persistent.com:9080/"
-    let baseroot = "idaas/oig/v1"
+class DetailInterfaceController: WKInterfaceController, WCSessionDelegate {
+    
+    private let session: WCSession? = WCSession.isSupported() ? WCSession.defaultSession() : nil
+    
+    let endpoint = "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9441/"
+    let baseroot = "idaas/im/v1"
     let myLoginId = "dcrane"
+    var username : String = ""
     var paramstring : String = ""
     var tasks : Tasks!
     
@@ -31,7 +35,14 @@ class DetailInterfaceController: WKInterfaceController {
     @IBAction func ApproveAction() {
         let url = endpoint + baseroot + "/approvals"
         
-        RequestApprovalAction(myLoginId, params : paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
+        var user = "" as String!
+        if self.username == "" {
+            user = "dcrane"
+        } else {
+            user = self.username
+        }
+        
+        RequestApprovalAction(user, params : paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
             if(succeeded) {
                 print("Action Successful")
                 self.pushControllerWithName("InterfaceController", context: self)
@@ -54,9 +65,27 @@ class DetailInterfaceController: WKInterfaceController {
         self.dismissController()
     }
     
+    override init() {
+        super.init()
+        
+        session?.delegate = self
+        session?.activateSession()
+    }
+    
+    func session(session: WCSession, didReceiveUserInfo userInfo: [String : AnyObject]) {
+        let emoji = userInfo["user"] as? String
+        self.username = emoji!
+    }
     
     override func awakeWithContext(context: AnyObject?) {
         super.awakeWithContext(context)
+        
+        var user = "" as String!
+        if self.username == "" {
+            user = "dcrane"
+        } else {
+            user = self.username
+        }
         
         if let tasks = context as? Tasks {
             self.tasks = tasks
@@ -83,25 +112,25 @@ class DetailInterfaceController: WKInterfaceController {
             }
             
             if beneficiaryText == "Kevin Clark" {
-                profileImage.setImage(UIImage(named: "kclark"))
+                profileImage.setImage(UIImage(named: "w-kclark"))
             } else if beneficiaryText == "Grace Davis" {
-                profileImage.setImage(UIImage(named: "gdavis"))
+                profileImage.setImage(UIImage(named: "w-gdavis"))
             } else if beneficiaryText == "Danny Crane" {
-                profileImage.setImage(UIImage(named: "dcrane"))
+                profileImage.setImage(UIImage(named: "w-dcrane"))
             } else {
-                profileImage.setImage(UIImage(named: "profileBlankPic"))
+                profileImage.setImage(UIImage(named: "w-profileblank"))
             }
             
             beneficiaryLabel.setText(beneficiaryText)
             descriptionLabel.setText(tasks.requestJustification)
             dateLabel.setText(formatDate(tasks.requestedDate))
-            approveBtn.setBackgroundImage(UIImage(named: "btn-approve"))
+            approveBtn.setBackgroundImage(UIImage(named: "w-btn-approve"))
             approveLabel.setText("APPROVE")
-            declineBtn.setBackgroundImage(UIImage(named: "btn-decline"))
+            declineBtn.setBackgroundImage(UIImage(named: "w-btn-decline"))
             declineLabel.setText("DECLINE")
             
             paramstring = "{\"requester\": {\"User Login\": \""
-            paramstring += myLoginId + "\"},\"task\": [{\"requestId\": \""
+            paramstring += user + "\"},\"task\": [{\"requestId\": \""
             paramstring += tasks.requestId + "\",\"taskId\": \""
             paramstring += tasks.taskId + "\", \"taskNumber\": \""
             paramstring += tasks.taskNumber + "\",\"taskPriority\": \""
@@ -144,6 +173,7 @@ class DetailInterfaceController: WKInterfaceController {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
+        request.addValue("TestClient", forHTTPHeaderField: "clientId")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {

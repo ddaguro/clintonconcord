@@ -123,16 +123,25 @@ class API {
     // swift 2.0 - SIGNIN VIEWCONTROLLER *
     func LogIn(loginId: String, params : String, url : String, postCompleted : (succeeded: Bool, msg: String) -> ()) {
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
-        let session = NSURLSession.sharedSession()
+        
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let session = NSURLSession(configuration: sessionConfig)
         
         request.HTTPMethod = "POST"
-        request.HTTPBody = params.dataUsingEncoding(NSUTF8StringEncoding);
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.HTTPBody = params.dataUsingEncoding(NSUTF8StringEncoding)
+        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         request.addValue(myClientId, forHTTPHeaderField: "clientId")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            
+            guard error == nil else { return }
+            
+            /*print("Response: \(response)")
+            let strData = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            print("Body: \(strData)")
+            */
             if(error != nil) {
                 print(error!.localizedDescription)
                 let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
@@ -157,9 +166,10 @@ class API {
                 }
             }
         })
+        
         task.resume()
     }
-    
+
     // swift 2.0 - MENU VIEWCONTROLLER *
     func LogOut(loginId: String, url : String, postCompleted : (succeeded: Bool, msg: String) -> ()) {
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
@@ -217,7 +227,15 @@ class API {
             else {
                 let jsonData = (try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as! NSDictionary
                 
+                let status = jsonData["status"] as? Int
+                
+                guard status == nil else {
+                    print("need login")
+                    return
+                }
+                
                 let results: NSArray = jsonData["Users"] as! NSArray
+
                 
                 var users = [Users]()
                 for user in results{

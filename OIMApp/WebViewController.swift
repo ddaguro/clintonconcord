@@ -22,7 +22,7 @@ class WebViewController: UIViewController, UIWebViewDelegate {
         let controller = storyboard.instantiateViewControllerWithIdentifier("DashboardViewController") as! DashboardViewController
         showViewController(controller, sender: self)
         
-        UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: UIStatusBarAnimation.Fade)
+        //UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: UIStatusBarAnimation.Fade)
         
     }
     
