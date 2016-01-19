@@ -36,7 +36,7 @@ public class Requests {
             
             var ents = [TargetEntities]()
             for ent in results{
-                let ent = TargetEntities(data: ent as! NSString)
+                let ent = TargetEntities(data: ent as! NSDictionary)
                 ents.append(ent)
                 //self.reqTargetNames = ent
                 //var names = (names + ent) as! String
@@ -81,11 +81,17 @@ reqStatus: "Request Awaiting Child Requests Completion"
 }
 
 class TargetEntities {
-    var entity : String!
+    var catalogid: String!
+    var entityid: String!
+    var entitytype: String!
+    var entityname: String!
     
-    init(data : NSString){
+    init(data : NSDictionary){
         
-        self.entity = data as String
+        self.catalogid = Utils.getStringFromJSON(data, key: "catalogId")
+        self.entityid = Utils.getStringFromJSON(data, key: "entityId")
+        self.entitytype = Utils.getStringFromJSON(data, key: "entityType")
+        self.entityname = Utils.getStringFromJSON(data, key: "entityName")
     }
 }
 

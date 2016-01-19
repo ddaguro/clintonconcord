@@ -66,8 +66,19 @@ class CertItem {
     var accounts : Int!
     var entitlements : Int!
     var certificationType : String!
-    
+
+    /*
+    var taskid : String!
+    var percentcomplete : String!
+    var asignee :  String!
+    var createdate : String!
+    var certificationtype : String!
+    var certificationid : Int!
+    var title : String!
+    var state : String!
+    */
     init(data : NSDictionary){
+        
         self.certificationId = data["certificationId"] as! Int
         self.percentComplete =  data["percentComplete"] as! Int
         self.itemRisk = Utils.getStringFromJSON(data, key: "itemRisk")
@@ -78,10 +89,30 @@ class CertItem {
         self.accounts = data["accounts"] as! Int
         self.entitlements = data["entitlements"] as! Int
         self.certificationType = Utils.getStringFromJSON(data, key: "certificationType")
-        
+
+        /*
+        self.taskid = Utils.getStringFromJSON(data, key: "taskId")
+        self.percentcomplete =  Utils.getStringFromJSON(data, key: "percentComplete")
+        self.asignee = Utils.getStringFromJSON(data, key: "asignee")
+        self.createdate = Utils.getStringFromJSON(data, key: "createdDate")
+        self.certificationtype = Utils.getStringFromJSON(data, key: "certificationType")
+        self.certificationid = data["certificationId"] as! Int
+        self.title = Utils.getStringFromJSON(data, key: "title")
+        self.state = Utils.getStringFromJSON(data, key: "state")
+        */
     }
     
     /* sample data
+    
+    
+    "taskId": "1a715155-b6e0-4253-9c1f-51e2cdf8ae1f",
+    "percentComplete": "100.0",
+    "asignee": "Danny Crane",
+    "createdDate": "Tue Jan 05 00:58:52 EST 2016",
+    "certificationType": "ApplicationInstance",
+    "certificationId": 881,
+    "title": "Application Instance Certification [ Danny Crane ] ",
+    "state": "In Progress"
     
     percentComplete: 0
     itemRisk: "Low Risk"

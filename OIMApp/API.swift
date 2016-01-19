@@ -10,7 +10,7 @@ import Foundation
 
 class API {
     
-    // swift 2.0 - ACCESS VIEWCONTROLLER *
+    // idaasv3 swift 2.0 - ACCESS VIEWCONTROLLER *
     func loadApplications(loginId: String, apiUrl: String, completion: (([Applications]) -> Void)!) {
         let request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
         let session = NSURLSession.sharedSession()
@@ -20,6 +20,7 @@ class API {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         request.addValue(myClientId, forHTTPHeaderField: "clientId")
+        request.addValue(myToken, forHTTPHeaderField: "authorization")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -46,7 +47,7 @@ class API {
         task.resume()
     }
     
-    // swift 2.0 - ACCESS VIEWCONTROLLER *
+    // idaasv3 swift 2.0 - ACCESS VIEWCONTROLLER *
     func loadEntitlements(loginId: String, apiUrl: String, completion: (([Entitlements]) -> Void)!) {
         let request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
         let session = NSURLSession.sharedSession()
@@ -56,6 +57,7 @@ class API {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         request.addValue(myClientId, forHTTPHeaderField: "clientId")
+        request.addValue(myToken, forHTTPHeaderField: "authorization")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -83,7 +85,7 @@ class API {
         task.resume()
     }
     
-    // swift 2.0 - ACCESS VIEWCONTROLLER *
+    // idaasv3 swift 2.0 - ACCESS VIEWCONTROLLER *
     func loadRoles(loginId: String, apiUrl: String, completion: (([Roles]) -> Void)!) {
         let request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
         let session = NSURLSession.sharedSession()
@@ -93,6 +95,7 @@ class API {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         request.addValue(myClientId, forHTTPHeaderField: "clientId")
+        request.addValue(myToken, forHTTPHeaderField: "authorization")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -120,7 +123,7 @@ class API {
         task.resume()
     }
     
-    // swift 2.0 - SIGNIN VIEWCONTROLLER *
+    // idaasv3 swift 2.0 - SIGNIN VIEWCONTROLLER *
     func LogIn(loginId: String, params : String, url : String, postCompleted : (succeeded: Bool, msg: String) -> ()) {
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
         
@@ -154,6 +157,7 @@ class API {
                     let success = parseJSON["isAuthenticated"] as? Int
                     if success == 1 {
                         postCompleted(succeeded: true, msg: "Successful")
+                        myToken = parseJSON["encodedValue"] as! String
                     } else {
                         postCompleted(succeeded: false, msg: "Incorrect username and password")
                     }
@@ -180,6 +184,7 @@ class API {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(myClientId, forHTTPHeaderField: "clientId")
+        request.addValue(myToken, forHTTPHeaderField: "authorization")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -209,7 +214,7 @@ class API {
         task.resume()
     }
     
-    // swift 2.0 - DASHBOARD VIEWCONTROLLER *
+    // idaasv3 swift 2.0 - DASHBOARD VIEWCONTROLLER *
     func loadUser(loginId: String, apiUrl: String, completion: (([Users]) -> Void)!) {
         let request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
         let session = NSURLSession.sharedSession()
@@ -219,6 +224,7 @@ class API {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         request.addValue(myClientId, forHTTPHeaderField: "clientId")
+        request.addValue(myToken, forHTTPHeaderField: "authorization")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -253,7 +259,7 @@ class API {
         task.resume()
     }
     
-    // swift 2.0 - APPROVALS VIEWCONTROLLER *
+    // idaasv3 swift 2.0 - APPROVALS VIEWCONTROLLER *
     func loadPendingApprovals(loginId: String, apiUrl: String, completion: (([Tasks]) -> Void)!) {
         let request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
         let session = NSURLSession.sharedSession()
@@ -263,6 +269,7 @@ class API {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         request.addValue(myClientId, forHTTPHeaderField: "clientId")
+        request.addValue(myToken, forHTTPHeaderField: "authorization")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             
@@ -291,7 +298,7 @@ class API {
         task.resume()
     }
     
-    // swift 2.0 - REQUESTS VIEWCONTROLLER *
+    // idaasv3 swift 2.0 - REQUESTS VIEWCONTROLLER *
     func loadRequests(loginId: String, apiUrl: String, completion: (([Requests]) -> Void)!) {
         let request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
         let session = NSURLSession.sharedSession()
@@ -301,6 +308,7 @@ class API {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         request.addValue(myClientId, forHTTPHeaderField: "clientId")
+        request.addValue(myToken, forHTTPHeaderField: "authorization")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -339,6 +347,7 @@ class API {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         request.addValue(myClientId, forHTTPHeaderField: "clientId")
+        request.addValue(myToken, forHTTPHeaderField: "authorization")
         
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
@@ -371,7 +380,7 @@ class API {
         task.resume()
     }
     
-    // swift 2.0 - CERTIFICATION VIEWCONTROLLER
+    // idaasv3 swift 2.0 - CERTIFICATION VIEWCONTROLLER
     func loadPendingCerts(loginId: String, apiUrl: String, completion: (([Certs]) -> Void)!) {
         let request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
         let session = NSURLSession.sharedSession()
@@ -381,6 +390,7 @@ class API {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         request.addValue(myClientId, forHTTPHeaderField: "clientId")
+        request.addValue(myToken, forHTTPHeaderField: "authorization")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -411,7 +421,7 @@ class API {
         task.resume()
     }
     
-    // swift 2.0 - CERTIFICATION DETAIL VIEWCONTROLLER APPLICATIONS
+    // idaasv3 swift 2.0 - CERTIFICATION DETAIL VIEWCONTROLLER APPLICATIONS
     func loadCertItem(loginId: String, apiUrl: String, completion: (([CertItem]) -> Void)!) {
         let request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
         let session = NSURLSession.sharedSession()
@@ -421,6 +431,7 @@ class API {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         request.addValue(myClientId, forHTTPHeaderField: "clientId")
+        request.addValue(myToken, forHTTPHeaderField: "authorization")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -429,7 +440,7 @@ class API {
             else {
                 let jsonData = (try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as! NSDictionary
                 
-                let results: NSArray = jsonData["identityCertifications"]!["certificationLineItems"] as! NSArray
+                let results: NSArray = jsonData["identityCertifications"]!["certificationInstances"] as! NSArray
                 
                 var certs = [CertItem]()
                 for cert in results{
@@ -448,7 +459,7 @@ class API {
         task.resume()
     }
     
-    // swift 2.0 - CERTFICATION DETAIL ITEMS VIEWCONTROLLER APPLICATONS
+    // idaasv3 swift 2.0 - CERTFICATION DETAIL ITEMS VIEWCONTROLLER APPLICATONS
     func loadCertItemDetails(loginId: String, apiUrl: String, completion: (([CertItemDetail]) -> Void)!) {
         let request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
         let session = NSURLSession.sharedSession()
@@ -458,6 +469,7 @@ class API {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         request.addValue(myClientId, forHTTPHeaderField: "clientId")
+        request.addValue(myToken, forHTTPHeaderField: "authorization")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -485,7 +497,7 @@ class API {
         task.resume()
     }
     
-    // swift 2.0 - CERTIFICATION DETAIL VIEWCONTROLLER ENTITLEMENTS
+    // idaasv3 swift 2.0 - CERTIFICATION DETAIL VIEWCONTROLLER ENTITLEMENTS
     func loadEntItem(loginId: String, apiUrl: String, completion: (([EntitlementItem]) -> Void)!) {
         let request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
         let session = NSURLSession.sharedSession()
@@ -495,6 +507,7 @@ class API {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         request.addValue(myClientId, forHTTPHeaderField: "clientId")
+        request.addValue(myToken, forHTTPHeaderField: "authorization")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -522,7 +535,7 @@ class API {
         task.resume()
     }
     
-    // swift 2.0 - CERTFICIATION DETAIL ITEMS VIEWCONTROLLER ENTITLEMENTS
+    // idaasv3 swift 2.0 - CERTFICIATION DETAIL ITEMS VIEWCONTROLLER ENTITLEMENTS
     func loadCertEntItemDetails(loginId: String, apiUrl: String, completion: (([EntitlementItemDetail]) -> Void)!) {
         let request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
         let session = NSURLSession.sharedSession()
@@ -532,6 +545,7 @@ class API {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         request.addValue(myClientId, forHTTPHeaderField: "clientId")
+        request.addValue(myToken, forHTTPHeaderField: "authorization")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -559,7 +573,7 @@ class API {
         task.resume()
     }
     
-    // swift 2.0 - CERTIFICATION DETAIL VIEWCONTROLLER USERS
+    // idaasv3 swift 2.0 - CERTIFICATION DETAIL VIEWCONTROLLER USERS
     func loadUserItem(loginId: String, apiUrl: String, completion: (([UserItem]) -> Void)!) {
         let request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
         let session = NSURLSession.sharedSession()
@@ -569,6 +583,7 @@ class API {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         request.addValue(myClientId, forHTTPHeaderField: "clientId")
+        request.addValue(myToken, forHTTPHeaderField: "authorization")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -596,7 +611,7 @@ class API {
         task.resume()
     }
     
-    // swift 2.0 - CERTIFICATION DETAIL ITEMS VIEWCONTROLLER USERS
+    // idaasv3 swift 2.0 - CERTIFICATION DETAIL ITEMS VIEWCONTROLLER USERS
     func loadCertUserItemDetails(loginId: String, apiUrl: String, completion: (([UserItemDetail]) -> Void)!) {
         let request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
         let session = NSURLSession.sharedSession()
@@ -606,6 +621,7 @@ class API {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         request.addValue(myClientId, forHTTPHeaderField: "clientId")
+        request.addValue(myToken, forHTTPHeaderField: "authorization")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -633,7 +649,7 @@ class API {
         task.resume()
     }
     
-    // swift 2.0 - CERTIFICATION DETAIL VIEWCONTROLLER ROLES
+    // idaasv3 swift 2.0 - CERTIFICATION DETAIL VIEWCONTROLLER ROLES
     func loadRoleItem(loginId: String, apiUrl: String, completion: (([RoleItem]) -> Void)!) {
         let request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
         let session = NSURLSession.sharedSession()
@@ -643,6 +659,7 @@ class API {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         request.addValue(myClientId, forHTTPHeaderField: "clientId")
+        request.addValue(myToken, forHTTPHeaderField: "authorization")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -670,7 +687,7 @@ class API {
         task.resume()
     }
     
-    // swift 2.0 - CERTIFICATION DETAIL ITEMS VIEWCONTROLLER ROLES
+    // idaasv3 swift 2.0 - CERTIFICATION DETAIL ITEMS VIEWCONTROLLER ROLES
     func loadCertRoleItemDetails(loginId: String, apiUrl: String, completion: (([RoleItemDetail]) -> Void)!) {
         let request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
         let session = NSURLSession.sharedSession()
@@ -680,6 +697,7 @@ class API {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         request.addValue(myClientId, forHTTPHeaderField: "clientId")
+        request.addValue(myToken, forHTTPHeaderField: "authorization")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -707,7 +725,7 @@ class API {
         task.resume()
     }
     
-    // swift 2.0 - CERTIFICATION ACTION VIEWCONTROLLER (APPLICATION ONLY)
+    // idaasv3 swift 2.0 - CERTIFICATION ACTION VIEWCONTROLLER (APPLICATION ONLY)
     func RequestCertificationsAction(loginId : String, params : String, url : String, postCompleted : (succeeded: Bool, msg: String) -> ()) {
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
         let session = NSURLSession.sharedSession()
@@ -718,6 +736,7 @@ class API {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         request.addValue(myClientId, forHTTPHeaderField: "clientId")
+        request.addValue(myToken, forHTTPHeaderField: "authorization")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -747,7 +766,7 @@ class API {
         task.resume()
     }
     
-    // swift 2.0 - MAKE REQUEST VIEWCONTROLLER *
+    // idaasv3 swift 2.0 - MAKE REQUEST VIEWCONTROLLER *
     func loadAllEntitlements(loginId: String, apiUrl: String, completion: (([Entitlements]) -> Void)!) {
         let request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
         let session = NSURLSession.sharedSession()
@@ -757,6 +776,7 @@ class API {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         request.addValue(myClientId, forHTTPHeaderField: "clientId")
+        request.addValue(myToken, forHTTPHeaderField: "authorization")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -784,7 +804,7 @@ class API {
         task.resume()
     }
     
-    // swift 2.0 - MAKE REQUEST ACTION VIEWCONTROLLER *
+    // idaasv3 swift 2.0 - MAKE REQUEST ACTION VIEWCONTROLLER *
     func RequestAction(loginId : String, params : String, url : String, postCompleted : (succeeded: Bool, msg: String) -> ()) {
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
         let session = NSURLSession.sharedSession()
@@ -795,6 +815,7 @@ class API {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         request.addValue(myClientId, forHTTPHeaderField: "clientId")
+        request.addValue(myToken, forHTTPHeaderField: "authorization")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -825,7 +846,7 @@ class API {
         task.resume()
     }
     
-    // swift 2.0 - DASHBOARD VIEWCONTROLLER *
+    // idaasv3 swift 2.0 - DASHBOARD VIEWCONTROLLER *
     func getDashboardCount(loginId: String, apiUrl: String, completion: ((success: Int) -> Void)!) {
         let request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
         let session = NSURLSession.sharedSession()
@@ -835,6 +856,7 @@ class API {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         request.addValue(myClientId, forHTTPHeaderField: "clientId")
+        request.addValue(myToken, forHTTPHeaderField: "authorization")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -868,7 +890,7 @@ class API {
         task.resume()
     }
     
-    // swift 2.0 - DASHBOARD VIEWCONTROLLER *
+    // idaasv3 swift 2.0 - DASHBOARD VIEWCONTROLLER *
     func loadActivities(loginId: String, apiUrl: String, completion: (([Activities]) -> Void)!) {
         let request = NSMutableURLRequest(URL: NSURL(string: apiUrl)!)
         let session = NSURLSession.sharedSession()
@@ -878,6 +900,7 @@ class API {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
         request.addValue(myClientId, forHTTPHeaderField: "clientId")
+        request.addValue(myToken, forHTTPHeaderField: "authorization")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -886,8 +909,8 @@ class API {
             else {
                 let jsonData = (try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as! NSDictionary
                 
-                let results: NSArray = jsonData["recentActivity"]!["recentRequests"] as! NSArray
-                
+                //let results: NSArray = jsonData["recentActivity"]!["recentRequests"] as! NSArray
+                let results: NSArray = jsonData["requests"] as! NSArray
                 var reqs = [Activities]()
                 for req in results{
                     let req = Activities(data: req as! NSDictionary)

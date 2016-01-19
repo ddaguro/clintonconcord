@@ -47,7 +47,7 @@ class Activities {
             
             var ents = [ReqTargetEntities]()
             for ent in entityresults {
-                let ent = ReqTargetEntities(data: ent as! String)
+                let ent = ReqTargetEntities(data: ent as! NSDictionary)
                 ents.append(ent)
             }
             self.reqTargetEntities = ents
@@ -79,11 +79,17 @@ class ReqBeneficiaryList {
 }
 
 class ReqTargetEntities {
-    var entity : String!
+    var catalogid: String!
+    var entityid: String!
+    var entitytype: String!
+    var entityname: String!
     
-    init(data : String){
+    init(data : NSDictionary){
         
-        self.entity = data
+        self.catalogid = Utils.getStringFromJSON(data, key: "catalogId")
+        self.entityid = Utils.getStringFromJSON(data, key: "entityId")
+        self.entitytype = Utils.getStringFromJSON(data, key: "entityType")
+        self.entityname = Utils.getStringFromJSON(data, key: "entityName")
     }
 }
 

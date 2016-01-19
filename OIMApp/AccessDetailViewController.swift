@@ -50,9 +50,10 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
         
         self.api = API()
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/accounts/"
+
         
         if catalog == "Applications"{
+            let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/accounts/"
             labelTitle2.text = "Applications"
             api.loadApplications(myLoginId, apiUrl: url, completion: didLoadApplications)
             /*
@@ -66,9 +67,11 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
             }
             */
         } else if catalog == "Entitlements" {
+            let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/entitlements/"
             labelTitle2.text = "Entitlements"
             api.loadEntitlements(myLoginId, apiUrl: url, completion: didLoadEntitlements)
         } else if catalog == "Roles" {
+            let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/roles/"
             labelTitle2.text = "Roles"
             api.loadRoles(myLoginId, apiUrl: url, completion : didLoadRoles)
         }
@@ -85,15 +88,18 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
     
     func refresh(){
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/accounts/"
+        //let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/accounts/"
         
         if catalog == "Applications"{
+            let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/accounts/"
             labelTitle2.text = "Applications"
             api.loadApplications(myLoginId, apiUrl: url, completion: didLoadApplications)
         } else if catalog == "Entitlements" {
+            let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/entitlements/"
             labelTitle2.text = "Entitlements"
             api.loadEntitlements(myLoginId, apiUrl: url, completion: didLoadEntitlements)
         } else if catalog == "Roles" {
+            let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/roles/"
             labelTitle2.text = "Roles"
             api.loadRoles(myLoginId, apiUrl: url, completion : didLoadRoles)
         }

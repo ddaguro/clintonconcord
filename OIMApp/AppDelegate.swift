@@ -13,6 +13,7 @@ var myApprovals: Int = 0
 var myRequest: Int = 0
 var totalCounter: Int = 0
 var myRequestorId : String = ""
+var myToken : String = ""
 
 
 var myLoginId : String = ""
@@ -23,7 +24,7 @@ var myApplications : [Applications]!
 var myActivities : [Activities]!
 var myFIDO : Bool = false
 
-var myClientId : String = "TestClient"
+var myClientId : String = "DevClient"
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

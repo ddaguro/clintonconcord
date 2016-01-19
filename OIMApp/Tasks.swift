@@ -53,7 +53,7 @@ public class Tasks {
             
             var ents = [RequestEntityName]()
             for ent in entityresults {
-                let ent = RequestEntityName(data: ent as! String)
+                let ent = RequestEntityName(data: ent as! NSDictionary)
                 ents.append(ent)
             }
             self.requestEntityName = ents
@@ -96,10 +96,11 @@ public class Tasks {
 
 class RequestEntityName {
     var entityname : String!
-    init(data : String){
-        self.entityname = data
+    init(data : NSDictionary){
+        self.entityname = Utils.getStringFromJSON(data, key: "entityName")
     }
 }
+
 
 class BeneficiaryUser {
     var beneficiary : String!

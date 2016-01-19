@@ -55,7 +55,7 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         self.reqs = [Requests]()
         self.api = API()
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/requests?limit=10"
+        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/requests?limit=10&filter=reqCreationDate%20ge%202016-01-01"
         if myRequests.count == 0 {
             //println("load from api")
             api.loadRequests(myLoginId, apiUrl: url, completion : didLoadData)
@@ -82,7 +82,7 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func refresh(){
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/requests?limit=10"
+        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/requests?limit=10&filter=reqCreationDate%20ge%202016-01-01"
         api.loadRequests(myLoginId, apiUrl: url, completion : didLoadData)
         
         SoundPlayer.play("upvote.wav")
@@ -144,9 +144,9 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         var text = ""
         for action in dataObject.reqTargetEntities {
             if text.isEmpty {
-                text = action.entity
+                text = action.entityname
             } else {
-                text += " , \(action.entity)"
+                text += " , \(action.entityname)"
             }
         }
         cell.nameLabel.text = text.length == 0 ? dataObject.reqType : text
@@ -190,7 +190,7 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func formatDate(dateString: String) -> String {
-        
+        /*
         let formatter = NSDateFormatter()
         //Thu Aug 13 18:19:07 EDT 2015
         formatter.dateFormat = "EEE MMM dd H:mm:ss yyyy" //yyyy-MM-dd'T'HH:mm:ssZ
@@ -198,6 +198,15 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         
         formatter.dateFormat = "EEE, MMM dd yyyy h:mm a"
         return formatter.stringFromDate(date!)
+        */
+        let formatter = NSDateFormatter()
+        //Thu Aug 13 18:19:07 EDT 2015
+        formatter.dateFormat = "EEE MMM dd H:mm:ss yyyy"
+        let date = formatter.dateFromString(dateString)
+        
+        formatter.dateFormat = "EEE, MMM dd yyyy h:mm a"
+        //return formatter.stringFromDate(date!)
+        return dateString
     }
     
 }

@@ -60,7 +60,8 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         //api.loadUser(requestorUserId, apiUrl: url, completion : didLoadUsers)
         
         
-        let url2 = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/recentactivity?limit=10"
+        //let url2 = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/recentactivity?limit=10"
+        let url2 = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/requests?limit=10&filter=reqCreationDate%20ge%202016-01-01"
         api.loadActivities(myLoginId, apiUrl: url2, completion : didLoadActivities)
         /*
         if myActivities.count == 0 {
@@ -359,11 +360,11 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
 
         let info = activities[indexPath.row]
         
-        if info.requester == "kclark" {
+        if info.requester.lowercaseString == "kevin clark" {
             cell.profileImage.image = UIImage(named: "kclark")
-        } else if info.requester == "gdavis" {
+        } else if info.requester.lowercaseString == "grace davis" {
             cell.profileImage.image = UIImage(named: "gdavis")
-        } else if info.requester == "dcrane" {
+        } else if info.requester.lowercaseString == "danny crane" {
             cell.profileImage.image = UIImage(named: "dcrane")
         } else {
             cell.profileImage.image = UIImage(named: "profileBlankPic")
@@ -374,9 +375,9 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         var titleText = ""
         for ent in info.reqTargetEntities {
             if titleText.isEmpty {
-                titleText = ent.entity
+                titleText = ent.entityname
             } else {
-                titleText += " , \(ent.entity)"
+                titleText += " , \(ent.entityname)"
             }
         }
         cell.titleLabel.text = titleText
