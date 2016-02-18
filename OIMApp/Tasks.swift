@@ -19,36 +19,52 @@ public class Tasks {
     var taskState : String!
     var taskAssignedOn : String!
     var requestType : String!
-    //var requestEntityName : String!
     var taskApprovalStage : String!
     var taskStageParticipantName : String!
     var requestRaisedByUser : String!
-    //var beneficiearyUser : String!
     var requestJustification : String!
     var requestedDate : String!
+    
+    var requestRaisedByUserId : String!
+    var requesterAvatarUrl : String!
+    var taskUpdatedOnDate : String!
     
     var beneficiaryUser : [BeneficiaryUser]!
     var requestEntityName : [RequestEntityName]!
     
+    var taskpreviousapprover : [TaskPreviousApprover]!
+    var taskcurrentapprover : [TaskCurrentApprover]!
+    
     init(data : NSDictionary){
         
-        self.requestId = Utils.getStringFromJSON(data, key: "requestId")
         self.taskId = Utils.getStringFromJSON(data, key: "taskId")
         self.taskNumber = Utils.getStringFromJSON(data, key: "taskNumber")
+        // assignees
         self.requestStatus = Utils.getStringFromJSON(data, key: "requestStatus")
-        self.taskPriority = Utils.getStringFromJSON(data, key: "taskPriority")
-        self.taskTitle = Utils.getStringFromJSON(data, key: "taskTitle")
-        self.taskState = Utils.getStringFromJSON(data, key: "taskState")
-        self.taskAssignedOn = Utils.getStringFromJSON(data, key: "taskAssignedOn")
+        // requestTaskDetails
+        if let previousapproverresults: NSArray = data["requestTaskDetails"] as? NSArray {
+            
+            var previoustsks = [TaskPreviousApprover]()
+            for previoustsk in previousapproverresults {
+                let previoustsk = TaskPreviousApprover(data: previoustsk as! NSDictionary)
+                previoustsks.append(previoustsk)
+            }
+            self.taskpreviousapprover = previoustsks
+        }
+        if let previouscurrentresults: NSArray = data["requestTaskDetails"] as? NSArray {
+            
+            var currenttsks = [TaskCurrentApprover]()
+            for currenttsk in previouscurrentresults {
+                let currenttsk = TaskCurrentApprover(data: currenttsk as! NSDictionary)
+                currenttsks.append(currenttsk)
+            }
+            self.taskcurrentapprover = currenttsks
+        }
+        self.requestRaisedByUserId = Utils.getStringFromJSON(data, key: "requestRaisedByUserId")
+        self.requesterAvatarUrl = Utils.getStringFromJSON(data, key: "requesterAvatarUrl")
         self.requestType = Utils.getStringFromJSON(data, key: "requestType")
-        //self.requestEntityName = Utils.getStringFromJSON(data, key: "requestEntityName")
-        self.taskApprovalStage = Utils.getStringFromJSON(data, key: "taskApprovalStage")
-        self.taskStageParticipantName = Utils.getStringFromJSON(data, key: "taskStageParticipantName")
-        self.requestRaisedByUser = Utils.getStringFromJSON(data, key: "requestRaisedByUser")
-        //self.beneficiearyUser = Utils.getStringFromJSON(data, key: "beneficiearyUser")
-        self.requestJustification = Utils.getStringFromJSON(data, key: "requestJustification")
-        self.requestedDate = Utils.getStringFromJSON(data, key: "requestedDate")
-        
+        self.taskPriority = Utils.getStringFromJSON(data, key: "taskPriority")
+        // requestEntityName
         if let entityresults: NSArray = data["requestEntityName"] as? NSArray {
             
             var ents = [RequestEntityName]()
@@ -58,7 +74,15 @@ public class Tasks {
             }
             self.requestEntityName = ents
         }
-        
+        self.taskAssignedOn = Utils.getStringFromJSON(data, key: "taskAssignedOn")
+        self.taskState = Utils.getStringFromJSON(data, key: "taskState")
+        self.taskApprovalStage = Utils.getStringFromJSON(data, key: "taskApprovalStage")
+        self.taskStageParticipantName = Utils.getStringFromJSON(data, key: "taskStageParticipantName")
+        self.requestRaisedByUser = Utils.getStringFromJSON(data, key: "requestRaisedByUser")
+        self.requestJustification = Utils.getStringFromJSON(data, key: "requestJustification")
+        self.requestedDate = Utils.getStringFromJSON(data, key: "requestedDate")
+        self.taskUpdatedOnDate = Utils.getStringFromJSON(data, key: "taskUpdatedOnDate")
+        // beneficiearyUser
         if let beneficiaryresults: NSArray = data["beneficiearyUser"] as? NSArray {
             
             var bens = [BeneficiaryUser]()
@@ -68,30 +92,59 @@ public class Tasks {
             }
             self.beneficiaryUser = bens
         }
-        
+        self.taskTitle = Utils.getStringFromJSON(data, key: "taskTitle")
+        self.requestId = Utils.getStringFromJSON(data, key: "requestId")
     }
+}
+
+class TaskPreviousApprover {
+
+    var requesttaskapprovers : [RequestTaskApprovers]!
     
-    /* sample data
+    init(data : NSDictionary){
+        if let taskresults: NSArray = data["history"]!["previousApprovers"] as? NSArray {
+
+            var approvers = [RequestTaskApprovers]()
+            for app in taskresults {
+                let app = RequestTaskApprovers(data: app as! NSDictionary)
+                approvers.append(app)
+            }
+            self.requesttaskapprovers = approvers
+        }
+    }
+}
+
+class TaskCurrentApprover {
     
-    requestId: "1160"
-    taskId: "1a568e4d-17fa-4ff1-b069-4140d00f69da"
-    taskNumber: "200994"
-    requestStatus: "Obtaining Operation Approval"
-    taskPriority: "3"
-    taskTitle: "Beneficiary manager approval for Request ID 1160"
-    taskState: "ASSIGNED"
-    taskAssignedOn: "Mon Jun 01 22:00:18 CDT 2015"
-    requestType: "Provision Entitlement"
-    requestEntityName: "Health Club"
-    taskApprovalStage: "Stage1"
-    taskStageParticipantName: "Assignee1"
-    requestRaisedByUser: "Ben Jones"
-    beneficiearyUser: "Ben Jones"
-    requestJustification: "Family Workouts"
-    requestedDate: "Mon Jun 01 22:00:16 CDT 2015"
+    var requesttaskapprovers : [RequestTaskApprovers]!
     
-    */
+    init(data : NSDictionary){
+        if let taskresults: NSArray = data["history"]!["currentApprovers"] as? NSArray {
+            
+            var approvers = [RequestTaskApprovers]()
+            for app in taskresults {
+                let app = RequestTaskApprovers(data: app as! NSDictionary)
+                approvers.append(app)
+            }
+            self.requesttaskapprovers = approvers
+        }
+    }
+}
+
+class RequestTaskApprovers {
+    var updatedDate : String!
+    var approvers : String!
+    var stageIndex : String!
+    var status : String!
+    var stage : String!
     
+    init(data : NSDictionary){
+        self.updatedDate = Utils.getStringFromJSON(data, key: "updatedDate")
+        self.approvers = Utils.getStringFromJSON(data, key: "approvers")
+        self.stageIndex = Utils.getStringFromJSON(data, key: "stageIndex")
+        self.status = Utils.getStringFromJSON(data, key: "status")
+        self.stage = Utils.getStringFromJSON(data, key: "stage")
+    }
 }
 
 class RequestEntityName {
@@ -100,7 +153,6 @@ class RequestEntityName {
         self.entityname = Utils.getStringFromJSON(data, key: "entityName")
     }
 }
-
 
 class BeneficiaryUser {
     var beneficiary : String!

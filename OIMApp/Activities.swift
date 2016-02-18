@@ -20,7 +20,7 @@ class Activities {
     
     var reqBeneficiaryList : [ReqBeneficiaryList]!
     var reqTargetEntities : [ReqTargetEntities]!
-    var currentApprovers : [CurrentApprovers]!
+    //var currentApprovers : [CurrentApprovers]!
     
     init(data : NSDictionary){
         
@@ -92,7 +92,7 @@ class ReqTargetEntities {
         self.entityname = Utils.getStringFromJSON(data, key: "entityName")
     }
 }
-
+/*
 class CurrentApprovers {
     var approvers : String!
     var status : String!
@@ -105,3 +105,4 @@ class CurrentApprovers {
         self.stage = Utils.getStringFromJSON(data, key: "stage")
     }
 }
+*/

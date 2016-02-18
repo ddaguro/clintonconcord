@@ -56,12 +56,12 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         self.activities = [Activities]()
         self.api = API()
         
-        //let url = Persistent.endpoint + Persistent.baseroot + "/users/" + requestorUserId
+        //let url = myAPIEndpoint + "/users/" + requestorUserId
         //api.loadUser(requestorUserId, apiUrl: url, completion : didLoadUsers)
         
         
-        //let url2 = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/recentactivity?limit=10"
-        let url2 = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/requests?limit=10&filter=reqCreationDate%20ge%202016-01-01"
+        //let url2 = myAPIEndpoint + "/users/" + myLoginId + "/recentactivity?limit=10"
+        let url2 = myAPIEndpoint + "/users/" + myLoginId + "/requests?limit=10&filter=reqCreationDate%20ge%202016-01-01"
         api.loadActivities(myLoginId, apiUrl: url2, completion : didLoadActivities)
         /*
         if myActivities.count == 0 {
@@ -85,7 +85,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func refresh(){
         
-        let url2 = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/recentactivity?limit=10"
+        let url2 = myAPIEndpoint + "/users/" + myLoginId + "/requests?limit=10&filter=reqCreationDate%20ge%202016-01-01"
         api.loadActivities(myLoginId, apiUrl: url2, completion : didLoadActivities)
         
         SoundPlayer.play("upvote.wav")
@@ -212,7 +212,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         
         api = API()
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + requestorUserId + "/pendingoperationscount"
+        let url = myAPIEndpoint + "/users/" + requestorUserId + "/pendingoperationscount"
         api.getDashboardCount(myLoginId, apiUrl: url, completion: { (success) -> () in
             
             // --> Total Pending

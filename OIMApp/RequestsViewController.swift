@@ -55,7 +55,7 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         self.reqs = [Requests]()
         self.api = API()
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/requests?limit=10&filter=reqCreationDate%20ge%202016-01-01"
+        let url = myAPIEndpoint + "/users/" + myLoginId + "/requests?limit=10&filter=reqCreationDate%20ge%202016-01-01"
         if myRequests.count == 0 {
             //println("load from api")
             api.loadRequests(myLoginId, apiUrl: url, completion : didLoadData)
@@ -82,7 +82,7 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func refresh(){
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/requests?limit=10&filter=reqCreationDate%20ge%202016-01-01"
+        let url = myAPIEndpoint + "/users/" + myLoginId + "/requests?limit=10&filter=reqCreationDate%20ge%202016-01-01"
         api.loadRequests(myLoginId, apiUrl: url, completion : didLoadData)
         
         SoundPlayer.play("upvote.wav")

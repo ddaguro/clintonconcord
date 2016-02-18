@@ -236,7 +236,7 @@ class API {
                 let status = jsonData["status"] as? Int
                 
                 guard status == nil else {
-                    print("need login")
+                    //print("need login")
                     return
                 }
                 
@@ -440,7 +440,7 @@ class API {
             else {
                 let jsonData = (try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as! NSDictionary
                 
-                let results: NSArray = jsonData["identityCertifications"]!["certificationInstances"] as! NSArray
+                let results: NSArray = jsonData["identityCertifications"]!["certificationLineItems"] as! NSArray
                 
                 var certs = [CertItem]()
                 for cert in results{

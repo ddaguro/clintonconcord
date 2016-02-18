@@ -110,7 +110,7 @@ class MakeRequestActionViewController: UIViewController, UITableViewDelegate, UI
                 let textField = doalert.textFields![0] as! UITextField
                 //PERFORM APPROVAL THRU API
                 
-                let url = Persistent.endpoint + Persistent.baseroot + "/requests"
+                let url = myAPIEndpoint + "/requests"
                 
                 var jsonstring = "{\"requester\":{\"User Login\":\"" + myLoginId + "\"},\"targetUsers\":[{\"User Login\":\"" + myLoginId
                 jsonstring += "\"}],\"accounts\":[{\"entitlements\":[{\"entitlementKey\":\"" + "\(self.appInstanceKey)"

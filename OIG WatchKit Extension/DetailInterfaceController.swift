@@ -14,11 +14,18 @@ class DetailInterfaceController: WKInterfaceController, WCSessionDelegate {
     
     private let session: WCSession? = WCSession.isSupported() ? WCSession.defaultSession() : nil
     
-    let endpoint = "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9441/"
-    let baseroot = "idaas/im/v1"
+    let myEndpoint = "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9441/idaas/im/v1"
     let myLoginId = "dcrane"
-    var username : String = ""
+    let myPassword = "Oracle123"
+    
     var paramstring : String = ""
+    
+    var username : String = ""
+    var password : String = ""
+    
+    var watchtoken : String = ""
+    var watchapi : String = ""
+    
     var tasks : Tasks!
     
     @IBOutlet var titleLabel: WKInterfaceLabel!
@@ -33,30 +40,46 @@ class DetailInterfaceController: WKInterfaceController, WCSessionDelegate {
     @IBOutlet var profileImage: WKInterfaceImage!
     
     @IBAction func ApproveAction() {
-        let url = endpoint + baseroot + "/approvals"
         
         var user = "" as String!
+        var pwd = "" as String!
+        var api = "" as String!
         if self.username == "" {
-            user = "dcrane"
+            user = myLoginId
+            pwd = myPassword
+            api = myEndpoint
         } else {
             user = self.username
+            pwd = self.password
+            api = self.watchapi
         }
         
-        RequestApprovalAction(user, params : paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
+        let url2 = api + "/users/login"
+        let paramstring2 = "username=" + user + "&password=" + pwd
+        
+        LogIn(paramstring2, url : url2) { (succeeded: Bool, msg: String) -> () in
             if(succeeded) {
-                print("Action Successful")
-                self.pushControllerWithName("InterfaceController", context: self)
-                self.dismissController()
+                let url = api + "/approvals"
+                
+                self.RequestApprovalAction(user, params : self.paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
+                    if(succeeded) {
+                        //print("Action Successful")
+                        self.pushControllerWithName("InterfaceController", context: self)
+                        self.dismissController()
+                    }
+                    else {
+                        //print("Action Failed")
+                    }
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        if(succeeded) {
+                            
+                        }
+                    })
+                }
             }
             else {
-                print("Action Failed")
             }
-            
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                if(succeeded) {
-                    
-                }
-            })
         }
     }
     
@@ -68,13 +91,28 @@ class DetailInterfaceController: WKInterfaceController, WCSessionDelegate {
     override init() {
         super.init()
         
-        session?.delegate = self
-        session?.activateSession()
+        if (WCSession.isSupported()) {
+            let session = WCSession.defaultSession()
+            session.delegate = self
+            session.activateSession()
+        }
     }
     
     func session(session: WCSession, didReceiveUserInfo userInfo: [String : AnyObject]) {
-        let emoji = userInfo["user"] as? String
-        self.username = emoji!
+        let watchdata = userInfo["data"] as? String
+        
+        let loginInfo: String = watchdata!
+        let loginInfoArray = loginInfo.componentsSeparatedByString(",")
+        
+        let watchuser: String = loginInfoArray[0]
+        let watchpwd: String = loginInfoArray[1]
+        let watchapi: String = loginInfoArray[2]
+        
+        if watchdata != nil {
+            self.username = watchuser
+            self.password = watchpwd
+            self.watchapi = watchapi
+        }
     }
     
     override func awakeWithContext(context: AnyObject?) {
@@ -82,16 +120,13 @@ class DetailInterfaceController: WKInterfaceController, WCSessionDelegate {
         
         var user = "" as String!
         if self.username == "" {
-            user = "dcrane"
+            user = myLoginId
         } else {
             user = self.username
         }
         
         if let tasks = context as? Tasks {
             self.tasks = tasks
-            //setTitle(tasks.requestEntityName)
-            //NSLog("\(self.tasks)")
-            
             
             var titleText = ""
             for ent in tasks.requestEntityName {
@@ -144,14 +179,7 @@ class DetailInterfaceController: WKInterfaceController, WCSessionDelegate {
     }
     
     func formatDate(dateString: String) -> String {
-        
-        let formatter = NSDateFormatter()
-        //Thu Aug 13 18:19:07 EDT 2015
-        formatter.dateFormat = "EEE MMM dd H:mm:ss yyyy" //yyyy-MM-dd'T'HH:mm:ssZ
-        let date = formatter.dateFromString(dateString.stringByReplacingOccurrencesOfString("EDT", withString: ""))
-        
-        formatter.dateFormat = "EEE, MMM dd h:mm a"
-        return formatter.stringFromDate(date!)
+        return dateString
     }
     
     override func willActivate() {
@@ -173,7 +201,8 @@ class DetailInterfaceController: WKInterfaceController, WCSessionDelegate {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
-        request.addValue("TestClient", forHTTPHeaderField: "clientId")
+        request.addValue("DevClient", forHTTPHeaderField: "clientId")
+        request.addValue(watchtoken, forHTTPHeaderField: "authorization")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -187,18 +216,57 @@ class DetailInterfaceController: WKInterfaceController, WCSessionDelegate {
                     
                     if success == true {
                         postCompleted(succeeded: true, msg: "Approved Request")
-                    } else {                        postCompleted(succeeded: false, msg: "Approved Request Error")
+                    } else {
+                        postCompleted(succeeded: false, msg: "Approved Request Error")
                     }
                     return
                 }
                 else {
                     let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                    print("Error could not parse JSON: \(jsonStr)")
-                    postCompleted(succeeded: false, msg: "Error")
+                    //print("Error could not parse JSON: \(jsonStr)")
+                    postCompleted(succeeded: false, msg: "Error: \(jsonStr)")
                 }
             }
         })
         
+        task.resume()
+    }
+    
+    func LogIn(params : String, url : String, postCompleted : (succeeded: Bool, msg: String) -> ()) {
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let session = NSURLSession(configuration: sessionConfig)
+        
+        request.HTTPMethod = "POST"
+        request.HTTPBody = params.dataUsingEncoding(NSUTF8StringEncoding);
+        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("DevClient", forHTTPHeaderField: "clientId")
+        
+        let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            if(error != nil) {
+                print(error!.localizedDescription)
+                postCompleted(succeeded: false, msg: "Error")
+            }
+            else {
+                let json = (try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)) as? NSDictionary
+                if let parseJSON = json {
+                    let success = parseJSON["isAuthenticated"] as? Int
+                    if success == 1 {
+                        
+                        self.watchtoken = parseJSON["encodedValue"] as! String
+                        postCompleted(succeeded: true, msg: "Successful")
+                    } else {
+                        postCompleted(succeeded: false, msg: "Incorrect username and password")
+                        
+                    }
+                    return
+                }
+                else {
+                    postCompleted(succeeded: false, msg: "Error")
+                }
+            }
+        })
         task.resume()
     }
 }

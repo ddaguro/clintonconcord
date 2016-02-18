@@ -49,7 +49,7 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
         
         self.api = API()
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/certifications/certificationlineitems/" + "\(certId)/" + certType
+        let url = myAPIEndpoint + "/certifications/certificationlineitems/" + "\(certId)/" + certType
         
         if certType == "ApplicationInstance" {
             api.loadCertItem(myLoginId, apiUrl : url, completion : didLoadData)
@@ -145,7 +145,7 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
     
     func refresh(){
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/certifications/certificationlineitems/" + "\(certId)/" + certType
+        let url = myAPIEndpoint + "/certifications/certificationlineitems/" + "\(certId)/" + certType
         
         if certType == "ApplicationInstance" {
             api.loadCertItem(myLoginId, apiUrl : url, completion : didLoadData)
@@ -209,7 +209,7 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
             } else if info.percentComplete <= 75 {
                 percentCompleteImage = UIImage(named: "percent75")!
             } else if info.percentComplete <= 100 {
-                percentCompleteImage = UIImage(named: "percent100")!
+                percentCompleteImage = UIImage(named: "percent95")!
             }
             
             cell.progressImage.image = percentCompleteImage
@@ -311,7 +311,7 @@ class CertficationsDetailViewController: UIViewController, UITableViewDelegate, 
             } else if info.rolePercentComplete <= 75 {
                 percentCompleteImage = UIImage(named: "percent75")!
             } else if info.rolePercentComplete <= 100 {
-                percentCompleteImage = UIImage(named: "percent100")!
+                percentCompleteImage = UIImage(named: "percent95")!
             }
             
             cell.progressImage.image = percentCompleteImage

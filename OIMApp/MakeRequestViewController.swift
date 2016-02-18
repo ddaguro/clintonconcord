@@ -66,7 +66,7 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
         self.applications = [Applications]()
         self.api = API()
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/cartitems"
+        let url = myAPIEndpoint + "/cartitems/?cursor=1&limit=10&filterAppInstance=appInstanceName%20eq%20zz&filterEntitlement=entitlement%20eq%20All&filterRole=roleName%20eq%20zz"
         
         //api.loadAllRoles(myLoginId, apiUrl : url, completion : didLoadRoles)
         api.loadAllEntitlements(myLoginId, apiUrl : url, completion : didLoadEntitlements)
@@ -102,7 +102,7 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
     
     func refresh(){
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/cartitems"
+        let url = myAPIEndpoint + "/cartitems/?cursor=1&limit=10&filterAppInstance=appInstanceName%20eq%20zz&filterEntitlement=entitlement%20eq%20All&filterRole=roleName%20eq%20zz"
         
         //api.loadAllRoles(myLoginId, apiUrl : url, completion : didLoadRoles)
         api.loadAllEntitlements(myLoginId, apiUrl : url, completion : didLoadEntitlements)
@@ -138,6 +138,7 @@ class MakeRequestViewController: UIViewController, UITableViewDelegate, UITableV
     
     func didLoadEntitlements(loadedEntitlements: [Entitlements]){
         self.entitlements = [Entitlements]()
+        self.tableData = [RequestInfo]()
         
         for ent in loadedEntitlements {
             self.entitlements.append(ent)

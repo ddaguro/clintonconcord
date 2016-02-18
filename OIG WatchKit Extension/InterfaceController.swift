@@ -18,73 +18,109 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     @IBOutlet var approveTable: WKInterfaceTable!
     
     var username : String = ""
+    var password : String = ""
+    var watchtoken : String = ""
+    var watchapi : String = ""
     
-    let endpoint = "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9441/"
-    let baseroot = "idaas/im/v1"
+    //let endpoint = "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9441/"
+    //let baseroot = "idaas/im/v1"
     
     var tasks : [Tasks]!
     
     @IBAction func refreshButton() {
-        self.loadTableData()
+        //self.loadTableData()
+        self.loadLoginData()
         approveTable.scrollToRowAtIndex(0)
     }
-    
     
     override init() {
         super.init()
         
-        session?.delegate = self
-        session?.activateSession()
+        if (WCSession.isSupported()) {
+            let session = WCSession.defaultSession()
+            session.delegate = self
+            session.activateSession()
+        }
     }
     
     func session(session: WCSession, didReceiveUserInfo userInfo: [String : AnyObject]) {
-        let emoji = userInfo["user"] as? String
-        self.username = emoji!
-        print("user: \(self.username)")
-        //Use this to update the UI instantaneously (otherwise, takes a little while)
-        /*
-        dispatch_async(dispatch_get_main_queue()) {
-            if let emoji = emoji {
-                print("Last emoji: \(emoji)")
-                self.username = emoji
-                print("user: \(self.username)")
-            }
+        let watchdata = userInfo["data"] as? String
+        
+        let loginInfo: String = watchdata!
+        let loginInfoArray = loginInfo.componentsSeparatedByString(",")
+        
+        let watchuser: String = loginInfoArray[0]
+        let watchpwd: String = loginInfoArray[1]
+        let watchapi: String = loginInfoArray[2]
+        //print(" api: " + watchapi)
+        //print(loginInfoArray.count)
+        
+        if watchdata != nil {
+            self.username = watchuser
+            self.password = watchpwd
+            self.watchapi = watchapi
         }
-*/
     }
     
     override func awakeWithContext(context: AnyObject?) {
         super.awakeWithContext(context)
-        
-        
-        //let appGroupID = "group.com.persistent.plat-sol.OIGApp"
-        
-        //let defaults = NSUserDefaults(suiteName: appGroupID)
-        //let username = "dcrane" as String! //defaults?.stringForKey("userLogin")
-        
-        
+
         var user = "" as String!
+        var pwd = "" as String!
+        var api = "" as String!
         if self.username == "" {
             user = "dcrane"
+            pwd = "Oracle123"
+            api = "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9441/idaas/im/v1"
         } else {
             user = self.username
+            pwd = self.password
+            api = self.watchapi
         }
-        print("user 1: \(user)")
         
-        let url2 = endpoint + baseroot + "/users/login"
-        let paramstring = "username=" + user + "&password=Oracle123"
+        let url2 = api + "/users/login"
+        let paramstring = "username=" + user + "&password=" + pwd
         
         LogIn(paramstring, url : url2) { (succeeded: Bool, msg: String) -> () in
             if(succeeded) {
-                //println("Success")
             }
             else {
-                //println("Failed")
             }
             
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 if(succeeded) {
-                    //println("Success Async")
+                    self.loadTableData()
+                }
+            })
+        }
+    }
+    
+    func loadLoginData() {
+        
+        var user = "" as String!
+        var pwd = "" as String!
+        var api = "" as String!
+        if self.username == "" {
+            user = "dcrane"
+            pwd = "Oracle123"
+            api = "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9441/idaas/im/v1"
+        } else {
+            user = self.username
+            pwd = self.password
+            api = self.watchapi
+        }
+        
+        let url2 = api + "/users/login"
+        let paramstring = "username=" + user + "&password=" + pwd
+        
+        LogIn(paramstring, url : url2) { (succeeded: Bool, msg: String) -> () in
+            if(succeeded) {
+            }
+            else {
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                if(succeeded) {
                     self.loadTableData()
                 }
             })
@@ -93,27 +129,22 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     
     private func loadTableData() {
         self.tasks = [Tasks]()
-        
-        //let appGroupID = "group.com.persistent.plat-sol.OIGApp"
-        
-        //let defaults = NSUserDefaults(suiteName: appGroupID)
-        //print(defaults?.stringForKey("userLogin"))
-        //let username = "dcrane" as String! //defaults?.stringForKey("userLogin")
+
         var user = "" as String!
+        var api = "" as String!
         if self.username == "" {
             user = "dcrane"
+            api = "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9441/idaas/im/v1"
         } else {
             user = self.username
+            api = self.watchapi
         }
-        print("user 2: \(user)")
-        let url = endpoint + baseroot + "/users/" + user + "/approvals/"
+        
+        let url = api + "/users/" + user + "/approvals/"
         loadPendingApprovals(user, apiUrl: url, completion : didLoadData)
-       
     }
     
     func didLoadData(loadedData: [Tasks]){
-        
-        //self.tasks = [Tasks]()
         
         for data in loadedData {
             self.tasks.append(data)
@@ -124,7 +155,6 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         }
         
         for (index, info) in tasks.enumerate() {
-            //println(index)
             if let row = approveTable.rowControllerAtIndex(index) as? ApproveTableRowController {
                 var titleText = ""
                 for ent in info.requestEntityName {
@@ -157,7 +187,6 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
             let info = tasks[rowIndex]
             return info
         }
-        
         return nil
     }
     
@@ -181,7 +210,8 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
-        request.addValue("TestClient", forHTTPHeaderField: "clientId")
+        request.addValue("DevClient", forHTTPHeaderField: "clientId")
+        request.addValue(watchtoken, forHTTPHeaderField: "authorization")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -218,7 +248,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         request.HTTPBody = params.dataUsingEncoding(NSUTF8StringEncoding);
         request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
-        request.addValue("TestClient", forHTTPHeaderField: "clientId")
+        request.addValue("DevClient", forHTTPHeaderField: "clientId")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -230,6 +260,8 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
                 if let parseJSON = json {
                     let success = parseJSON["isAuthenticated"] as? Int
                     if success == 1 {
+                        
+                        self.watchtoken = parseJSON["encodedValue"] as! String
                         postCompleted(succeeded: true, msg: "Successful")
                     } else {
                         postCompleted(succeeded: false, msg: "Incorrect username and password")
@@ -249,11 +281,10 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         
         let formatter = NSDateFormatter()
         //Thu Aug 13 18:19:07 EDT 2015
-        formatter.dateFormat = "EEE MMM dd H:mm:ss yyyy" //yyyy-MM-dd'T'HH:mm:ssZ
-        let date = formatter.dateFromString(dateString.stringByReplacingOccurrencesOfString("EDT", withString: ""))
+        formatter.dateFormat = "EEE MMM dd H:mm:ss yyyy"
         
-        formatter.dateFormat = "EEE, MMM dd h:mm a"
-        return formatter.stringFromDate(date!)
+        formatter.dateFormat = "EEE, MMM dd yyyy h:mm a"
+        return dateString
     }
 }
 

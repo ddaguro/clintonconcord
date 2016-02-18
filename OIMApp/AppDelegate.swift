@@ -15,6 +15,7 @@ var totalCounter: Int = 0
 var myRequestorId : String = ""
 var myToken : String = ""
 
+var myAPIEndpoint : String = ""
 
 var myLoginId : String = ""
 
@@ -243,6 +244,6 @@ struct Persistent {
     9442 (HTTPS – 1 way SSL)
     9443 (HTTPS – 1 way SSL with Basic Auth), use s_APIUser/password
     */
-    static let endpoint = "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9441/"
+    static let endpoint = myAPIEndpoint
     static let baseroot = "idaas/im/v1"
 }

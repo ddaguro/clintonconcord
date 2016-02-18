@@ -56,7 +56,7 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
         self.certs = [Certs]()
         self.api = API()
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/certifications?limit=50"
+        let url = myAPIEndpoint + "/users/" + myLoginId + "/certifications?limit=50"
         api.loadPendingCerts(myLoginId, apiUrl: url, completion : didLoadData)
         
         
@@ -109,7 +109,7 @@ class CertficationsViewController: UIViewController, UITableViewDelegate, UITabl
     
     func refresh(){
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/certifications"
+        let url = myAPIEndpoint + "/users/" + myLoginId + "/certifications"
         api.loadPendingCerts(myLoginId, apiUrl: url, completion : didLoadData)
         
         SoundPlayer.play("upvote.wav")

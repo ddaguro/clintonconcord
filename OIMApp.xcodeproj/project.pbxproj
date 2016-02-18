@@ -10,6 +10,8 @@
 		010C6DF41B1E17AF00944643 /* MakeRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010C6DF31B1E17AF00944643 /* MakeRequestViewController.swift */; };
 		010C7EB31B8D0AB80065BB66 /* ApproveChartInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010C7EB21B8D0AB80065BB66 /* ApproveChartInterfaceController.swift */; };
 		0113B4391B8383B600A80DFA /* Activities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0113B4381B8383B600A80DFA /* Activities.swift */; };
+		0119AE5A1C73BC38000F053A /* ApprovalsDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0119AE591C73BC38000F053A /* ApprovalsDetailViewController.swift */; };
+		0119AE5C1C73BEB4000F053A /* ApprovalDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0119AE5B1C73BEB4000F053A /* ApprovalDetailCell.swift */; };
 		0124323D1B8B715500101F59 /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0124323C1B8B715500101F59 /* InterfaceController.swift */; };
 		0124323F1B8B715500101F59 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0124323E1B8B715500101F59 /* NotificationController.swift */; };
 		012432411B8B715500101F59 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 012432401B8B715500101F59 /* Images.xcassets */; };
@@ -261,6 +263,8 @@
 		010C6DF31B1E17AF00944643 /* MakeRequestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MakeRequestViewController.swift; sourceTree = "<group>"; };
 		010C7EB21B8D0AB80065BB66 /* ApproveChartInterfaceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApproveChartInterfaceController.swift; sourceTree = "<group>"; };
 		0113B4381B8383B600A80DFA /* Activities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Activities.swift; sourceTree = "<group>"; };
+		0119AE591C73BC38000F053A /* ApprovalsDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApprovalsDetailViewController.swift; sourceTree = "<group>"; };
+		0119AE5B1C73BEB4000F053A /* ApprovalDetailCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApprovalDetailCell.swift; sourceTree = "<group>"; };
 		011CC9961B9F4CA300260121 /* OIMApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = OIMApp.entitlements; sourceTree = "<group>"; };
 		012432371B8B715500101F59 /* OIG WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "OIG WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0124323A1B8B715500101F59 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -573,6 +577,7 @@
 				01FF7F4D1B3364EB0026BE38 /* CertsCell.swift */,
 				01FF7F531B3885890026BE38 /* CertsDetailCell.swift */,
 				014FC4981B4B39170035CB6A /* DashboardCell.swift */,
+				0119AE5B1C73BEB4000F053A /* ApprovalDetailCell.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -932,6 +937,7 @@
 			isa = PBXGroup;
 			children = (
 				01B7B4FD1B02A04A0090E62E /* ApprovalsViewController.swift */,
+				0119AE591C73BC38000F053A /* ApprovalsDetailViewController.swift */,
 			);
 			name = MyApprovals;
 			sourceTree = "<group>";
@@ -1365,6 +1371,7 @@
 				0138FC6C1AFAAD5D00837EAB /* TransistionOperator.swift in Sources */,
 				015C14101B0BE0C00099B9E7 /* DashboardViewController.swift in Sources */,
 				018060411B20D6B600F4C68D /* TransitionZoom.swift in Sources */,
+				0119AE5C1C73BEB4000F053A /* ApprovalDetailCell.swift in Sources */,
 				015334BD1AFBECC60050C985 /* SignInViewController.swift in Sources */,
 				014FC4901B4B1BEA0035CB6A /* CertficationsActionViewController.swift in Sources */,
 				0180603F1B20D6B600F4C68D /* SpringView.swift in Sources */,
@@ -1420,6 +1427,7 @@
 				0180603B1B20D6B600F4C68D /* SpringImageView.swift in Sources */,
 				01506FB01B0D0BDB00F9D605 /* AccessDetailViewController.swift in Sources */,
 				018060291B20D6B600F4C68D /* BlurView.swift in Sources */,
+				0119AE5A1C73BC38000F053A /* ApprovalsDetailViewController.swift in Sources */,
 				0180603D1B20D6B600F4C68D /* SpringTextField.swift in Sources */,
 				01FBA2BA1B14EA53006C1915 /* Tasks.swift in Sources */,
 				0138FC6A1AFAABC600837EAB /* NavigationCell.swift in Sources */,
@@ -1483,9 +1491,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "OIG WatchKit Extension/OIG WatchKit Extension.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1507,9 +1515,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "OIG WatchKit Extension/OIG WatchKit Extension.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "OIG WatchKit Extension/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
@@ -1528,9 +1536,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "OIG WatchKit App/OIG WatchKit App.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1554,9 +1562,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "OIG WatchKit App/OIG WatchKit App.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				IBSC_MODULE = OIG_WatchKit_Extension;
 				INFOPLIST_FILE = "OIG WatchKit App/Info.plist";
@@ -1661,10 +1669,10 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = OIMApp/OIMApp.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = OIMApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.persistent.plat-sol.OIGApp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1683,10 +1691,10 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = OIMApp/OIMApp.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Persistent Systems Limited (Z85852MG3R)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = OIMApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.persistent.plat-sol.OIGApp";
 				PRODUCT_NAME = "$(TARGET_NAME)";

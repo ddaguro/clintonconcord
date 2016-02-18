@@ -106,7 +106,7 @@ class MenuViewController: UITableViewController {
         lblName.autoresizingMask = [UIViewAutoresizing.FlexibleLeftMargin, UIViewAutoresizing.FlexibleRightMargin]
         
         //imageView.autoresizingMask.contentMode = UIViewContentMode.ScaleAspectFit
-        //let checkedUrl = Persistent.endpoint + Persistent.baseroot + "/users/" + myRequestorId + "/avatar"
+        //let checkedUrl = myAPIEndpoint + "/users/" + myRequestorId + "/avatar"
         //downloadImage(checkedUrl)
         
         if myLoginId == "kclark" {
@@ -121,7 +121,7 @@ class MenuViewController: UITableViewController {
             imageView.image = UIImage(named: "profileBlankPic")
         }
         /*
-        if let url = NSURL(string: Persistent.endpoint + Persistent.baseroot + "/avatar/" + myRequestorId + "/" + myRequestorId) {
+        if let url = NSURL(string: myAPIEndpoint + "/avatar/" + myRequestorId + "/" + myRequestorId) {
             if let data = NSData(contentsOfURL: url){
                 imageView.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleRightMargin
                 imageView.layer.masksToBounds = true;
@@ -147,7 +147,7 @@ class MenuViewController: UITableViewController {
         
         self.api = API()
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/users/logout"
+        let url = myAPIEndpoint + "/users/logout"
         
         api.LogOut(myLoginId, url: url) { (succeeded: Bool, msg: String) -> () in
             let alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay.")
@@ -327,7 +327,7 @@ class MenuViewController: UITableViewController {
             
             var requestorUserId : String!
             requestorUserId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-            let url = Persistent.endpoint + Persistent.baseroot + "/identity/logout/" + requestorUserId
+            let url = myAPIEndpoint + "/identity/logout/" + requestorUserId
             
             api.LogOut(url) { (succeeded: Bool, msg: String) -> () in
                 var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay.")

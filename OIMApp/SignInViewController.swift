@@ -17,14 +17,10 @@ class SignInViewController : UIViewController, UITextFieldDelegate, WCSessionDel
     
     @IBOutlet var facebookButton : UIButton!
     @IBOutlet var twitterButton : UIButton!
-    
-    
+
     @IBOutlet var noAccountButton : UIButton!
-    
     @IBOutlet var bgImageView : UIImageView!
-    
     @IBOutlet var signInButton : UIButton!
-    
     @IBOutlet var forgotPassword : UIButton!
     
     @IBOutlet var passwordContainer : UIView!
@@ -50,14 +46,17 @@ class SignInViewController : UIViewController, UITextFieldDelegate, WCSessionDel
         super.viewDidLoad()
         
         
-        let session = WCSession.defaultSession()
-        session.delegate = self
-        session.activateSession()
-
+        ReadAPIEndpoint()
+        //print(myAPIEndpoint)
+        if (WCSession.isSupported()) {
+            let session = WCSession.defaultSession()
+            session.delegate = self
+            session.activateSession()
+        }
         
         //hide
-        facebookButton.hidden = true
-        twitterButton.hidden = true
+        facebookButton.hidden = false
+        twitterButton.hidden = false
         titleLabel.hidden = true
         
         noAccountButton.setTitle("Sign In with FIDO", forState: .Normal)
@@ -108,6 +107,16 @@ class SignInViewController : UIViewController, UITextFieldDelegate, WCSessionDel
         signInButton.layer.cornerRadius = 5
         signInButton.addTarget(self, action: "LoggedIn", forControlEvents: .TouchUpInside)
         
+        twitterButton.setTitle("Ver 1.4.1", forState: .Normal)
+        twitterButton.setTitleColor(self.UIColorFromHex(0x37474f, alpha: 1.0), forState: .Normal)
+        twitterButton.titleLabel?.font = UIFont(name: MegaTheme.semiBoldFontName, size: 10)
+        twitterButton.addTarget(self, action: "buttonSaveAction", forControlEvents: .TouchUpInside)
+     
+        facebookButton.setTitle("...", forState: .Normal)
+        facebookButton.setTitleColor(self.UIColorFromHex(0x37474f, alpha: 1.0), forState: .Normal)
+        facebookButton.titleLabel?.font = UIFont(name: MegaTheme.semiBoldFontName, size: 10)
+        facebookButton.addTarget(self, action: "buttonResetAction", forControlEvents: .TouchUpInside)
+        
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         view.addGestureRecognizer(tap)
         
@@ -116,9 +125,7 @@ class SignInViewController : UIViewController, UITextFieldDelegate, WCSessionDel
         }
         
         UIApplication.sharedApplication().registerForRemoteNotifications()
-        
     }
-    
     
     func textFieldShouldReturn(userText: UITextField) -> Bool {
         self.view.endEditing(true)
@@ -139,6 +146,61 @@ class SignInViewController : UIViewController, UITextFieldDelegate, WCSessionDel
         controller.nagivationStyleToPresent = "presentTableNavigation"
     }
     
+    func LoggedIn(){
+        ReadAPIEndpoint()
+        self.api = API()
+        
+        let url = myAPIEndpoint + "/users/login"
+        let username = userTextField.text
+        let password = passwordTextField.text
+        let paramstring = "username=" + username! + "&password=" + password!
+        
+        if username != "" {
+            api.LogIn(username!, params: paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
+                let alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
+                if(succeeded) {
+                    
+                    let url = myAPIEndpoint + "/users/" + username!
+                    self.api.loadUser(username!, apiUrl: url, completion : self.didLoadUsers)
+                    
+                    if myLoginId != username {
+                        myFIDO = false
+                    }
+                    
+                    NSUserDefaults.standardUserDefaults().setObject(username, forKey: "requestorUserId")
+                    NSUserDefaults.standardUserDefaults().synchronize()
+                    
+                    myLoginId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
+                    
+                    if self.session == self.validSession {
+                        WCSession.defaultSession().transferUserInfo(["data" : username! + "," + password! + "," + myAPIEndpoint ])
+                    }
+                    
+                    self.SaveLogin(username!, pwd: password!)
+                }
+                else {
+                    alert.title = "Failed : ("
+                    alert.message = msg
+                }
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    if(succeeded)
+                    {
+                        self.performSegueWithIdentifier("SegueDashboard", sender: self)
+                        
+                    } else {
+                        alert.show()
+                    }
+                })
+            }
+        } else {
+            let alert = UIAlertController(title: "Failed : (", message: "Incorrect username and password", preferredStyle: .Alert)
+            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in }
+            alert.addAction(OKAction)
+            
+            self.presentViewController(alert, animated: true) { }
+        }
+    }
+    
     func LoggedInFIDO(){
         
         if self.ReadLogin() {
@@ -149,7 +211,7 @@ class SignInViewController : UIViewController, UITextFieldDelegate, WCSessionDel
             } else {
                 let context = LAContext()
                 var error: NSError?
-                
+                ReadAPIEndpoint()
                 // check if Touch ID is available
                 if context.canEvaluatePolicy(.DeviceOwnerAuthenticationWithBiometrics, error: &error) {
                 
@@ -166,7 +228,7 @@ class SignInViewController : UIViewController, UITextFieldDelegate, WCSessionDel
                                     
                                     self.api = API()
                                     
-                                    let url = Persistent.endpoint + Persistent.baseroot + "/users/login"
+                                    let url = myAPIEndpoint + "/users/login"
                                     
                                     //self.ReadLogin()
                                     
@@ -187,7 +249,7 @@ class SignInViewController : UIViewController, UITextFieldDelegate, WCSessionDel
                                                 //load user object
                                                 self.users = [Users]()
                                                 
-                                                let url = Persistent.endpoint + Persistent.baseroot + "/users/" + username
+                                                let url = myAPIEndpoint + "/users/" + username
                                                 self.api.loadUser(username, apiUrl: url, completion : self.didLoadUsers)
                                         
                                                 let appGroupID = "group.com.persistent.plat-sol.OIGApp"
@@ -200,7 +262,9 @@ class SignInViewController : UIViewController, UITextFieldDelegate, WCSessionDel
                                                 
                                                 myLoginId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
                                                 
-
+                                                if self.session == self.validSession {
+                                                    WCSession.defaultSession().transferUserInfo(["data" : username + "," + password + "," + myAPIEndpoint ])
+                                                }
 
                                             }
                                             else {
@@ -235,71 +299,6 @@ class SignInViewController : UIViewController, UITextFieldDelegate, WCSessionDel
             let alert = UIAlertView(title: "Please Register for FIOD", message: "This user account is not registered for FIDO UAF, or the application was upgraded and re-registration is required.  Please sign in with your Username and Password and re-register for FIDO UAF.", delegate: nil, cancelButtonTitle: "Okay")
             alert.show()
             dismissViewControllerAnimated(true, completion: nil)
-        }
-    }
-    
-    func LoggedIn(){
-        
-        self.api = API()
-        
-        let url = Persistent.endpoint + Persistent.baseroot + "/users/login"
-        let username = userTextField.text
-        let password = passwordTextField.text
-        let paramstring = "username=" + username! + "&password=" + password!
-        
-        if username != "" {
-            api.LogIn(username!, params: paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
-                let alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
-                if(succeeded) {
-                    //self.users = [Users]()
-                    
-                    let url = Persistent.endpoint + Persistent.baseroot + "/users/" + username!
-                    self.api.loadUser(username!, apiUrl: url, completion : self.didLoadUsers)
-                    
-                    if myLoginId != username {
-                        myFIDO = false
-                    }
-                    /*
-                    let appGroupID = "group.com.persistent.plat-sol.OIGApp"
-                    
-                    if let defaults = NSUserDefaults(suiteName: appGroupID) {
-                        defaults.setValue(username, forKey: "userLogin")
-                        defaults.synchronize()
-                    }
-                    */
-                    NSUserDefaults.standardUserDefaults().setObject(username, forKey: "requestorUserId")
-                    NSUserDefaults.standardUserDefaults().synchronize()
-                    
-                    myLoginId = NSUserDefaults.standardUserDefaults().objectForKey("requestorUserId") as! String
-
-                    if self.session == self.validSession {
-                        WCSession.defaultSession().transferUserInfo(["user" : myLoginId ])
-                    }
-                    
-                    self.SaveLogin(username!, pwd: password!)
-                }
-                else {
-                    alert.title = "Failed : ("
-                    alert.message = msg
-                }
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    if(succeeded)
-                    {
-                        self.performSegueWithIdentifier("SegueDashboard", sender: self)
-                        
-                    } else {
-                        alert.show()
-                    }
-                })
-            }
-        } else {
-            //let alert = UIAlertView(title: "Failed : (", message: "Incorrect username and password", delegate: nil, cancelButtonTitle: "Okay")
-            //alert.show()
-            let alert = UIAlertController(title: "Failed : (", message: "Incorrect username and password", preferredStyle: .Alert)
-            
-            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in }
-            alert.addAction(OKAction)
-            self.presentViewController(alert, animated: true) { }
         }
     }
     
@@ -371,5 +370,128 @@ class SignInViewController : UIViewController, UITextFieldDelegate, WCSessionDel
             return session
         }
         return nil
+    }
+    
+    
+    func buttonSaveAction()
+    {
+        if myAPIEndpoint != "" {
+            
+        }
+        
+        ReadAPIEndpoint()
+        let alerttitle : String! = "Server Configuration"
+        let alertmsg : String! = "Set custom server"
+        
+        var doalert : DOAlertController
+
+        doalert = DOAlertController(title: alerttitle, message: alertmsg, preferredStyle: .Alert)
+        
+        doalert.addTextFieldWithConfigurationHandler { textField in
+            //textField.placeholder = " Enter RESTful API Endpoint "
+            textField.text = myAPIEndpoint.lowercaseString
+        }
+        
+        let saveAction = DOAlertAction(title: "OK", style: .Default) { action in
+            let textField = doalert.textFields![0] as! UITextField
+            
+            let file = "apiEndpoint.txt"
+            if let dirs : [String] = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true) {
+                let dir = dirs[0] as NSString!
+                let path = dir.stringByAppendingPathComponent(file);
+                let text = textField.text!
+                
+                do {
+                    try text.writeToFile(path, atomically: false, encoding: NSUTF8StringEncoding)
+                } catch {
+                }
+            }
+            
+        }
+        
+        let cancelAction = DOAlertAction(title: "Cancel", style: .Cancel) { action in
+        }
+        
+        doalert.addAction(cancelAction)
+        doalert.addAction(saveAction)
+        presentViewController(doalert, animated: true, completion: nil)
+    }
+    
+    func buttonResetAction()
+    {
+        let alerttitle : String! = "Server Configuration"
+        let alertmsg : String! = "Would you like to reset server to default?"
+        
+        var doalert : DOAlertController
+        
+        doalert = DOAlertController(title: alerttitle, message: alertmsg, preferredStyle: .Alert)
+        
+        let saveAction = DOAlertAction(title: "Reset", style: .Default) { action in
+            
+            let file = "apiEndpoint.txt"
+            if let dirs : [String] = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true) {
+                let dir = dirs[0] as NSString!
+                let path = dir.stringByAppendingPathComponent(file);
+                let text = "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9441/idaas/im/v1"
+                
+                do {
+                    try text.writeToFile(path, atomically: false, encoding: NSUTF8StringEncoding)
+                } catch {
+                }
+            }
+            
+        }
+        
+        let cancelAction = DOAlertAction(title: "Cancel", style: .Cancel) { action in
+        }
+        
+        doalert.addAction(cancelAction)
+        doalert.addAction(saveAction)
+        presentViewController(doalert, animated: true, completion: nil)
+    }
+    
+    func ReadAPIEndpoint() -> Bool {
+        let file = "apiEndpoint.txt"
+        if let dirs : [String] = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true) {
+            let dir = dirs[0] as NSString!
+            let path = dir.stringByAppendingPathComponent(file);
+            //print(path)
+            let text = try? String(contentsOfFile: path, encoding: NSUTF8StringEncoding)
+            
+            var url = ""
+            if text != nil {
+                url = text!
+                myAPIEndpoint = url
+                return true
+            } else {
+                // step 1 - set endpoint to session on initial load
+                url = "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9441/idaas/im/v1"
+                myAPIEndpoint = url
+                // step 2 - write to local device for subsuquent acces
+                
+                let file = "apiEndpoint.txt"
+                if let dirs : [String] = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true) {
+                    let dir = dirs[0] as NSString!
+                    let path = dir.stringByAppendingPathComponent(file);
+                    let text = "http://ec2-52-25-57-202.us-west-2.compute.amazonaws.com:9441/idaas/im/v1"
+                    
+                    do {
+                        try text.writeToFile(path, atomically: false, encoding: NSUTF8StringEncoding)
+                    } catch {
+                    }
+                }
+                
+                return false
+            }
+        }
+        return false
+    }
+    
+    func UIColorFromHex(rgbValue:UInt32, alpha:Double=1.0)->UIColor {
+        let red = CGFloat((rgbValue & 0xFF0000) >> 16)/256.0
+        let green = CGFloat((rgbValue & 0xFF00) >> 8)/256.0
+        let blue = CGFloat(rgbValue & 0xFF)/256.0
+        
+        return UIColor(red:red, green:green, blue:blue, alpha:CGFloat(alpha))
     }
 }

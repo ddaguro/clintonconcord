@@ -25,6 +25,7 @@ class ApproveChartInterfaceController: WKInterfaceController, WCSessionDelegate 
     var myApprovals: Int = 0
     var myRequest: Int = 0
     var username : String = ""
+    var watchtoken : String = ""
     
     override init() {
         super.init()
@@ -34,8 +35,10 @@ class ApproveChartInterfaceController: WKInterfaceController, WCSessionDelegate 
     }
     
     func session(session: WCSession, didReceiveUserInfo userInfo: [String : AnyObject]) {
-        let user = userInfo["user"] as? String
-        self.username = user!
+        let watchuser = userInfo["user"] as? String
+        if watchuser != nil {
+            self.username = watchuser!
+        }
     }
     override func awakeWithContext(context: AnyObject?) {
         super.awakeWithContext(context)
@@ -84,7 +87,7 @@ class ApproveChartInterfaceController: WKInterfaceController, WCSessionDelegate 
         request.HTTPBody = params.dataUsingEncoding(NSUTF8StringEncoding);
         request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
-        request.addValue("TestClient", forHTTPHeaderField: "clientId")
+        request.addValue("DevClient", forHTTPHeaderField: "clientId")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {
@@ -96,6 +99,7 @@ class ApproveChartInterfaceController: WKInterfaceController, WCSessionDelegate 
                 if let parseJSON = json {
                     let success = parseJSON["isAuthenticated"] as? Int
                     if success == 1 {
+                        self.watchtoken = parseJSON["encodedValue"] as! String
                         postCompleted(succeeded: true, msg: "Successful")
                     } else {
                         postCompleted(succeeded: false, msg: "Incorrect username and password")
@@ -120,7 +124,8 @@ class ApproveChartInterfaceController: WKInterfaceController, WCSessionDelegate 
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(loginId, forHTTPHeaderField: "loginId")
-        request.addValue("TestClient", forHTTPHeaderField: "clientId")
+        request.addValue("DevClient", forHTTPHeaderField: "clientId")
+        request.addValue(watchtoken, forHTTPHeaderField: "authorization")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             if(error != nil) {

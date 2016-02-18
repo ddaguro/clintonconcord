@@ -55,7 +55,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
                 
                 let textField = doalert.textFields![0] as! UITextField
                 
-                let url = Persistent.endpoint + Persistent.baseroot + "/approvals"
+                let url = myAPIEndpoint + "/approvals"
                 
                 var taskaction = "APPROVE" as String!
                 
@@ -161,7 +161,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
         tableView.separatorColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
         tableView.allowsMultipleSelectionDuringEditing = true
-        tableView.allowsSelection = false
+        //tableView.allowsSelection = false
         tableView.allowsSelectionDuringEditing = true
         //tableView.estimatedRowHeight = 300
         //tableView.rowHeight = UITableViewAutomaticDimension
@@ -176,7 +176,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         self.tasks = [Tasks]()
         self.api = API()
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/approvals/"
+        let url = myAPIEndpoint + "/users/" + myLoginId + "/approvals/"
         api.loadPendingApprovals(myLoginId, apiUrl: url, completion : didLoadData)
         
         refreshControl = UIRefreshControl()
@@ -209,7 +209,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func refresh(){
-        let url = Persistent.endpoint + Persistent.baseroot + "/users/" + myLoginId + "/approvals/"
+        let url = myAPIEndpoint + "/users/" + myLoginId + "/approvals/"
         api.loadPendingApprovals(myLoginId, apiUrl: url, completion : didLoadData)
         
         SoundPlayer.play("upvote.wav")
@@ -331,14 +331,14 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
+        /*
         if let indexPath = self.tableView.indexPathsForSelectedRows as? [NSIndexPath]! {
             self.selectedtasks.removeAll(keepCapacity: true)
             for idx in indexPath {
                 let info = tasks[idx.item]
                 self.selectedtasks.append(info)
             }
-            /*
+            /* not using - save for later
             let selectedcell = tableView.cellForRowAtIndexPath(indexPath)
             
             if (selectedcell!.accessoryType == UITableViewCellAccessoryType.None) {
@@ -353,7 +353,29 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
                 //self.selectedtasks.filter() { $0.requestId != info.requestId }
                 //self.selectedtasks.sort({ $0.requestId < $1.requestId })
             }*/
+        }*/
+        if let indexPath = self.tableView.indexPathForSelectedRow {
+            let info = tasks[indexPath.row]
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let controller = storyboard.instantiateViewControllerWithIdentifier("ApprovalsDetailViewController") as! ApprovalsDetailViewController
+            controller.approvalId = info.requestId
+            
+            var titleText = ""
+            for ent in info.requestEntityName {
+                if titleText.isEmpty {
+                    titleText = ent.entityname
+                } else {
+                    titleText += " , \(ent.entityname)"
+                }
+            }
+            
+            controller.approvalTitle = titleText
+            controller.navigationController
+            showViewController(controller, sender: self)
         }
+        
+        tableView.deselectRowAtIndexPath(indexPath, animated: false)
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -451,7 +473,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
             let approveAction = DOAlertAction(title: "OK", style: .Default) { action in
                 let textField = doalert.textFields![0] as! UITextField
                 
-                let url = Persistent.endpoint + Persistent.baseroot + "/approvals"
+                let url = myAPIEndpoint + "/approvals"
                 
                 var paramstring = "{\"requester\": {\"User Login\": \""
                 paramstring += myLoginId + "\"},\"task\": [{\"requestId\": \""

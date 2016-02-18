@@ -78,7 +78,7 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
                     let textField = doalert.textFields![0] as! UITextField
                     
                     var certaction = "CERTIFY" as String!
-                    let url = Persistent.endpoint + Persistent.baseroot + "/certifications"
+                    let url = myAPIEndpoint + "/certifications"
                     
                     var jsonstring = "{\"identityCertifications\": {\"certificationId\": " + "\(self.certId)"
                     jsonstring += ",\"entityId\": " +  "\(self.applicationInstanceId)"
@@ -219,7 +219,7 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
             roletype = "/members"
         }
         
-        let url = Persistent.endpoint + Persistent.baseroot + "/certifications/certificationlineitemdetails/" + "\(certId)/" + certType + "/\(certdetailid)" + roletype
+        let url = myAPIEndpoint + "/certifications/certificationlineitemdetails/" + "\(certId)/" + certType + "/\(certdetailid)" + roletype
         
         if certType == "ApplicationInstance" {
             api.loadCertItemDetails(myLoginId, apiUrl : url, completion : didLoadData)
@@ -231,10 +231,10 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
             api.loadCertRoleItemDetails(myLoginId, apiUrl: url, completion : didLoadRoleDetailData)
         }
         
-        refreshControl = UIRefreshControl()
-        refreshControl.tintColor = UIColor.redColor()
-        refreshControl.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
-        tableView.addSubview(refreshControl)
+        //refreshControl = UIRefreshControl()
+        //refreshControl.tintColor = UIColor.redColor()
+        //refreshControl.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
+        //tableView.addSubview(refreshControl)
         
         self.navigationController?.interactivePopGestureRecognizer!.delegate = self;
         
@@ -247,7 +247,7 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
         } else if certType == "Entitlement" {
             certdetailid = entitlementId
         }
-        let url = Persistent.endpoint + Persistent.baseroot + "/certifications/certificationlineitemdetails/" + "\(certId)/" + certType + "/\(certdetailid)"
+        let url = myAPIEndpoint + "/certifications/certificationlineitemdetails/" + "\(certId)/" + certType + "/\(certdetailid)"
         
         if certType == "ApplicationInstance" {
             api.loadCertItemDetails(myLoginId, apiUrl : url, completion : didLoadData)
@@ -600,7 +600,7 @@ class CertficationsActionViewController: UIViewController, UITableViewDelegate, 
             let certifyAction = DOAlertAction(title: "OK", style: .Default) { action in
                 let textField = doalert.textFields![0] as! UITextField
                 //PERFORM APPROVAL THRU API
-                let url = Persistent.endpoint + Persistent.baseroot + "/certifications"
+                let url = myAPIEndpoint + "/certifications"
                 
                 var jsonstring = "{\"identityCertifications\": {\"certificationId\": " + "\(cid)"
                 jsonstring += ",\"entityId\": " +  "\(self.applicationInstanceId)"
