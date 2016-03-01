@@ -35,11 +35,22 @@ public class Tasks {
     var taskpreviousapprover : [TaskPreviousApprover]!
     var taskcurrentapprover : [TaskCurrentApprover]!
     
+    var assignees : [Assignees]!
+    
     init(data : NSDictionary){
         
         self.taskId = Utils.getStringFromJSON(data, key: "taskId")
         self.taskNumber = Utils.getStringFromJSON(data, key: "taskNumber")
         // assignees
+        if let assigneeresults: NSArray = data["assignees"] as? NSArray {
+            
+            var assigns = [Assignees]()
+            for assign in assigneeresults {
+                let assign = Assignees(data: assign as! NSDictionary)
+                assigns.append(assign)
+            }
+            self.assignees = assigns
+        }
         self.requestStatus = Utils.getStringFromJSON(data, key: "requestStatus")
         // requestTaskDetails
         if let previousapproverresults: NSArray = data["requestTaskDetails"] as? NSArray {
@@ -144,6 +155,13 @@ class RequestTaskApprovers {
         self.stageIndex = Utils.getStringFromJSON(data, key: "stageIndex")
         self.status = Utils.getStringFromJSON(data, key: "status")
         self.stage = Utils.getStringFromJSON(data, key: "stage")
+    }
+}
+
+class Assignees {
+    var assigneename : String!
+    init(data : NSDictionary){
+        self.assigneename = Utils.getStringFromJSON(data, key: "name")
     }
 }
 

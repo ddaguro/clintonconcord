@@ -33,6 +33,7 @@
 		013AB3D11AFA854400160A34 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013AB3D01AFA854400160A34 /* Utils.swift */; };
 		0141C7ED1B3B23B9000B674B /* refresh.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0141C7EB1B3B23B9000B674B /* refresh.wav */; };
 		0141C7EE1B3B23B9000B674B /* upvote.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0141C7EC1B3B23B9000B674B /* upvote.wav */; };
+		014E57101C85F448006ACCD9 /* LoadMoreCC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014E570F1C85F448006ACCD9 /* LoadMoreCC.swift */; };
 		014EA1281B8BC2BC009125F6 /* DetailInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014EA1271B8BC2BC009125F6 /* DetailInterfaceController.swift */; };
 		014FC4901B4B1BEA0035CB6A /* CertficationsActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014FC48F1B4B1BEA0035CB6A /* CertficationsActionViewController.swift */; };
 		014FC4921B4B1E590035CB6A /* RequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014FC4911B4B1E590035CB6A /* RequestCell.swift */; };
@@ -187,6 +188,7 @@
 		018060401B20D6B600F4C68D /* TransitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018060231B20D6B600F4C68D /* TransitionManager.swift */; };
 		018060411B20D6B600F4C68D /* TransitionZoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018060241B20D6B600F4C68D /* TransitionZoom.swift */; };
 		018060421B20D6B600F4C68D /* UnwindSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018060251B20D6B600F4C68D /* UnwindSegue.swift */; };
+		019FF4BD1C7BAB860063866A /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019FF4BC1C7BAB860063866A /* Utility.swift */; };
 		01A95BBA1B178EBC00869943 /* TasksCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A95BB91B178EBC00869943 /* TasksCell.swift */; };
 		01B7B4FE1B02A04A0090E62E /* ApprovalsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B7B4FD1B02A04A0090E62E /* ApprovalsViewController.swift */; };
 		01C5E1461BAB59540021CFFE /* OIG WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 012432371B8B715500101F59 /* OIG WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -295,6 +297,7 @@
 		013AB3D01AFA854400160A34 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		0141C7EB1B3B23B9000B674B /* refresh.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = refresh.wav; sourceTree = "<group>"; };
 		0141C7EC1B3B23B9000B674B /* upvote.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = upvote.wav; sourceTree = "<group>"; };
+		014E570F1C85F448006ACCD9 /* LoadMoreCC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadMoreCC.swift; sourceTree = "<group>"; };
 		014EA1271B8BC2BC009125F6 /* DetailInterfaceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailInterfaceController.swift; sourceTree = "<group>"; };
 		014FC48F1B4B1BEA0035CB6A /* CertficationsActionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CertficationsActionViewController.swift; sourceTree = "<group>"; };
 		014FC4911B4B1E590035CB6A /* RequestCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestCell.swift; sourceTree = "<group>"; };
@@ -451,6 +454,7 @@
 		018060231B20D6B600F4C68D /* TransitionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionManager.swift; sourceTree = "<group>"; };
 		018060241B20D6B600F4C68D /* TransitionZoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionZoom.swift; sourceTree = "<group>"; };
 		018060251B20D6B600F4C68D /* UnwindSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnwindSegue.swift; sourceTree = "<group>"; };
+		019FF4BC1C7BAB860063866A /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		01A95BB91B178EBC00869943 /* TasksCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TasksCell.swift; sourceTree = "<group>"; };
 		01B7B4FD1B02A04A0090E62E /* ApprovalsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApprovalsViewController.swift; sourceTree = "<group>"; };
 		01DA33B91B0C5BE6002778DF /* Roles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Roles.swift; sourceTree = "<group>"; };
@@ -578,6 +582,7 @@
 				01FF7F531B3885890026BE38 /* CertsDetailCell.swift */,
 				014FC4981B4B39170035CB6A /* DashboardCell.swift */,
 				0119AE5B1C73BEB4000F053A /* ApprovalDetailCell.swift */,
+				014E570F1C85F448006ACCD9 /* LoadMoreCC.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -683,6 +688,7 @@
 				01FBA2BE1B14FBD8006C1915 /* Requests.swift */,
 				01FF7F4F1B3367E70026BE38 /* Certs.swift */,
 				0113B4381B8383B600A80DFA /* Activities.swift */,
+				019FF4BC1C7BAB860063866A /* Utility.swift */,
 			);
 			name = API;
 			sourceTree = "<group>";
@@ -1362,6 +1368,7 @@
 				018060311B20D6B600F4C68D /* ImageLoader.swift in Sources */,
 				016750DC1B1CF1230093FD6A /* CertficationsViewController.swift in Sources */,
 				B7F7B6001B431FCA006E7E08 /* REFrostedRootViewController.m in Sources */,
+				014E57101C85F448006ACCD9 /* LoadMoreCC.swift in Sources */,
 				015C140D1B0BC4F50099B9E7 /* ADVSegmentedControl.swift in Sources */,
 				0180602A1B20D6B600F4C68D /* DesignableButton.swift in Sources */,
 				015C13F71B0B8CA30099B9E7 /* Authenication.swift in Sources */,
@@ -1404,6 +1411,7 @@
 				015C140C1B0BC4F50099B9E7 /* ADVProgressLayer.swift in Sources */,
 				01FBA2BF1B14FBD8006C1915 /* Requests.swift in Sources */,
 				01DA33BE1B0C5D38002778DF /* Applications.swift in Sources */,
+				019FF4BD1C7BAB860063866A /* Utility.swift in Sources */,
 				0180603A1B20D6B600F4C68D /* SpringButton.swift in Sources */,
 				01FF7F501B3367E70026BE38 /* Certs.swift in Sources */,
 				01FF7F541B3885890026BE38 /* CertsDetailCell.swift in Sources */,

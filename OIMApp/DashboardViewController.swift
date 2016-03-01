@@ -32,6 +32,10 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     var refreshControl:UIRefreshControl!
     var isFirstTime = true
     
+    //---> For Pagination
+    var cursor = 1;
+    let limit = 7;
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //println("----->>> DashboardViewController")
@@ -61,7 +65,8 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         
         
         //let url2 = myAPIEndpoint + "/users/" + myLoginId + "/recentactivity?limit=10"
-        let url2 = myAPIEndpoint + "/users/" + myLoginId + "/requests?limit=10&filter=reqCreationDate%20ge%202016-01-01"
+        //let url2 = myAPIEndpoint + "/users/" + myLoginId + "/requests?limit=10&filter=reqCreationDate%20ge%202016-01-01"
+        let url2 = myAPIEndpoint + "/users/" + myLoginId + "/requests?requestsForGivenDays=5&filter=reqCreationDate%20ge%202016-01-01&cursor=\(self.cursor)&limit=\(self.limit)"
         api.loadActivities(myLoginId, apiUrl: url2, completion : didLoadActivities)
         /*
         if myActivities.count == 0 {
@@ -85,7 +90,8 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func refresh(){
         
-        let url2 = myAPIEndpoint + "/users/" + myLoginId + "/requests?limit=10&filter=reqCreationDate%20ge%202016-01-01"
+        //let url2 = myAPIEndpoint + "/users/" + myLoginId + "/requests?limit=10&filter=reqCreationDate%20ge%202016-01-01"
+        let url2 = myAPIEndpoint + "/users/" + myLoginId + "/requests?requestsForGivenDays=5&filter=reqCreationDate%20ge%202016-01-01&cursor=\(self.cursor)&limit=\(self.limit)"
         api.loadActivities(myLoginId, apiUrl: url2, completion : didLoadActivities)
         
         SoundPlayer.play("upvote.wav")

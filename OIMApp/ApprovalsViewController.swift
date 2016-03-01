@@ -10,6 +10,7 @@ import UIKit
 
 
 class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
     @IBOutlet var tableView : UITableView!
     @IBOutlet var menuItem : UIBarButtonItem!
     @IBOutlet var toolbar : UIToolbar!
@@ -19,6 +20,11 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet var btnEdit: UIBarButtonItem!
     @IBOutlet var btnEditDecline: UIBarButtonItem!
     @IBOutlet var btnEditLabel: UIBarButtonItem!
+    
+    
+    @IBOutlet weak var bottonMargin: NSLayoutConstraint!
+    var viewLoadMore : UIView!
+    var showViewLoadMore = true
     
     var imageAsync : UIImage!
     var isFirstTime = true
@@ -30,6 +36,10 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     var tasks : [Tasks]!
     var selectedtasks : [Tasks] = []
     var api : API!
+    
+    //---> For Pagination
+    var cursor = 1;
+    let limit = 7;
     
     @IBAction func btnEditCeclineAction(sender: AnyObject) {
         
@@ -95,6 +105,25 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
                     }
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        for var i = 0; i < self.selectedtasks.count; ++i {
+                            //let task = self.selectedtasks[i]
+                            //--->>> Getting IndexPath for Row to Delete
+                            let indexPath = NSIndexPath(forRow:i, inSection:0) as NSIndexPath
+                            //--->> Removing Data from Data SOurce
+                            self.tasks.removeAtIndex(i)
+                            //--->>> Removing Row with Animation
+                            self.tableView.beginUpdates()
+                            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+                            self.tableView.endUpdates()
+                        }
+                        
+                        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(0.2 * Double(NSEC_PER_SEC)))
+                        dispatch_after(delayTime, dispatch_get_main_queue()) {
+                            self.tableView.reloadData()
+                        }
+                        
+                        /*
                         self.view.showLoading()
                         self.refresh()
                         
@@ -103,6 +132,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
                         self.btnEdit.image = UIImage()
                         self.btnEdit.enabled = false
                         self.tableView.reloadData()
+                        */
                     })
                 }
             }
@@ -122,6 +152,10 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         //self.editing = !self.editing
         
         if tableView.editing {
+            
+            ///--->>> Un-Hiding Bottom Toolbar By Defaults
+            self.bottonMargin.constant = self.bottonMargin.constant - 44;
+            
             self.tableView.setEditing(false, animated: true)
             btnEditLabel.title = "Edit"
             btnEdit.title = ""
@@ -131,6 +165,10 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
             btnEditDecline.enabled = false
             
         } else {
+            
+            ///--->>> Hiding Bottom Toolbar By Defaults
+            self.bottonMargin.constant = self.bottonMargin.constant + 44;
+            
             self.tableView.setEditing(true, animated: true)
             btnEditLabel.title = "Cancel"
             btnEdit.image = UIImage(named:"toolbar-approve")
@@ -176,7 +214,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         self.tasks = [Tasks]()
         self.api = API()
         
-        let url = myAPIEndpoint + "/users/" + myLoginId + "/approvals/"
+        let url = myAPIEndpoint + "/users/" + myLoginId + "/approvals/?cursor=\(self.cursor)&limit=\(self.limit)"
         api.loadPendingApprovals(myLoginId, apiUrl: url, completion : didLoadData)
         
         refreshControl = UIRefreshControl()
@@ -199,6 +237,19 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         */
 
         
+        self.bottonMargin.constant = self.bottonMargin.constant - 44;
+    }
+    
+    func loadMore() {
+        
+        
+        self.showViewLoadMore = true
+        
+        //print("loadMore is Called...");
+        
+        let url = myAPIEndpoint + "/users/" + myLoginId + "/approvals/?cursor=\(self.cursor)&limit=\(self.limit)"
+        //print("API Call URL : \(url)")
+        api.loadPendingApprovals(myLoginId, apiUrl: url, completion : didLoadData)
     }
     
     // MARK: swipe gestures
@@ -209,15 +260,20 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func refresh(){
-        let url = myAPIEndpoint + "/users/" + myLoginId + "/approvals/"
+        
+        self.tasks = [Tasks]()
+        self.cursor = 1
+        
+        let url = myAPIEndpoint + "/users/" + myLoginId + "/approvals/?cursor=\(self.cursor)&limit=\(self.limit)"
         api.loadPendingApprovals(myLoginId, apiUrl: url, completion : didLoadData)
         
         SoundPlayer.play("upvote.wav")
     }
     
     func didLoadData(loadedData: [Tasks]){
+        //print("didLoadData is Called...")
         
-        self.tasks = [Tasks]()
+        // self.tasks = [Tasks]()
         
         for data in loadedData {
             self.tasks.append(data)
@@ -226,9 +282,25 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         if isFirstTime  {
             self.view.showLoading()
         }
+        
+        /*
         self.tableView.reloadData()
         self.view.hideLoading()
         self.refreshControl?.endRefreshing()
+        */
+        
+        //---> Increment Cursor
+        self.cursor = self.cursor + 15;
+        //print("self.cursor: \(self.cursor)")
+        
+        if self.cursor > myApprovals {
+            self.showViewLoadMore = false
+        }
+        
+        self.tableView.reloadData()
+        self.view.hideLoading()
+        self.refreshControl?.endRefreshing()
+        
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -242,92 +314,147 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.tasks == nil
-        {
+        if self.tasks == nil {
             return 0
         }
-        return self.tasks!.count
         
+        if self.showViewLoadMore {
+            //print("self.tasks!.count: \(self.tasks!.count + 1)")
+            return self.tasks!.count + 1
+            
+        } else {
+            
+            //print("self.tasks!.count: \(self.tasks!.count)")
+            return self.tasks!.count
+        }
+
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let task = tasks[indexPath.row]
-        
-        let cell = tableView.dequeueReusableCellWithIdentifier("TasksCell") as! TasksCell
-        
-        
-        cell.approveBtn.tag = indexPath.row
-        cell.approveBtn.setBackgroundImage(UIImage(named:"btn-approve"), forState: .Normal)
-        cell.approveBtn.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
-        
-        cell.declineBtn.tag = indexPath.row
-        cell.declineBtn.setBackgroundImage(UIImage(named:"btn-decline"), forState: .Normal)
-        cell.declineBtn.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
-        
-        cell.moreBtn.tag = indexPath.row
-        cell.moreBtn.setBackgroundImage(UIImage(named:"btn-more"), forState: .Normal)
-        cell.moreBtn.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
+        if (indexPath.row < self.tasks.count) {
+            
+            let task = tasks[indexPath.row]
+            
+            let cell = tableView.dequeueReusableCellWithIdentifier("TasksCell") as! TasksCell
+            
+            cell.approveBtn.tag = indexPath.row
+            cell.approveBtn.setBackgroundImage(UIImage(named:"btn-approve"), forState: .Normal)
+            cell.approveBtn.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
+            
+            cell.declineBtn.tag = indexPath.row
+            cell.declineBtn.setBackgroundImage(UIImage(named:"btn-decline"), forState: .Normal)
+            cell.declineBtn.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
+            
+            cell.moreBtn.tag = indexPath.row
+            cell.moreBtn.setBackgroundImage(UIImage(named:"btn-more"), forState: .Normal)
+            cell.moreBtn.addTarget(self, action: "buttonAction:", forControlEvents: .TouchUpInside)
 
-        var titleText = ""
-        for ent in task.requestEntityName {
-            if titleText.isEmpty {
-                titleText = ent.entityname
-            } else {
-                titleText += " , \(ent.entityname)"
+            var titleText = ""
+            for ent in task.requestEntityName {
+                if titleText.isEmpty {
+                    titleText = ent.entityname
+                } else {
+                    titleText += " , \(ent.entityname)"
+                }
             }
-        }
-        cell.nameLabel.text = titleText
-        cell.postLabel?.text = task.requestType
-        cell.beneficiaryLabel.text = "Beneficiaries"
-        
-        var beneficiaryText = ""
-        for ben in task.beneficiaryUser {
-            if beneficiaryText.isEmpty {
-                beneficiaryText = ben.beneficiary
-            } else {
-                beneficiaryText += " , \(ben.beneficiary)"
+            cell.nameLabel.text = titleText
+            cell.postLabel?.text = task.requestType
+            cell.beneficiaryLabel.text = "Beneficiaries"
+            
+            var beneficiaryText = ""
+            for ben in task.beneficiaryUser {
+                if beneficiaryText.isEmpty {
+                    beneficiaryText = ben.beneficiary
+                } else {
+                    beneficiaryText += " , \(ben.beneficiary)"
+                }
             }
-        }
-        var username : String
-        if beneficiaryText == "Kevin Clark" {
-            username = "kclark"
-            cell.typeImageView.image = UIImage(named: "kclark")
-        } else if beneficiaryText == "Grace Davis" {
-            username = "gdavis"
-            cell.typeImageView.image = UIImage(named: "gdavis")
-        } else if beneficiaryText == "Danny Crane" {
-            username = "dcrane"
-            cell.typeImageView.image = UIImage(named: "dcrane")
-        } else if beneficiaryText == "Billie Rojero" {
-            username = "brojero"
-            cell.typeImageView.image = UIImage(named: "brojero")
+            var username : String
+            if beneficiaryText == "Kevin Clark" {
+                username = "kclark"
+                cell.typeImageView.image = UIImage(named: "kclark")
+            } else if beneficiaryText == "Grace Davis" {
+                username = "gdavis"
+                cell.typeImageView.image = UIImage(named: "gdavis")
+            } else if beneficiaryText == "Danny Crane" {
+                username = "dcrane"
+                cell.typeImageView.image = UIImage(named: "dcrane")
+            } else if beneficiaryText == "Billie Rojero" {
+                username = "brojero"
+                cell.typeImageView.image = UIImage(named: "brojero")
+            } else {
+                cell.typeImageView.image = UIImage(named: "profileBlankPic")
+            }
+            cell.beneiciaryUserLabel.text = beneficiaryText
+            cell.justificationLabel.text = task.requestJustification
+            
+            cell.dateLabel.text = task.requestedDate + "   |   Request " + task.requestId
+            
+            cell.selectionStyle = UITableViewCellSelectionStyle.Default
+            
+            if self.tableView.editing {
+                cell.approveBtn.enabled = false
+                cell.declineBtn.enabled = false
+                cell.moreBtn.enabled = false
+                cell.moreBtn.hidden = true
+            } else {
+                cell.approveBtn.enabled = true
+                cell.declineBtn.enabled = true
+                cell.moreBtn.enabled = true
+                cell.moreBtn.hidden = false
+            }
+        
+            if (myApprovals < 7) {
+                //--->>> No Load More Here
+                self.showViewLoadMore = false
+                
+            } else {
+                ///---->>> Load More Should Call
+                if (indexPath.row == self.tasks.count - 7 /*- 2*/){
+                    if (self.cursor <= myApprovals) {
+                        print("in CellforRowAtIndexPath -- Calling Load More")
+                        self.loadMore();
+                    } else {
+                        ////--->>> Do Nothing
+                    }
+                }
+            }
+        
+            return cell
+        
+        } else if (self.showViewLoadMore == true) {
+    
+            let cell = tableView.dequeueReusableCellWithIdentifier("LoadMoreCC") as! LoadMoreCC
+            cell.viewSpinner.frame = CGRectMake(cell.viewSpinner.frame.origin.x, cell.viewSpinner.frame.origin.y, cell.viewSpinner.frame.size.width, 30)
+            cell.spinner.color = UIColor(red: 73.0/255.0, green: 143.0/255.0, blue: 225.0/255.0, alpha: 1.0)
+            cell.spinner.startAnimating()
+            return cell
+    
         } else {
-            cell.typeImageView.image = UIImage(named: "profileBlankPic")
+            let cell = UITableViewCell()
+            return cell
         }
-        cell.beneiciaryUserLabel.text = beneficiaryText
-        
-        //cell.beneiciaryUserLabel.text = task.beneficiearyUser.stringByReplacingOccurrencesOfString("[", withString: "").stringByReplacingOccurrencesOfString("]", withString: "")
-        cell.justificationLabel.text = task.requestJustification
-        //cell.justificationLabel.bounds = CGRectMake(0, 0, self.tableView.size.width, self.tableView.size.height)
-        
-        cell.dateLabel.text = task.requestedDate + "   |   Request " + task.requestId
-        
-        cell.selectionStyle = UITableViewCellSelectionStyle.Default
-        
-        if self.tableView.editing {
-            cell.approveBtn.enabled = false
-            cell.declineBtn.enabled = false
-            cell.moreBtn.enabled = false
-            cell.moreBtn.hidden = true
-        } else {
-            cell.approveBtn.enabled = true
-            cell.declineBtn.enabled = true
-            cell.moreBtn.enabled = true
-            cell.moreBtn.hidden = false
-        }
+    
+    }
 
-        return cell
-        
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if (indexPath.row == self.tasks.count) {
+            return 30.0
+        } else {
+            return 180.0
+        }
+    }
+    
+    ///---->>> Also Working for Load More
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        let lastSectionIndex = tableView.numberOfSections - 1
+        let lastRowIndex = tableView.numberOfRowsInSection(lastSectionIndex) - 1
+        if ((indexPath.section == lastSectionIndex) && (indexPath.row == lastRowIndex)) {
+            //--->>> This is the last Cell
+            //print("This is the last Cell...")
+            
+            // self.loadMore()
+        }
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -354,28 +481,40 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
                 //self.selectedtasks.sort({ $0.requestId < $1.requestId })
             }*/
         }*/
-        if let indexPath = self.tableView.indexPathForSelectedRow {
-            let info = tasks[indexPath.row]
-            
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let controller = storyboard.instantiateViewControllerWithIdentifier("ApprovalsDetailViewController") as! ApprovalsDetailViewController
-            controller.approvalId = info.requestId
-            
-            var titleText = ""
-            for ent in info.requestEntityName {
-                if titleText.isEmpty {
-                    titleText = ent.entityname
-                } else {
-                    titleText += " , \(ent.entityname)"
+        if self.tableView.editing {
+            if let indexPath = self.tableView.indexPathsForSelectedRows as? [NSIndexPath]! {
+                self.selectedtasks.removeAll(keepCapacity: true)
+                for idx in indexPath {
+                    let info = tasks[idx.item]
+                    self.selectedtasks.append(info)
                 }
             }
+        } else {
             
-            controller.approvalTitle = titleText
-            controller.navigationController
-            showViewController(controller, sender: self)
+            if let indexPath = self.tableView.indexPathForSelectedRow {
+                let info = tasks[indexPath.row]
+                
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let controller = storyboard.instantiateViewControllerWithIdentifier("ApprovalsDetailViewController") as! ApprovalsDetailViewController
+                controller.approvalId = info.requestId
+                
+                var titleText = ""
+                for ent in info.requestEntityName {
+                    if titleText.isEmpty {
+                        titleText = ent.entityname
+                    } else {
+                        titleText += " , \(ent.entityname)"
+                    }
+                }
+                
+                controller.approvalTitle = titleText
+                controller.navigationController
+                showViewController(controller, sender: self)
+            }
+            
+            tableView.deselectRowAtIndexPath(indexPath, animated: false)
         }
-        
-        tableView.deselectRowAtIndexPath(indexPath, animated: false)
+
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -499,9 +638,32 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
                     }
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        self.view.showLoading()
-                        self.refresh()
                         
+                        ///--->>> New Implementation
+                        //print("OK Button Pressed...")
+                        //print("btnsendtag.tag : \(btnsendtag.tag)")
+                        
+                        //--->>> Getting IndexPath for Row to Delete
+                        let indexPath = NSIndexPath(forRow:btnsendtag.tag, inSection:0) as NSIndexPath
+                        //--->> Removing Data from Data SOurce
+                        self.tasks.removeAtIndex(btnsendtag.tag)
+                        
+                        //--->>> Removing Row with Animation
+                        self.tableView.beginUpdates()
+                        self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+                        self.tableView.endUpdates()
+                        
+                        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(0.2 * Double(NSEC_PER_SEC)))
+                        dispatch_after(delayTime, dispatch_get_main_queue()) {
+                            //print("Reload TableView")
+                            
+                            //--->>> Reload Data to Refresh IndexPaths
+                            self.tableView.reloadData()
+                        }
+                        
+                        //--->>> Old Implementation
+                        // self.view.showLoading()
+                        // self.refresh()
                     })
                 }
             }

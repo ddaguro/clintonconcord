@@ -34,6 +34,11 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
     var api : API!
     var users : Users!
     
+    
+    //---> For Pagination
+    var cursor = 1;
+    let limit = 10;
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -53,7 +58,7 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
 
         
         if catalog == "Applications"{
-            let url = myAPIEndpoint + "/users/" + myLoginId + "/accounts/"
+            let url = myAPIEndpoint + "/users/" + myLoginId + "/applications?cursor=\(self.cursor)&limit=\(self.limit)"
             labelTitle2.text = "Applications"
             api.loadApplications(myLoginId, apiUrl: url, completion: didLoadApplications)
             /*
@@ -67,11 +72,11 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
             }
             */
         } else if catalog == "Entitlements" {
-            let url = myAPIEndpoint + "/users/" + myLoginId + "/entitlements/"
+            let url = myAPIEndpoint + "/users/" + myLoginId + "/entitlements?cursor=\(self.cursor)&limit=\(self.limit)"
             labelTitle2.text = "Entitlements"
             api.loadEntitlements(myLoginId, apiUrl: url, completion: didLoadEntitlements)
         } else if catalog == "Roles" {
-            let url = myAPIEndpoint + "/users/" + myLoginId + "/roles/"
+            let url = myAPIEndpoint + "/users/" + myLoginId + "/roles?cursor=\(self.cursor)&limit=\(self.limit)"
             labelTitle2.text = "Roles"
             api.loadRoles(myLoginId, apiUrl: url, completion : didLoadRoles)
         }
@@ -86,20 +91,39 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
 
     }
     
-    func refresh(){
+    func loadMore() {
         
-        //let url = myAPIEndpoint + "/users/" + myLoginId + "/accounts/"
+        self.view.showLoading()
+        
+        //print("loadMore is Called...");
         
         if catalog == "Applications"{
-            let url = myAPIEndpoint + "/users/" + myLoginId + "/accounts/"
+            let url = myAPIEndpoint + "/users/" + myLoginId + "/applications?cursor=\(self.cursor)&limit=\(self.limit)"
             labelTitle2.text = "Applications"
             api.loadApplications(myLoginId, apiUrl: url, completion: didLoadApplications)
         } else if catalog == "Entitlements" {
-            let url = myAPIEndpoint + "/users/" + myLoginId + "/entitlements/"
+            let url = myAPIEndpoint + "/users/" + myLoginId + "/entitlements?cursor=\(self.cursor)&limit=\(self.limit)"
             labelTitle2.text = "Entitlements"
             api.loadEntitlements(myLoginId, apiUrl: url, completion: didLoadEntitlements)
         } else if catalog == "Roles" {
-            let url = myAPIEndpoint + "/users/" + myLoginId + "/roles/"
+            let url = myAPIEndpoint + "/users/" + myLoginId + "/roles?cursor=\(self.cursor)&limit=\(self.limit)"
+            labelTitle2.text = "Roles"
+            api.loadRoles(myLoginId, apiUrl: url, completion : didLoadRoles)
+        }
+    }
+    
+    func refresh(){
+        
+        if catalog == "Applications"{
+            let url = myAPIEndpoint + "/users/" + myLoginId + "/applications?cursor=\(self.cursor)&limit=\(self.limit)"
+            labelTitle2.text = "Applications"
+            api.loadApplications(myLoginId, apiUrl: url, completion: didLoadApplications)
+        } else if catalog == "Entitlements" {
+            let url = myAPIEndpoint + "/users/" + myLoginId + "/entitlements?cursor=\(self.cursor)&limit=\(self.limit)"
+            labelTitle2.text = "Entitlements"
+            api.loadEntitlements(myLoginId, apiUrl: url, completion: didLoadEntitlements)
+        } else if catalog == "Roles" {
+            let url = myAPIEndpoint + "/users/" + myLoginId + "/roles?cursor=\(self.cursor)&limit=\(self.limit)"
             labelTitle2.text = "Roles"
             api.loadRoles(myLoginId, apiUrl: url, completion : didLoadRoles)
         }
@@ -147,6 +171,17 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
             cell.subtitleLabel.text = dataObject.description.length == 0 ? dataObject.displayName : dataObject.description
             cell.dateImage?.image = UIImage(named: "clock")
             cell.dateLabel?.text = "Date Provisioned On " + formatDate(dataObject.provisionedOnDate)
+            
+            ///---->>> Load More Should Call
+            if (indexPath.row == self.applications.count - 1){
+                if (self.cursor <= 50) {
+                    //print("in CellforRowAtIndexPath -- Calling Load More")
+                    self.loadMore();
+                } else {
+                    ////--->>> Do Nothing
+                }
+            }
+            
         } else if catalog == "Entitlements" {
             let dataObject = entitlements[indexPath.row]
             cell.titleLabel.text = dataObject.entitlementDisplayName
@@ -163,8 +198,21 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
         
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
+
+        
         return cell;
         
+    }
+    
+    ///---->>> Also Working for Load More
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        let lastSectionIndex = tableView.numberOfSections - 1
+        let lastRowIndex = tableView.numberOfRowsInSection(lastSectionIndex) - 1
+        if ((indexPath.section == lastSectionIndex) && (indexPath.row == lastRowIndex)) {
+            //--->>> This is the last Cell
+            // print("This is the last Cell...")
+            // self.loadMore()
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -174,11 +222,11 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
     
     
     func didLoadApplications(loadedApplications: [Applications]){
-        self.applications = [Applications]()
+        
+        //self.applications = [Applications]()
         
         for app in loadedApplications {
             self.applications.append(app)
-            //myApplications.append(app)
         }
         
         if isFirstTime  {
@@ -187,6 +235,8 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
         self.tableView.reloadData()
         self.view.hideLoading()
         self.refreshControl?.endRefreshing()
+        
+        self.cursor = self.cursor + 15;
     }
     
     func didLoadRoles(loadedRoles: [Roles]){

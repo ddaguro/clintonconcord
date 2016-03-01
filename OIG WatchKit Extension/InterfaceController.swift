@@ -27,6 +27,11 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     
     var tasks : [Tasks]!
     
+    
+    //---> For Pagination
+    var cursor = 1;
+    let limit = 5;
+    
     @IBAction func refreshButton() {
         //self.loadTableData()
         self.loadLoginData()
@@ -140,7 +145,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
             api = self.watchapi
         }
         
-        let url = api + "/users/" + user + "/approvals/"
+        let url = api + "/users/" + user + "/approvals/?cursor=\(self.cursor)&limit=\(self.limit)"
         loadPendingApprovals(user, apiUrl: url, completion : didLoadData)
     }
     

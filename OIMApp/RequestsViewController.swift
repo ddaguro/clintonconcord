@@ -27,6 +27,9 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
     var reqs : [Requests]!
     var api : API!
     
+    //---> For Pagination
+    var cursor = 1;
+    let limit = 10;
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,12 +58,10 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         self.reqs = [Requests]()
         self.api = API()
         
-        let url = myAPIEndpoint + "/users/" + myLoginId + "/requests?limit=10&filter=reqCreationDate%20ge%202016-01-01"
+        let url = myAPIEndpoint + "/users/" + myLoginId + "/requests?requestsForGivenDays=5&filter=reqCreationDate%20ge%202016-01-01&cursor=\(self.cursor)&limit=\(self.limit)"
         if myRequests.count == 0 {
-            //println("load from api")
             api.loadRequests(myLoginId, apiUrl: url, completion : didLoadData)
         } else {
-            //println("load from storage")
         }
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = UIColor.redColor()
@@ -70,6 +71,14 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         //---> PanGestureRecognizer
         let recognizer = UIPanGestureRecognizer(target: self, action: "panGestureRecognized:")
         self.view.addGestureRecognizer(recognizer)
+    }
+    
+    func loadMore() {
+        
+        self.view.showLoading()
+        
+        let url = myAPIEndpoint + "/users/" + myLoginId + "/requests?requestsForGivenDays=5&filter=reqCreationDate%20ge%202016-01-01&cursor=\(self.cursor)&limit=\(self.limit)"
+        api.loadRequests(myLoginId, apiUrl: url, completion : didLoadData)
     }
     
     // MARK: swipe gestures
@@ -82,15 +91,14 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func refresh(){
         
-        let url = myAPIEndpoint + "/users/" + myLoginId + "/requests?limit=10&filter=reqCreationDate%20ge%202016-01-01"
+        let url = myAPIEndpoint + "/users/" + myLoginId + "/requests?requestsForGivenDays=5&filter=reqCreationDate%20ge%202016-01-01&cursor=\(self.cursor)&limit=\(self.limit)"
         api.loadRequests(myLoginId, apiUrl: url, completion : didLoadData)
-        
         SoundPlayer.play("upvote.wav")
     }
     
     func didLoadData(loadedData: [Requests]){
-        self.reqs = [Requests]()
-        myRequests = [Requests]()
+        //self.reqs = [Requests]()
+        //myRequests = [Requests]()
         
         for data in loadedData {
             self.reqs.append(data)
@@ -105,6 +113,8 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         self.tableView.reloadData()
         self.view.hideLoading()
         self.refreshControl?.endRefreshing()
+        
+        self.cursor = self.cursor + 15;
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -155,8 +165,30 @@ class RequestsViewController: UIViewController, UITableViewDelegate, UITableView
         cell.dateLabel.text = formatDate(dataObject.reqCreatedOn)
         
         cell.selectionStyle = UITableViewCellSelectionStyle.None
+        
+        ///---->>> Load More Should Call
+        if (indexPath.row == self.reqs.count - 1){
+            if (self.cursor <= 100) {
+                //print("in CellforRowAtIndexPath -- Calling Load More")
+                self.loadMore();
+            } else {
+                ////--->>> Do Nothing
+            }
+        }
+        
         return cell
         
+    }
+    
+    ///---->>> Also Working for Load More
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        let lastSectionIndex = tableView.numberOfSections - 1
+        let lastRowIndex = tableView.numberOfRowsInSection(lastSectionIndex) - 1
+        if ((indexPath.section == lastSectionIndex) && (indexPath.row == lastRowIndex)) {
+            //--->>> This is the last Cell
+            // print("This is the last Cell...")
+            // self.loadMore()
+        }
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
