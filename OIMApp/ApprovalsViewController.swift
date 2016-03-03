@@ -16,26 +16,24 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet var toolbar : UIToolbar!
     @IBOutlet var labelTitle: UILabel!
     @IBOutlet var lblTotalCounter: UILabel!
-    
     @IBOutlet var btnEdit: UIBarButtonItem!
     @IBOutlet var btnEditDecline: UIBarButtonItem!
     @IBOutlet var btnEditLabel: UIBarButtonItem!
-    
-    
     @IBOutlet weak var bottonMargin: NSLayoutConstraint!
+    
     var viewLoadMore : UIView!
     var showViewLoadMore = true
-    
+    var isVeryFirstTime = true
     var imageAsync : UIImage!
     var isFirstTime = true
     var refreshControl:UIRefreshControl!
     var itemHeading: NSMutableArray! = NSMutableArray()
     var nagivationStyleToPresent : String?
-    
     let transitionOperator = TransitionOperator()
     var tasks : [Tasks]!
     var selectedtasks : [Tasks] = []
     var api : API!
+    var utl : UTIL!
     
     //---> For Pagination
     var cursor = 1;
@@ -43,21 +41,20 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     
     @IBAction func btnEditCeclineAction(sender: AnyObject) {
         
-        let alert = UIAlertView(title: "Decline Confirmation", message: "Bulk Decline", delegate: nil, cancelButtonTitle: "Okay")
-        alert.show()
+        let alertController = UIAlertController(title: "Decline Confirmation", message: "Bulk Decline", preferredStyle: .Alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { action in
+        }
+        
+        alertController.addAction(cancelAction)
+        self.presentViewController(alertController, animated: true){
+        }
+        
     }
     
     @IBAction func btnEditAction(sender: AnyObject) {
-        //println("Bulk Action")
-        //if self.tableView.editing {
         if self.selectedtasks.count > 0 {
-            //println("APPROVE")
-            var doalert : DOAlertController
-            doalert = DOAlertController(title: "Approval Confirmation", message: "Please confirm approval for the selected request(s)", preferredStyle: .Alert)
-            
-            // Add the text field for text entry.
+            let doalert = DOAlertController(title: "Approval Confirmation", message: "Please confirm approval for the selected request(s)", preferredStyle: .Alert)
             doalert.addTextFieldWithConfigurationHandler { textField in
-                // If you need to customize the text field, you can do so here.
                 textField.placeholder = " Enter Comments "
             }
             
@@ -67,7 +64,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
                 
                 let url = myAPIEndpoint + "/approvals"
                 
-                var taskaction = "APPROVE" as String!
+                let taskaction = "APPROVE" as String!
                 
                 var paramstring = "{\"requester\": {\"User Login\": \"" + myLoginId + "\"},\"task\": ["
                 
@@ -85,15 +82,15 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
                 }
                 paramstring += "]}"
                 
-                
-                var idx = paramstring.endIndex.advancedBy(-3)
+                let idx = paramstring.endIndex.advancedBy(-3)
                 
                 var substring1 = paramstring.substringToIndex(idx)
                 substring1 += "]}"
-                //println(substring1)
                 
                 self.api.RequestApprovalAction(myLoginId, params : substring1, url : url) { (succeeded: Bool, msg: String) -> () in
-                    var alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
+                    //--> uncomment code if we want to display alert on success.
+                    let alert = UIAlertController(title: "Success!", message: msg, preferredStyle: .Alert)
+                    //self.presentViewController(alert, animated: true, completion: nil)
                     if(succeeded) {
                         alert.title = "Success!"
                         alert.message = msg
@@ -107,32 +104,19 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
                         for var i = 0; i < self.selectedtasks.count; ++i {
-                            //let task = self.selectedtasks[i]
-                            //--->>> Getting IndexPath for Row to Delete
-                            let indexPath = NSIndexPath(forRow:i, inSection:0) as NSIndexPath
-                            //--->> Removing Data from Data SOurce
-                            self.tasks.removeAtIndex(i)
-                            //--->>> Removing Row with Animation
-                            self.tableView.beginUpdates()
-                            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
-                            self.tableView.endUpdates()
+                            if let indexPath = self.tableView.indexPathForSelectedRow {
+                                self.tasks.removeAtIndex(indexPath.row)
+                                
+                                self.tableView.beginUpdates()
+                                self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+                                self.tableView.endUpdates()
+                            }
                         }
                         
                         let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(0.2 * Double(NSEC_PER_SEC)))
                         dispatch_after(delayTime, dispatch_get_main_queue()) {
                             self.tableView.reloadData()
                         }
-                        
-                        /*
-                        self.view.showLoading()
-                        self.refresh()
-                        
-                        self.tableView.setEditing(false, animated: true)
-                        self.btnEditLabel.title = "Edit"
-                        self.btnEdit.image = UIImage()
-                        self.btnEdit.enabled = false
-                        self.tableView.reloadData()
-                        */
                     })
                 }
             }
@@ -143,14 +127,17 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
             
             presentViewController(doalert, animated: true, completion: nil)
         } else {
-            var alert = UIAlertView(title: "Error : (", message: "You must select at least one", delegate: nil, cancelButtonTitle: "Okay")
-            alert.show()
+            
+            let alertController = UIAlertController(title: "Error : (", message: "You must select at least one", preferredStyle: .Alert)
+            let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { action in
+            }
+            alertController.addAction(cancelAction)
+            self.presentViewController(alertController, animated: true){
+            }
         }
     }
     
     @IBAction func btnEdit(sender: AnyObject) {
-        //self.editing = !self.editing
-        
         if tableView.editing {
             
             ///--->>> Un-Hiding Bottom Toolbar By Defaults
@@ -191,24 +178,19 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
             self.lblTotalCounter.hidden = true
         }
         
-        toolbar.clipsToBounds = true
-        
-        labelTitle.text = "Pending Approvals"
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
         tableView.separatorColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
         tableView.allowsMultipleSelectionDuringEditing = true
-        //tableView.allowsSelection = false
         tableView.allowsSelectionDuringEditing = true
-        //tableView.estimatedRowHeight = 300
-        //tableView.rowHeight = UITableViewAutomaticDimension
+        
+        toolbar.clipsToBounds = true
+        labelTitle.text = "Pending Approvals"
         menuItem.image = UIImage(named: "menu")
         toolbar.tintColor = UIColor.blackColor()
-        
         btnEdit.enabled = false
         btnEditDecline.enabled = false
-        
         itemHeading.addObject("Approvals")
         
         self.tasks = [Tasks]()
@@ -222,7 +204,6 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         refreshControl.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
         tableView.addSubview(refreshControl)
         
-        //---> PanGestureRecognizer
         let recognizer = UIPanGestureRecognizer(target: self, action: "panGestureRecognized:")
         self.view.addGestureRecognizer(recognizer)
         
@@ -236,19 +217,12 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
         */
 
-        
         self.bottonMargin.constant = self.bottonMargin.constant - 44;
     }
     
     func loadMore() {
-        
-        
         self.showViewLoadMore = true
-        
-        //print("loadMore is Called...");
-        
         let url = myAPIEndpoint + "/users/" + myLoginId + "/approvals/?cursor=\(self.cursor)&limit=\(self.limit)"
-        //print("API Call URL : \(url)")
         api.loadPendingApprovals(myLoginId, apiUrl: url, completion : didLoadData)
     }
     
@@ -271,10 +245,6 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func didLoadData(loadedData: [Tasks]){
-        //print("didLoadData is Called...")
-        
-        // self.tasks = [Tasks]()
-        
         for data in loadedData {
             self.tasks.append(data)
         }
@@ -283,14 +253,8 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
             self.view.showLoading()
         }
         
-        /*
-        self.tableView.reloadData()
-        self.view.hideLoading()
-        self.refreshControl?.endRefreshing()
-        */
-        
         //---> Increment Cursor
-        self.cursor = self.cursor + 15;
+        self.cursor = self.cursor + 7;
         //print("self.cursor: \(self.cursor)")
         
         if self.cursor > myApprovals {
@@ -319,12 +283,9 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         
         if self.showViewLoadMore {
-            //print("self.tasks!.count: \(self.tasks!.count + 1)")
             return self.tasks!.count + 1
             
         } else {
-            
-            //print("self.tasks!.count: \(self.tasks!.count)")
             return self.tasks!.count
         }
 
@@ -333,6 +294,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if (indexPath.row < self.tasks.count) {
             
+            self.utl = UTIL()
             let task = tasks[indexPath.row]
             
             let cell = tableView.dequeueReusableCellWithIdentifier("TasksCell") as! TasksCell
@@ -359,7 +321,10 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             cell.nameLabel.text = titleText
             cell.postLabel?.text = task.requestType
-            cell.beneficiaryLabel.text = "Beneficiaries"
+            
+            //cell.beneficiaryLabel.text = " " + task.requestStatus + " "
+            //cell.beneficiaryLabel.backgroundColor = utl.GetStatusColor(task.requestStatus)
+            cell.beneficiaryLabel.text = "Beneficiaries:"
             
             var beneficiaryText = ""
             for ben in task.beneficiaryUser {
@@ -369,22 +334,9 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
                     beneficiaryText += " , \(ben.beneficiary)"
                 }
             }
-            var username : String
-            if beneficiaryText == "Kevin Clark" {
-                username = "kclark"
-                cell.typeImageView.image = UIImage(named: "kclark")
-            } else if beneficiaryText == "Grace Davis" {
-                username = "gdavis"
-                cell.typeImageView.image = UIImage(named: "gdavis")
-            } else if beneficiaryText == "Danny Crane" {
-                username = "dcrane"
-                cell.typeImageView.image = UIImage(named: "dcrane")
-            } else if beneficiaryText == "Billie Rojero" {
-                username = "brojero"
-                cell.typeImageView.image = UIImage(named: "brojero")
-            } else {
-                cell.typeImageView.image = UIImage(named: "profileBlankPic")
-            }
+            
+            self.utl = UTIL()
+            cell.typeImageView.image = utl.GetLocalAvatarByName(beneficiaryText)
             cell.beneiciaryUserLabel.text = beneficiaryText
             cell.justificationLabel.text = task.requestJustification
             
@@ -412,7 +364,7 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
                 ///---->>> Load More Should Call
                 if (indexPath.row == self.tasks.count - 7 /*- 2*/){
                     if (self.cursor <= myApprovals) {
-                        print("in CellforRowAtIndexPath -- Calling Load More")
+                        //print("in CellforRowAtIndexPath -- Calling Load More")
                         self.loadMore();
                     } else {
                         ////--->>> Do Nothing
@@ -423,13 +375,20 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
             return cell
         
         } else if (self.showViewLoadMore == true) {
-    
-            let cell = tableView.dequeueReusableCellWithIdentifier("LoadMoreCC") as! LoadMoreCC
-            cell.viewSpinner.frame = CGRectMake(cell.viewSpinner.frame.origin.x, cell.viewSpinner.frame.origin.y, cell.viewSpinner.frame.size.width, 30)
-            cell.spinner.color = UIColor(red: 73.0/255.0, green: 143.0/255.0, blue: 225.0/255.0, alpha: 1.0)
-            cell.spinner.startAnimating()
-            return cell
-    
+            
+            if self.isVeryFirstTime == true {
+                self.isVeryFirstTime = false
+                let cell = UITableViewCell()
+                return cell
+                
+            } else {
+                let cell = tableView.dequeueReusableCellWithIdentifier("LoadMoreCC") as! LoadMoreCC
+                cell.viewSpinner.frame = CGRectMake(cell.viewSpinner.frame.origin.x, cell.viewSpinner.frame.origin.y, cell.viewSpinner.frame.size.width, 30)
+                cell.spinner.color = UIColor(red: 73.0/255.0, green: 143.0/255.0, blue: 225.0/255.0, alpha: 1.0)
+                cell.spinner.startAnimating()
+                return cell
+            }
+            
         } else {
             let cell = UITableViewCell()
             return cell
@@ -676,12 +635,14 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
    
         } else {
             doalert = DOAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
-            let approveAction = DOAlertAction(title: "Approve", style: .Destructive) { action in
+            //let approveAction = DOAlertAction(title: "Approve", style: .Destructive) { action in
+            //}
+            let reassignAction = DOAlertAction(title: "Reassign", style: .Destructive) { action in
             }
             let claimAction = DOAlertAction(title: "Claim", style: .Destructive) { action in
             }
-            let declineAction = DOAlertAction(title: "Decline", style: .Destructive) { action in
-            }
+            //let declineAction = DOAlertAction(title: "Decline", style: .Destructive) { action in
+            //}
             let delegateAction = DOAlertAction(title: "Delegate", style: .Destructive) { action in
             }
             let resetAction = DOAlertAction(title: "Reset", style: .Destructive) { action in
@@ -689,9 +650,8 @@ class ApprovalsViewController: UIViewController, UITableViewDelegate, UITableVie
             let cancelAction = DOAlertAction(title: "Cancel", style: .Cancel) { action in
             }
             // Add the action.
-            doalert.addAction(approveAction)
+            doalert.addAction(reassignAction)
             doalert.addAction(claimAction)
-            doalert.addAction(declineAction)
             doalert.addAction(delegateAction)
             doalert.addAction(resetAction)
             doalert.addAction(cancelAction)

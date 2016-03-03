@@ -117,8 +117,8 @@ class ApprovalsDetailViewController: UIViewController, UITableViewDelegate, UITa
         cell.beneficiary.text = task.requestRaisedByUser // need to udpate
         cell.justification.text = task.requestJustification
         
-        cell.taskTitle.text = " " + task.taskTitle + " "
-        cell.taskTitle.backgroundColor = utl.GetStatusColor(task.taskTitle)
+        cell.taskTitle.text = " " + task.requestStatus.stringByReplacingOccurrencesOfString("Request ", withString: "") + " " // not using task.title
+        cell.taskTitle.backgroundColor = utl.GetStatusColor(task.requestStatus) // not using task.title
         cell.taskAssignedOn.text = task.taskAssignedOn
         
         var awaitingText = ""
@@ -148,7 +148,8 @@ class ApprovalsDetailViewController: UIViewController, UITableViewDelegate, UITa
             previousStatuslbl.layer.masksToBounds = true
             previousStatuslbl.font = UIFont(name: MegaTheme.fontName, size: 10)
             previousStatuslbl.textColor = UIColor.whiteColor()
-            previousStatuslbl.text = " " + task.taskpreviousapprover[0].requesttaskapprovers[i].status + " "
+            previousStatuslbl.textAlignment = NSTextAlignment.Center
+            previousStatuslbl.text = utl.GetConvertedStatus(task.taskpreviousapprover[0].requesttaskapprovers[i].status)
             previousStatuslbl.backgroundColor = utl.GetStatusColor(task.taskpreviousapprover[0].requesttaskapprovers[i].status)
             self.tableView.addSubview(previousStatuslbl)
             previousStatusSpacer = previousStatusSpacer + 60
@@ -202,7 +203,8 @@ class ApprovalsDetailViewController: UIViewController, UITableViewDelegate, UITa
             currentStatuslbl.layer.masksToBounds = true
             currentStatuslbl.font = UIFont(name: MegaTheme.fontName, size: 10)
             currentStatuslbl.textColor = UIColor.whiteColor()
-            currentStatuslbl.text = " " + task.taskcurrentapprover[0].requesttaskapprovers[i].status + " "
+            currentStatuslbl.textAlignment = NSTextAlignment.Center
+            currentStatuslbl.text = utl.GetConvertedStatus(task.taskcurrentapprover[0].requesttaskapprovers[i].status)
             currentStatuslbl.backgroundColor = utl.GetStatusColor(task.taskcurrentapprover[0].requesttaskapprovers[i].status)
             self.tableView.addSubview(currentStatuslbl)
             currentStatusSpacer = previousStatusSpacer + 60
@@ -396,12 +398,14 @@ class ApprovalsDetailViewController: UIViewController, UITableViewDelegate, UITa
             
         } else {
             doalert = DOAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
-            let approveAction = DOAlertAction(title: "Approve", style: .Destructive) { action in
+            //let approveAction = DOAlertAction(title: "Approve", style: .Destructive) { action in
+            //}
+            let reassignAction = DOAlertAction(title: "Reassign", style: .Destructive) { action in
             }
             let claimAction = DOAlertAction(title: "Claim", style: .Destructive) { action in
             }
-            let declineAction = DOAlertAction(title: "Decline", style: .Destructive) { action in
-            }
+            //let declineAction = DOAlertAction(title: "Decline", style: .Destructive) { action in
+            //}
             let delegateAction = DOAlertAction(title: "Delegate", style: .Destructive) { action in
             }
             let resetAction = DOAlertAction(title: "Reset", style: .Destructive) { action in
@@ -409,9 +413,8 @@ class ApprovalsDetailViewController: UIViewController, UITableViewDelegate, UITa
             let cancelAction = DOAlertAction(title: "Cancel", style: .Cancel) { action in
             }
             // Add the action.
-            doalert.addAction(approveAction)
+            doalert.addAction(reassignAction)
             doalert.addAction(claimAction)
-            doalert.addAction(declineAction)
             doalert.addAction(delegateAction)
             doalert.addAction(resetAction)
             doalert.addAction(cancelAction)

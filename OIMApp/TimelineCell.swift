@@ -11,40 +11,50 @@ import UIKit
 
 class TimelineCell : UITableViewCell {
     
-    @IBOutlet var typeImageView : UIImageView!
-    //@IBOutlet var profileImageView : UIImageView!
-    @IBOutlet var dateImageView : UIImageView!
-    @IBOutlet var photoImageView : UIImageView?
+    @IBOutlet var entityName : UILabel!
+    @IBOutlet var reqStatus : UILabel!
+    @IBOutlet var reqCreatedOn : UILabel!
     
-    @IBOutlet var nameLabel : UILabel!
-    @IBOutlet var postLabel : UILabel?
-    @IBOutlet var dateLabel : UILabel!
+    @IBOutlet var dateImageView : UIImageView!
+    @IBOutlet var typeImageView : UIImageView!
+    
+    @IBOutlet var reqType: UILabel!
+    
+    @IBOutlet var beneficiary: UILabel!
     
     override func awakeFromNib() {
         
+        entityName.font = UIFont(name: MegaTheme.fontName, size: 14)
+        entityName.textColor = MegaTheme.darkColor
+        
+        reqStatus.layer.cornerRadius = 8
+        reqStatus.layer.masksToBounds = true
+        reqStatus.font = UIFont(name: MegaTheme.fontName, size: 10)
+        reqStatus.textAlignment = NSTextAlignment.Center
+        reqStatus.textColor = UIColor.whiteColor()
+        
         dateImageView.image = UIImage(named: "clock")
         dateImageView.alpha = 0.20
-        //profileImageView.layer.cornerRadius = 30
         
-        nameLabel.font = UIFont(name: MegaTheme.fontName, size: 16)
-        nameLabel.textColor = MegaTheme.darkColor
+        reqCreatedOn.font = UIFont(name: MegaTheme.fontName, size: 10)
+        reqCreatedOn.textColor = MegaTheme.lightColor
         
-        postLabel?.font = UIFont(name: MegaTheme.fontName, size: 14)
-        postLabel?.textColor = MegaTheme.lightColor
+        reqType.font = UIFont(name: MegaTheme.fontName, size: 12)
+        reqType.textColor = MegaTheme.lightColor
         
-        dateLabel.font = UIFont(name: MegaTheme.fontName, size: 14)
-        dateLabel.textColor = MegaTheme.lightColor
+        beneficiary.font = UIFont(name: MegaTheme.fontName, size: 12)
+        beneficiary.textColor = MegaTheme.lightColor
         
-        photoImageView?.layer.borderWidth = 0.4
-        photoImageView?.layer.borderColor = UIColor(white: 0.92, alpha: 1.0).CGColor
     }
     
+    /*
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        if postLabel != nil {
-            let label = postLabel!
+        if reqStatus != nil {
+            let label = reqStatus!
             label.preferredMaxLayoutWidth = CGRectGetWidth(label.frame)
         }
     }
+    */
 }

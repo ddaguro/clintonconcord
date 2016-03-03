@@ -107,7 +107,7 @@ class SignInViewController : UIViewController, UITextFieldDelegate, WCSessionDel
         signInButton.layer.cornerRadius = 5
         signInButton.addTarget(self, action: "LoggedIn", forControlEvents: .TouchUpInside)
         
-        twitterButton.setTitle("Ver 1.4.1", forState: .Normal)
+        twitterButton.setTitle("Ver 1.4.2", forState: .Normal)
         twitterButton.setTitleColor(self.UIColorFromHex(0x37474f, alpha: 1.0), forState: .Normal)
         twitterButton.titleLabel?.font = UIFont(name: MegaTheme.semiBoldFontName, size: 10)
         twitterButton.addTarget(self, action: "buttonSaveAction", forControlEvents: .TouchUpInside)

@@ -38,7 +38,7 @@ class UTIL {
             statuscolor = self.UIColorFromHex(0x88c057, alpha: 1.0)
             break;
         case "ASSIGNED":
-            statuscolor = self.UIColorFromHex(0xeeaf4b, alpha: 1.0)
+            statuscolor = self.UIColorFromHex(0x3aa99e, alpha: 1.0)
             break;
         default:
             statuscolor = self.UIColorFromHex(0x546979, alpha: 1.0)
@@ -99,6 +99,25 @@ class UTIL {
             break;
         }
         return avatarimage
+    }
+    
+    func GetConvertedStatus (timelineStatus: String) -> String {
+        
+        var status : String
+        
+        switch timelineStatus {
+            
+        case "APPROVE":
+            status = "Approve"
+            break;
+        case "ASSIGNED":
+            status = "Assigned"
+            break;
+        default:
+            status = " Pending "
+            break;
+        }
+        return status
     }
 }
 
