@@ -70,6 +70,9 @@ class UTIL {
         case "Grace Davis":
             avatarimage = UIImage(named: "gdavis")
             break;
+        case "Jerry Freel":
+            avatarimage = UIImage(named: "brojero")
+            break;
         default:
             avatarimage = UIImage(named: "profileBlankPic")
 
@@ -92,6 +95,9 @@ class UTIL {
             break;
         case "gdavis":
             avatarimage = UIImage(named: "gdavis")
+            break;
+        case "jfreel":
+            avatarimage = UIImage(named: "brojero")
             break;
         default:
             avatarimage = UIImage(named: "profileBlankPic")
@@ -118,6 +124,17 @@ class UTIL {
             break;
         }
         return status
+    }
+    
+    func formatDate(dateString: String) -> String {
+        
+        let formatter = NSDateFormatter()
+        //Thu Aug 13 18:19:07 EDT 2015
+        formatter.dateFormat = "yyyy-MM-dd"
+        let date = formatter.dateFromString(dateString)
+        
+        formatter.dateFormat = "EEE, MMM dd yyyy"
+        return formatter.stringFromDate(date!)
     }
 }
 

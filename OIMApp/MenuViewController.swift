@@ -13,13 +13,13 @@ class MenuViewController: UITableViewController {
     var lblName = UILabel(frame: CGRectMake(0, 150, 0, 24))
     var imageView = UIImageView(frame: CGRectMake(0, 40, 100, 100))
     var api : API!
+    var utl : UTIL!
     var users : [Users]!
     @IBOutlet var tblView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.api = API()
-        //println("----->>> MenuViewController")
         
         //---> Adding UIButton in UITableView Footer
         let viewFooter = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, 60))
@@ -35,37 +35,25 @@ class MenuViewController: UITableViewController {
         
         self.tblView.tableFooterView = viewFooter;
         btnLogout.center = CGPointMake(self.tblView.tableFooterView!.frame.size.width / 2 - 20, self.tblView.tableFooterView!.frame.size.height / 2 + 10);
-        
-        // This will remove extra separators from tableview
-        // self.tblView.tableFooterView = UIView(frame: CGRectZero)
-        
-        self.tblView.separatorColor = UIColor.clearColor() // UIColor(red: 150/255.0, green: 161/255.0, blue: 177/255.0, alpha: 1.0)
-        self.tblView.opaque = false
-        // self.tblView.backgroundColor = UIColor.lightGrayColor()
-        
-        //---> Setting UITableView Header
 
-        
+        self.tblView.separatorColor = UIColor.clearColor()
+        self.tblView.opaque = false
         
         let view = UIView(frame: CGRectMake(0, 0, 0, 184.0))
-        /*var imageView = UIImageView(frame: CGRectMake(0, 40, 100, 100))*/
         imageView.autoresizingMask = [UIViewAutoresizing.FlexibleLeftMargin, UIViewAutoresizing.FlexibleRightMargin]
         imageView.image = UIImage(named: "profileBlankPic")
         imageView.layer.masksToBounds = true;
         imageView.layer.cornerRadius = 50.0;
         imageView.layer.borderColor = UIColor.whiteColor().CGColor;
-        // imageView.layer.borderWidth = 3.0;
         imageView.layer.rasterizationScale = UIScreen.mainScreen().scale
         imageView.layer.shouldRasterize = true;
         imageView.clipsToBounds = true
         
-        let displayname = NSUserDefaults.standardUserDefaults().objectForKey("DisplayName") as? String
-        // print("viewDidLoad----->>> ")
-        // println(displayname)
+        let displayname = myDisplayName
         lblName.text = displayname
         lblName.font = UIFont(name: "HelveticaNeue", size: 21)
         lblName.backgroundColor = UIColor.clearColor()
-        lblName.textColor = UIColor.whiteColor()  // UIColor(red: 62/255.0, green: 68/255.0, blue: 75/255.0, alpha: 1.0)
+        lblName.textColor = UIColor.whiteColor()
         lblName.sizeToFit();
         lblName.autoresizingMask = [UIViewAutoresizing.FlexibleLeftMargin, UIViewAutoresizing.FlexibleRightMargin]
         
@@ -78,7 +66,6 @@ class MenuViewController: UITableViewController {
         view.addSubview(btnSetting)
         
         self.tblView.tableHeaderView = view
-        // self.tblView.tableHeaderView?.backgroundColor = UIColor.clearColor()
         let bView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height))
         let bimage = UIImage(named: "side-menu-bg")
         let bimageview = UIImageView(frame: CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height))
@@ -95,12 +82,10 @@ class MenuViewController: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        let displayname = NSUserDefaults.standardUserDefaults().objectForKey("DisplayName") as? String
-        // print("displayname----->>> ")
-        // println(displayname)
+        
+        self.utl = UTIL()
+        let displayname = myDisplayName
         lblName.text = displayname
-        // print("lblName.text ----->>> ")
-        // println(lblName.text)
         lblName.sizeToFit();
         lblName.center = CGPointMake(self.tblView.tableFooterView!.frame.size.width / 2, 160);
         lblName.autoresizingMask = [UIViewAutoresizing.FlexibleLeftMargin, UIViewAutoresizing.FlexibleRightMargin]
@@ -109,17 +94,8 @@ class MenuViewController: UITableViewController {
         //let checkedUrl = myAPIEndpoint + "/users/" + myRequestorId + "/avatar"
         //downloadImage(checkedUrl)
         
-        if myLoginId == "kclark" {
-            imageView.image = UIImage(named: "kclark")
-        } else if myLoginId == "gdavis" {
-            imageView.image = UIImage(named: "gdavis")
-        } else if myLoginId == "dcrane" {
-            imageView.image = UIImage(named: "dcrane")
-        } else if myLoginId == "b415713" {
-            imageView.image = UIImage(named: "brojero")
-        }else {
-            imageView.image = UIImage(named: "profileBlankPic")
-        }
+        imageView.image = utl.GetLocalAvatarByUserName(myLoginId)
+        
         /*
         if let url = NSURL(string: myAPIEndpoint + "/avatar/" + myRequestorId + "/" + myRequestorId) {
             if let data = NSData(contentsOfURL: url){
@@ -139,7 +115,7 @@ class MenuViewController: UITableViewController {
     }
     
     func btnSettingAction() {
-        print("btnSettingAction clicked...")
+        //print("btnSettingAction clicked...")
     }
     
     func btnLogoutAction() {
@@ -150,7 +126,7 @@ class MenuViewController: UITableViewController {
         let url = myAPIEndpoint + "/users/logout"
         
         api.LogOut(myLoginId, url: url) { (succeeded: Bool, msg: String) -> () in
-            let alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay.")
+            let alert = UIAlertController(title: "Success!", message: msg, preferredStyle: .Alert)
             if(succeeded) {
                 alert.title = "Success!"
                 alert.message = msg
@@ -175,7 +151,7 @@ class MenuViewController: UITableViewController {
                     self.frostedViewController.contentViewController = navigationController;
                     self.frostedViewController.hideMenuViewController()
                 } else {
-                    alert.show()
+                    self.presentViewController(alert, animated: true, completion: nil)
                 }
             })
         }
@@ -247,10 +223,7 @@ class MenuViewController: UITableViewController {
             cell.lblTitle.text = "API DOCS"
             cell.viewImage.image = UIImage(named: "menu-icon-apidocs")
             
-        }  /*else if indexPath.row == 7 {
-        cell.lblTitle.text = "LOGOUT"
-        }*/
-        
+        }
         return cell
     }
     
@@ -387,8 +360,6 @@ class MenuViewController: UITableViewController {
     }
 
     func didLoadUsers(loadedUsers: [Users]){
-        //self.users = loadedUsers
-        
         for usr in loadedUsers {
             users.append(usr)
         }

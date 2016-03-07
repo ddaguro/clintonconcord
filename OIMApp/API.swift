@@ -158,6 +158,7 @@ class API {
                     if success == 1 {
                         postCompleted(succeeded: true, msg: "Successful")
                         myToken = parseJSON["encodedValue"] as! String
+                        myDisplayName = parseJSON["displayName"] as! String
                     } else {
                         postCompleted(succeeded: false, msg: "Incorrect username and password")
                     }

@@ -14,6 +14,7 @@ var myRequest: Int = 0
 var totalCounter: Int = 0
 var myRequestorId : String = ""
 var myToken : String = ""
+var myDisplayName : String = ""
 
 var myAPIEndpoint : String = ""
 

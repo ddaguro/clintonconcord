@@ -25,6 +25,7 @@ class TasksCell : UITableViewCell {
     @IBOutlet var beneficiaryLabel: UILabel!
     @IBOutlet var beneiciaryUserLabel: UILabel!
     @IBOutlet var justificationLabel: UILabel!
+    
     override func awakeFromNib() {
         
         nameLabel.font = UIFont(name: MegaTheme.fontName, size: 14)
@@ -47,10 +48,6 @@ class TasksCell : UITableViewCell {
         
         justificationLabel.font = UIFont(name: MegaTheme.fontName, size: 12)
         justificationLabel.textColor = MegaTheme.lightColor
-        //justificationLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
-        //justificationLabel.numberOfLines = 5
-        //justificationLabel.preferredMaxLayoutWidth = 200
-        //justificationLabel.sizeToFit()
     }
     
     override func layoutSubviews() {

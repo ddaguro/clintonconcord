@@ -27,7 +27,6 @@ class ApprovalsDetailViewController: UIViewController, UITableViewDelegate, UITa
         self.navigationController?.popViewControllerAnimated(true)
     }
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -53,6 +52,15 @@ class ApprovalsDetailViewController: UIViewController, UITableViewDelegate, UITa
         self.navigationController?.interactivePopGestureRecognizer!.delegate = self;
         
         self.tableView.separatorColor = UIColor.clearColor()
+        
+    }
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(true)
+        
+        if isFirstTime {
+            view.showLoading()
+            isFirstTime = false
+        }
     }
     
     func didLoadData(loadedData: [Tasks]){
@@ -103,18 +111,27 @@ class ApprovalsDetailViewController: UIViewController, UITableViewDelegate, UITa
         }
         cell.entityName.text = titleText
         
-        cell.requestStatus.text = " " + task.requestStatus.stringByReplacingOccurrencesOfString("Request ", withString: "") + " "
-        cell.requestStatus.backgroundColor = utl.GetStatusColor(task.requestStatus)
+        //cell.requestStatus.text = " " + task.requestStatus.stringByReplacingOccurrencesOfString("Request ", withString: "") + " "
+        //cell.requestStatus.backgroundColor = utl.GetStatusColor(task.requestStatus)
         
         var assigneeText = ""
         for asg in task.assignees {
             assigneeText = asg.assigneename
         }
-        cell.avatar.image = utl.GetLocalAvatarByName(assigneeText)
-        cell.assignee.text = assigneeText
+        
+        var beneficiaryText = ""
+        for ben in task.beneficiaryUser {
+            if beneficiaryText.isEmpty {
+                beneficiaryText = ben.beneficiary
+            } else {
+                beneficiaryText += " , \(ben.beneficiary)"
+            }
+        }
+        
+        cell.avatar.image = utl.GetLocalAvatarByName(beneficiaryText)
+        cell.assignee.text = beneficiaryText
         cell.requestDate.text = task.requestedDate
         cell.requestId.text = "Request Id:" + task.requestId
-        cell.beneficiary.text = task.requestRaisedByUser // need to udpate
         cell.justification.text = task.requestJustification
         
         cell.taskTitle.text = " " + task.requestStatus.stringByReplacingOccurrencesOfString("Request ", withString: "") + " " // not using task.title
@@ -128,14 +145,14 @@ class ApprovalsDetailViewController: UIViewController, UITableViewDelegate, UITa
         var previousAvatarSpacer: CGFloat = 50
         
         let timelineView = UIView(frame: CGRectMake(0, 0, 2, 36))
-        timelineView.center = CGPointMake(34, 305)
+        timelineView.center = CGPointMake(34, 240)
         timelineView.backgroundColor = UIColor.lightGrayColor()
         timelineView.alpha = 0.2
         self.tableView.addSubview(timelineView)
         
         for i in 0..<task.taskpreviousapprover[0].requesttaskapprovers.count {
             let previousApproverlbl = UILabel(frame: CGRectMake(0, 0, 74, 21))
-            previousApproverlbl.center = CGPointMake(178, 292 + previousApproverSpacer)
+            previousApproverlbl.center = CGPointMake(178, 232 + previousApproverSpacer)
             previousApproverlbl.font = UIFont(name: MegaTheme.fontName, size: 12)
             previousApproverlbl.textColor = MegaTheme.lightColor
             previousApproverlbl.text = task.taskpreviousapprover[0].requesttaskapprovers[i].approvers
@@ -143,7 +160,7 @@ class ApprovalsDetailViewController: UIViewController, UITableViewDelegate, UITa
             previousApproverSpacer = previousApproverSpacer + 60
             
             let previousStatuslbl = UILabel(frame: CGRectMake(0, 0, 64, 21))
-            previousStatuslbl.center = CGPointMake(98, 292 + previousStatusSpacer)
+            previousStatuslbl.center = CGPointMake(98, 232 + previousStatusSpacer)
             previousStatuslbl.layer.cornerRadius = 8
             previousStatuslbl.layer.masksToBounds = true
             previousStatuslbl.font = UIFont(name: MegaTheme.fontName, size: 10)
@@ -155,7 +172,7 @@ class ApprovalsDetailViewController: UIViewController, UITableViewDelegate, UITa
             previousStatusSpacer = previousStatusSpacer + 60
             
             let previousDatelbl = UILabel(frame: CGRectMake(0, 0, 179, 21))
-            previousDatelbl.center = CGPointMake(158, 270 + previousDateSpacer)
+            previousDatelbl.center = CGPointMake(158, 210 + previousDateSpacer)
             previousDatelbl.font = UIFont(name: MegaTheme.fontName, size: 10)
             previousDatelbl.textColor = MegaTheme.lightColor
             previousDatelbl.text = task.taskpreviousapprover[0].requesttaskapprovers[i].updatedDate
@@ -164,13 +181,12 @@ class ApprovalsDetailViewController: UIViewController, UITableViewDelegate, UITa
             
             let previousAvatarImg = utl.GetLocalAvatarByName(task.taskpreviousapprover[0].requesttaskapprovers[i].approvers)
             let previousAvatarImgView = UIImageView(image: previousAvatarImg)
-            previousAvatarImgView.frame = CGRect(x: 17, y: 265 + previousAvatarSpacer, width: 36, height: 36)
+            previousAvatarImgView.frame = CGRect(x: 17, y: 205 + previousAvatarSpacer, width: 36, height: 36)
             self.tableView.addSubview(previousAvatarImgView)
             previousAvatarSpacer = previousAvatarSpacer + 60
             
-            
             let previousTimelineView = UIView(frame: CGRectMake(0, 0, 2, 36))
-            previousTimelineView.center = CGPointMake(34, 255 + previousAvatarSpacer)
+            previousTimelineView.center = CGPointMake(34, 195 + previousAvatarSpacer)
             previousTimelineView.backgroundColor = UIColor.lightGrayColor()
             previousTimelineView.alpha = 0.2
             self.tableView.addSubview(previousTimelineView)
@@ -190,7 +206,7 @@ class ApprovalsDetailViewController: UIViewController, UITableViewDelegate, UITa
         
         for i in 0..<task.taskcurrentapprover[0].requesttaskapprovers.count {
             let currentApproverlbl = UILabel(frame: CGRectMake(0, 0, 74, 21))
-            currentApproverlbl.center = CGPointMake(178, 292 + previousApproverSpacer + currentApproverSpacer)
+            currentApproverlbl.center = CGPointMake(178, 232 + previousApproverSpacer + currentApproverSpacer)
             currentApproverlbl.font = UIFont(name: MegaTheme.fontName, size: 12)
             currentApproverlbl.textColor = MegaTheme.lightColor
             currentApproverlbl.text = task.taskcurrentapprover[0].requesttaskapprovers[i].approvers
@@ -198,7 +214,7 @@ class ApprovalsDetailViewController: UIViewController, UITableViewDelegate, UITa
             currentApproverSpacer = previousApproverSpacer + 60
             
             let currentStatuslbl = UILabel(frame: CGRectMake(0, 0, 64, 21))
-            currentStatuslbl.center = CGPointMake(98, 292 + previousStatusSpacer + currentStatusSpacer)
+            currentStatuslbl.center = CGPointMake(98, 232 + previousStatusSpacer + currentStatusSpacer)
             currentStatuslbl.layer.cornerRadius = 8
             currentStatuslbl.layer.masksToBounds = true
             currentStatuslbl.font = UIFont(name: MegaTheme.fontName, size: 10)
@@ -215,7 +231,7 @@ class ApprovalsDetailViewController: UIViewController, UITableViewDelegate, UITa
                 awaitingText = task.taskcurrentapprover[0].requesttaskapprovers[i].updatedDate
             }
             let currentDatelbl = UILabel(frame: CGRectMake(0, 0, 179, 21))
-            currentDatelbl.center = CGPointMake(158, 270 + previousDateSpacer + currentDateSpacer)
+            currentDatelbl.center = CGPointMake(158, 210 + previousDateSpacer + currentDateSpacer)
             currentDatelbl.font = UIFont(name: MegaTheme.fontName, size: 10)
             currentDatelbl.textColor = MegaTheme.lightColor
             currentDatelbl.text = awaitingText
@@ -224,7 +240,7 @@ class ApprovalsDetailViewController: UIViewController, UITableViewDelegate, UITa
             
             let currentAvatarImg = utl.GetLocalAvatarByName(task.taskcurrentapprover[0].requesttaskapprovers[i].approvers)
             let currentAvatarImgView = UIImageView(image: currentAvatarImg)
-            currentAvatarImgView.frame = CGRect(x: 17, y: 265 + previousAvatarSpacer + currentAvatarSpacer, width: 36, height: 36)
+            currentAvatarImgView.frame = CGRect(x: 17, y: 205 + previousAvatarSpacer + currentAvatarSpacer, width: 36, height: 36)
             self.tableView.addSubview(currentAvatarImgView)
             currentAvatarSpacer = previousAvatarSpacer + 60
             
@@ -245,7 +261,7 @@ class ApprovalsDetailViewController: UIViewController, UITableViewDelegate, UITa
         
         
         let approveBtn = UIButton(frame: CGRectMake(0, 0, 118, 30))
-        approveBtn.center = CGPointMake(90, 290 + currentStatusSpacer)
+        approveBtn.center = CGPointMake(90, 230 + currentStatusSpacer)
         approveBtn.tag = indexPath.row
         approveBtn.setTitle("Approve", forState: UIControlState.Normal)
         approveBtn.setTitleColor(UIColor.clearColor(), forState: UIControlState.Normal)
@@ -260,7 +276,7 @@ class ApprovalsDetailViewController: UIViewController, UITableViewDelegate, UITa
         */
         
         let declineBtn = UIButton(frame: CGRectMake(0, 0, 119, 30))
-        declineBtn.center = CGPointMake(220, 290 + currentStatusSpacer)
+        declineBtn.center = CGPointMake(220, 230 + currentStatusSpacer)
         declineBtn.tag = indexPath.row
         declineBtn.setTitle("Decline", forState: UIControlState.Normal)
         declineBtn.setTitleColor(UIColor.clearColor(), forState: UIControlState.Normal)
@@ -275,7 +291,7 @@ class ApprovalsDetailViewController: UIViewController, UITableViewDelegate, UITa
         */
         
         let moreBtn = UIButton(frame: CGRectMake(0, 0, 52, 30))
-        moreBtn.center = CGPointMake(320, 290 + currentStatusSpacer)
+        moreBtn.center = CGPointMake(320, 230 + currentStatusSpacer)
         moreBtn.tag = indexPath.row
         moreBtn.setTitle("More", forState: UIControlState.Normal)
         moreBtn.setTitleColor(UIColor.clearColor(), forState: UIControlState.Normal)
@@ -367,7 +383,8 @@ class ApprovalsDetailViewController: UIViewController, UITableViewDelegate, UITa
                 paramstring += taskaction + "\"}]}"
                 
                 self.api.RequestApprovalAction(myLoginId, params : paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
-                    let alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
+                    let alert = UIAlertController(title: "Success!", message: msg, preferredStyle: .Alert)
+                    //-->self.presentViewController(alert, animated: true, completion: nil) uncomment code if we want to display alert on success.
                     if(succeeded) {
                         alert.title = "Success!"
                         alert.message = msg
@@ -384,7 +401,6 @@ class ApprovalsDetailViewController: UIViewController, UITableViewDelegate, UITa
                         let pendingApprovalViewController = storyboard.instantiateViewControllerWithIdentifier("ApprovalsViewController") as! ApprovalsViewController
                         navigationController.viewControllers = [pendingApprovalViewController]
                         self.frostedViewController.contentViewController = navigationController;
-                        //self.frostedViewController.hideMenuViewController()
                         
                     })
                 }

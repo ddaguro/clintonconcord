@@ -45,16 +45,13 @@ class SignInViewController : UIViewController, UITextFieldDelegate, WCSessionDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         ReadAPIEndpoint()
-        //print(myAPIEndpoint)
         if (WCSession.isSupported()) {
             let session = WCSession.defaultSession()
             session.delegate = self
             session.activateSession()
         }
         
-        //hide
         facebookButton.hidden = false
         twitterButton.hidden = false
         titleLabel.hidden = true
@@ -67,7 +64,6 @@ class SignInViewController : UIViewController, UITextFieldDelegate, WCSessionDel
         noAccountButton.layer.cornerRadius = 5
         noAccountButton.addTarget(self, action: "LoggedInFIDO", forControlEvents: .TouchUpInside)
         
-        //println("----->>> SignInViewController")
         bgImageView.image = UIImage(named: "login-bg")
         bgImageView.contentMode = .ScaleAspectFill
         
@@ -97,7 +93,6 @@ class SignInViewController : UIViewController, UITextFieldDelegate, WCSessionDel
         forgotPassword.setTitle("", forState: .Normal)
         forgotPassword.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         forgotPassword.titleLabel?.font = UIFont(name: MegaTheme.semiBoldFontName, size: 15)
-        //forgotPassword.addTarget(self, action: "dismiss", forControlEvents: .TouchUpInside)
         
         signInButton.setTitle("Sign In", forState: .Normal)
         signInButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -157,7 +152,8 @@ class SignInViewController : UIViewController, UITextFieldDelegate, WCSessionDel
         
         if username != "" {
             api.LogIn(username!, params: paramstring, url : url) { (succeeded: Bool, msg: String) -> () in
-                let alert = UIAlertView(title: "Success!", message: msg, delegate: nil, cancelButtonTitle: "Okay")
+                let alert = UIAlertController(title: "Success!", message: msg, preferredStyle: .Alert)
+                //-->self.presentViewController(alert, animated: true, completion: nil) uncomment code if we want to display alert on success.
                 if(succeeded) {
                     
                     let url = myAPIEndpoint + "/users/" + username!
@@ -188,7 +184,7 @@ class SignInViewController : UIViewController, UITextFieldDelegate, WCSessionDel
                         self.performSegueWithIdentifier("SegueDashboard", sender: self)
                         
                     } else {
-                        alert.show()
+                        self.presentViewController(alert, animated: true, completion: nil)
                     }
                 })
             }

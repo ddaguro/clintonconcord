@@ -15,7 +15,6 @@ class ApprovalDetailCell: UITableViewCell {
     @IBOutlet var assignee: UILabel!
     @IBOutlet var requestDate: UILabel!
     @IBOutlet var requestId: UILabel!
-    @IBOutlet var beneficiary: UILabel!
     @IBOutlet var justification: UILabel!
     
     @IBOutlet var requestStatus: UILabel!
@@ -35,14 +34,12 @@ class ApprovalDetailCell: UITableViewCell {
         requestId.font = UIFont(name: MegaTheme.fontName, size: 10)
         requestId.textColor = MegaTheme.lightColor
         
+        /*
         requestStatus.layer.cornerRadius = 8
         requestStatus.layer.masksToBounds = true
         requestStatus.font = UIFont(name: MegaTheme.fontName, size: 10)
         requestStatus.textColor = UIColor.whiteColor()
-        
-        beneficiary.font = UIFont(name: MegaTheme.fontName, size: 12)
-        beneficiary.textColor = MegaTheme.lightColor
-        
+        */
         requestType.font = UIFont(name: MegaTheme.fontName, size: 12)
         requestType.textColor = MegaTheme.darkColor
         

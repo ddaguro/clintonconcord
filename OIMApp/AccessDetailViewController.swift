@@ -21,7 +21,8 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
     @IBAction func goBack(sender: UIBarButtonItem) {
         self.navigationController?.popViewControllerAnimated(true)
     }
-    
+    var showViewLoadMore = true
+    var isVeryFirstTime = true
     var isFirstTime = true
     var refreshControl:UIRefreshControl!
     var nagivationStyleToPresent : String?
@@ -32,8 +33,8 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
     var roles : [Roles]!
     
     var api : API!
+    var utl : UTIL!
     var users : Users!
-    
     
     //---> For Pagination
     var cursor = 1;
@@ -54,8 +55,6 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
         self.roles = [Roles]()
         
         self.api = API()
-        
-
         
         if catalog == "Applications"{
             let url = myAPIEndpoint + "/users/" + myLoginId + "/applications?cursor=\(self.cursor)&limit=\(self.limit)"
@@ -86,16 +85,11 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
         refreshControl.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
         tableView.addSubview(refreshControl)
         
-        
         self.navigationController?.interactivePopGestureRecognizer!.delegate = self;
-
     }
     
     func loadMore() {
-        
-        self.view.showLoading()
-        
-        //print("loadMore is Called...");
+        self.showViewLoadMore = true
         
         if catalog == "Applications"{
             let url = myAPIEndpoint + "/users/" + myLoginId + "/applications?cursor=\(self.cursor)&limit=\(self.limit)"
@@ -113,6 +107,8 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     func refresh(){
+        
+        self.cursor = 1
         
         if catalog == "Applications"{
             let url = myAPIEndpoint + "/users/" + myLoginId + "/applications?cursor=\(self.cursor)&limit=\(self.limit)"
@@ -149,59 +145,99 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
             } else {
                 count = myApplications.count
             }*/
-            count = applications.count
+
+            if self.applications == nil {
+                return 0
+            }
+            
+            if self.showViewLoadMore {
+                return self.applications.count + 1
+                
+            } else {
+                return applications.count
+            }
+            
         } else if catalog == "Entitlements" {
             count = entitlements.count
         } else if catalog == "Roles" {
             count = roles.count
         }
-        
+    
         return count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("accessMetaCell") as! MetaCell
-        
-        cell.spacerImage?.image = UIImage(named: "check")
-        
-        if catalog == "Applications" {
-            let dataObject = applications[indexPath.row]
-            cell.titleLabel.text = dataObject.displayName
-            cell.subtitleLabel.text = dataObject.description.length == 0 ? dataObject.displayName : dataObject.description
-            cell.dateImage?.image = UIImage(named: "clock")
-            cell.dateLabel?.text = "Date Provisioned On " + formatDate(dataObject.provisionedOnDate)
+        self.utl = UTIL()
+        if (indexPath.row < self.applications.count) {
+            let cell = tableView.dequeueReusableCellWithIdentifier("accessMetaCell") as! MetaCell
             
-            ///---->>> Load More Should Call
-            if (indexPath.row == self.applications.count - 1){
-                if (self.cursor <= 50) {
-                    //print("in CellforRowAtIndexPath -- Calling Load More")
-                    self.loadMore();
+            cell.spacerImage?.image = UIImage(named: "check")
+            
+            if catalog == "Applications" {
+                let dataObject = applications[indexPath.row]
+                cell.titleLabel.text = dataObject.displayName
+                cell.subtitleLabel.text = dataObject.description.length == 0 ? dataObject.displayName : dataObject.description
+                cell.dateImage?.image = UIImage(named: "clock")
+                cell.dateLabel?.text = "Date Provisioned On " + utl.formatDate(dataObject.provisionedOnDate)
+                
+                if (myRequest < 10) {
+                    //--->>> No Load More Here
+                    self.showViewLoadMore = false
+                    
                 } else {
-                    ////--->>> Do Nothing
+                    ///---->>> Load More Should Call
+                    if (indexPath.row == self.applications.count - 10 /*- 2*/){
+                        if (self.cursor <= myApprovals) {
+                            //print("in CellforRowAtIndexPath -- Calling Load More")
+                            self.loadMore();
+                        } else {
+                            ////--->>> Do Nothing
+                        }
+                    }
                 }
+                
+                self.tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
+                
+            } else if catalog == "Entitlements" {
+                let dataObject = entitlements[indexPath.row]
+                cell.titleLabel.text = dataObject.entitlementDisplayName
+                cell.subtitleLabel.text = dataObject.entitlementDescription.length == 0 ? dataObject.entitlementDisplayName : dataObject.entitlementDescription
+                cell.dateImage?.image = UIImage(named: "clock")
+                cell.dateLabel?.text = "Date Provisioned On " + utl.formatDate(dataObject.provisionedOnDate)
+            } else if catalog == "Roles" {
+                let dataObject = roles[indexPath.row]
+                cell.titleLabel.text = dataObject.roleName
+                cell.subtitleLabel.text = dataObject.description.length == 0 ? dataObject.roleName : dataObject.description
+                cell.dateImage?.image = UIImage(named: "clock")
+                cell.dateLabel?.text = "Date Assigned On " + utl.formatDate(dataObject.assignedOn)
             }
             
-        } else if catalog == "Entitlements" {
-            let dataObject = entitlements[indexPath.row]
-            cell.titleLabel.text = dataObject.entitlementDisplayName
-            cell.subtitleLabel.text = dataObject.entitlementDescription.length == 0 ? dataObject.entitlementDisplayName : dataObject.entitlementDescription
-            cell.dateImage?.image = UIImage(named: "clock")
-            cell.dateLabel?.text = "Date Provisioned On " + formatDate(dataObject.provisionedOnDate)
-        } else if catalog == "Roles" {
-            let dataObject = roles[indexPath.row]
-            cell.titleLabel.text = dataObject.roleName
-            cell.subtitleLabel.text = dataObject.description.length == 0 ? dataObject.roleName : dataObject.description
-            cell.dateImage?.image = UIImage(named: "clock")
-            cell.dateLabel?.text = "Date Assigned On " + formatDate(dataObject.assignedOn)
+            cell.selectionStyle = UITableViewCellSelectionStyle.None
+            
+            return cell
+        } else if (self.showViewLoadMore == true) {
+            
+            if self.isVeryFirstTime == true {
+                self.isVeryFirstTime = false
+                let cell = UITableViewCell()
+                self.tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+                return cell
+                
+            } else {
+                let cell = tableView.dequeueReusableCellWithIdentifier("LoadMoreAccess") as! LoadMoreCC
+                cell.viewSpinner.frame = CGRectMake(cell.viewSpinner.frame.origin.x, cell.viewSpinner.frame.origin.y, cell.viewSpinner.frame.size.width, 30)
+                cell.spinner.color = UIColor(red: 73.0/255.0, green: 143.0/255.0, blue: 225.0/255.0, alpha: 1.0)
+                cell.spinner.startAnimating()
+                self.tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+                return cell
+            }
+            
+        } else {
+            let cell = UITableViewCell()
+            self.tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+            return cell
         }
-        
-        cell.selectionStyle = UITableViewCellSelectionStyle.None
-        
-
-        
-        return cell;
-        
     }
     
     ///---->>> Also Working for Load More
@@ -210,7 +246,8 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
         let lastRowIndex = tableView.numberOfRowsInSection(lastSectionIndex) - 1
         if ((indexPath.section == lastSectionIndex) && (indexPath.row == lastRowIndex)) {
             //--->>> This is the last Cell
-            // print("This is the last Cell...")
+            //print("This is the last Cell...")
+            
             // self.loadMore()
         }
     }
@@ -222,9 +259,6 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
     
     
     func didLoadApplications(loadedApplications: [Applications]){
-        
-        //self.applications = [Applications]()
-        
         for app in loadedApplications {
             self.applications.append(app)
         }
@@ -232,11 +266,18 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
         if isFirstTime  {
             self.view.showLoading()
         }
+        
+        //---> Increment Cursor
+        self.cursor = self.cursor + 10;
+        
+        if self.cursor > myApprovals {
+            self.showViewLoadMore = false
+        }
+        
         self.tableView.reloadData()
         self.view.hideLoading()
         self.refreshControl?.endRefreshing()
         
-        self.cursor = self.cursor + 15;
     }
     
     func didLoadRoles(loadedRoles: [Roles]){
@@ -269,16 +310,7 @@ class AccessDetailViewController: UIViewController, UITableViewDelegate, UITable
         self.refreshControl?.endRefreshing()
     }
     
-    func formatDate(dateString: String) -> String {
-        
-        let formatter = NSDateFormatter()
-        //Thu Aug 13 18:19:07 EDT 2015
-        formatter.dateFormat = "yyyy-MM-dd"
-        let date = formatter.dateFromString(dateString)
-        
-        formatter.dateFormat = "EEE, MMM dd yyyy"
-        return formatter.stringFromDate(date!)
-    }
+
 
 }
 
